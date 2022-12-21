@@ -82,3 +82,16 @@ func GetScopedToken(c Config, projectname string) (*Token, error) {
 
 	return nil, fmt.Errorf("no such Project \"%v\"", projectname)
 }
+
+func GetProjectByName(c Config, projectname string) (*Project, error) {
+	for _, cloud := range c.Clouds {
+		for _, project := range cloud.Projects {
+			if project.Name == projectname {
+				return &project, nil
+			}
+		}
+
+	}
+
+	return nil, fmt.Errorf("no such Project \"%v\"", projectname)
+}
