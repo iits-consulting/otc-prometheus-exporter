@@ -7,6 +7,7 @@ import (
 	"os/user"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 type Config struct {
@@ -94,4 +95,13 @@ func GetProjectByName(c Config, projectname string) (*Project, error) {
 	}
 
 	return nil, fmt.Errorf("no such Project \"%v\"", projectname)
+}
+
+func (t Token) IsValidAt(timestamp time.Time) (bool, error) {
+	stringTime, _ := time.Parse(time.RFC3339, t.ExpiresAt)
+	return timestamp.Before(stringTime), nil
+}
+
+func (t Token) IsValidNow() (bool, error) {
+	return t.IsValidAt(time.Now())
 }
