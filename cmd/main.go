@@ -7,9 +7,9 @@ import (
 	"github.com/iits-consulting/otc-prometheus-exporter/internal"
 )
 
-// Lies Umgebungsvariable mit Projektnamen ein
-// PROJECT_NAME
-// Netzwerkanfrage zu struct überführen
+// 1. ENV Namespaces auslesen und parsen(Ziel: Array von strings)
+// 2. filtern nach Namespaces
+// 3. Anfrage
 func main() {
 	const path = "~/.otc-auth-config"
 	config, err := internal.LoadConfigFromFile(path)
@@ -22,12 +22,18 @@ func main() {
 		panic("PROJECT_NAME not set\n")
 	}
 
+	namesspaces, ok := os.LookupEnv("NAMESPACES")
+	if !ok {
+		panic("NAMESPACES not set\n")
+	}
+	fmt.Println(namesspaces)
+
 	project, err := internal.GetProjectByName(*config, projectName)
 	if err != nil {
 		panic(err)
 	}
 
-	fmt.Println(project.ScopedToken.ExpiresAt)
+	//fmt.Println(project.ScopedToken.ExpiresAt)
 	valid, _ := project.ScopedToken.IsValidNow()
 	if err != nil {
 		panic(err)
@@ -44,12 +50,23 @@ func main() {
 
 	for _, s := range result.Servers {
 		m[s.Id] = s.Name
-		fmt.Printf("%s -> %s\n", s.Id, s.Name)
 	}
 
-	//metrics, _ := client.GetMetricsData()
-	//fmt.Println(metrics)
+	metrics, _ := client.GetMetricTypes()
+	filterdMetrics := metrics.FilterByNamespaces([]string{namesspaces})
 
+	x := filterdMetrics.Metrics[0]
+
+	y, err := client.GetMetricData(x.Namespace, x.MetricName, x.Dimensions[0].Name, x.Dimensions[0].Value)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(y)
+
+	//MetricNameSpaces := internal.GetMetricNamespaces()
+	//fmt.Println(MetricNameSpaces)
+
+	//fmt.Println(metrics)
 	//fmt.Println(m["98a3ec65-4da2-437a-b83c-0045186d74ec"])
 
 }

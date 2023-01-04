@@ -9,11 +9,13 @@ import (
 
 const EcsEndpointTemplate = "https://ecs.eu-de.otc.t-systems.com/v2.1/%s/servers"
 const MetricsEndpointTemplate = "https://ces.eu-de.otc.t-systems.com/V1.0/%s/metrics"
+const CloudEyeEndpointTemplate = "https://ces.eu-de.otc.t-systems.com/V1.0/%s/metric-data"
 
 type OtcClient struct {
-	secret          string
-	ecsEndpoint     string
-	metricsEndpoint string
+	secret           string
+	ecsEndpoint      string
+	metricsEndpoint  string
+	cloudEyeEndpoint string
 }
 
 type EcsResponse struct {
@@ -56,12 +58,16 @@ type Metric struct {
 func NewOtcClient(projectId, secret string) OtcClient {
 	ecsEndpoint := fmt.Sprintf(EcsEndpointTemplate, projectId)
 	metricsEndpoint := fmt.Sprintf(MetricsEndpointTemplate, projectId)
+	cloudEyeEndpoint := fmt.Sprintf(CloudEyeEndpointTemplate, projectId)
 	return OtcClient{
-		secret:          secret,
-		ecsEndpoint:     ecsEndpoint,
-		metricsEndpoint: metricsEndpoint,
+		secret:           secret,
+		ecsEndpoint:      ecsEndpoint,
+		metricsEndpoint:  metricsEndpoint,
+		cloudEyeEndpoint: cloudEyeEndpoint,
 	}
 }
+
+//func
 
 func (o OtcClient) GetEcsData() (*EcsResponse, error) {
 	client := http.Client{}
@@ -92,7 +98,7 @@ func (o OtcClient) GetEcsData() (*EcsResponse, error) {
 
 }
 
-func (o OtcClient) GetMetricsData() (*MetricsResponse, error) {
+func (o OtcClient) GetMetricTypes() (*MetricsResponse, error) {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", o.metricsEndpoint, nil)
 	if err != nil {
@@ -118,4 +124,60 @@ func (o OtcClient) GetMetricsData() (*MetricsResponse, error) {
 	}
 
 	return &response, nil
+}
+
+func (mR MetricsResponse) FilterByNamespaces(namespaces []string) MetricsResponse {
+	filterdMetrics := []Metric{}
+	for _, m := range mR.Metrics {
+		if m.IsFromNamespace(namespaces) {
+			filterdMetrics = append(filterdMetrics, m)
+		}
+	}
+	return MetricsResponse{filterdMetrics}
+}
+
+func (m Metric) IsFromNamespace(namespaces []string) bool {
+	for _, n := range namespaces {
+		if n == m.Namespace {
+			return true
+		}
+	}
+	return false
+}
+
+// Period = 300; from & to berechnen = akutelle Zeit in millisekunden - 1 Sekunde, aktuelle Zeit in millisekunden
+// filter = average
+func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionvalue string) (*map[string]interface{}, error) {
+	client := http.Client{}
+	req, err := http.NewRequest("GET", o.cloudEyeEndpoint, nil)
+	req.Header.Add("X-Auth-Token", o.secret)
+	q := req.URL.Query()
+	q.Add("namespace", namespace)
+	q.Add("metric_name", metricname)
+	q.Add("from", "1672845283629")
+	q.Add("to", "1672845284629")
+	q.Add("period", "300")
+	q.Add("filter", "average")
+	q.Add("dim.0", fmt.Sprintf("%s,%s", dimesionkey, dimensionvalue))
+
+	req.URL.RawQuery = q.Encode()
+	resp, err := client.Do(req)
+
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var response map[string]interface{}
+	json.Unmarshal(body, &response)
+	if err != nil {
+		return nil, err
+	}
+
+	return &response, err
 }
