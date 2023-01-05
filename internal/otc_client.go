@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"time"
 )
 
 const EcsEndpointTemplate = "https://ecs.eu-de.otc.t-systems.com/v2.1/%s/servers"
@@ -19,7 +20,7 @@ type OtcClient struct {
 }
 
 type EcsResponse struct {
-	Servers []Server
+	Servers []Server `json:"server"`
 }
 
 /*type Name struct {
@@ -40,7 +41,7 @@ type Server struct {
 }
 
 type MetricsResponse struct {
-	Metrics []Metric
+	Metrics []Metric `json:"metrics"`
 }
 
 type Dimension struct {
@@ -49,10 +50,21 @@ type Dimension struct {
 }
 
 type Metric struct {
-	Namespace  string `json:"namespace"`
-	Dimensions []Dimension
-	MetricName string `json:"metric_name"`
-	Unit       string `json:"unit"`
+	Namespace  string      `json:"namespace"`
+	Dimensions []Dimension `json:"dimensions"`
+	MetricName string      `json:"metric_name"`
+	Unit       string      `json:"unit"`
+}
+
+type Datapoint struct {
+	Average   string `json:"average"`
+	Timestamp string `json:"timestamp"`
+	Unit      string `json:"unit"`
+}
+
+type CloudEyeResponse struct {
+	Datapoints  []Datapoint `json:"datapoints"`
+	Metric_name string      `json:"metric_name"`
 }
 
 func NewOtcClient(projectId, secret string) OtcClient {
@@ -67,7 +79,24 @@ func NewOtcClient(projectId, secret string) OtcClient {
 	}
 }
 
-//func
+func (o OtcClient) GetAllMetricData(mr MetricsResponse) ([]CloudEyeResponse, error) {
+
+	const SleepDurationSeconds = 1
+
+	result := make([]CloudEyeResponse, len(mr.Metrics))
+
+	for i, m := range mr.Metrics {
+		y, err := o.GetMetricData(m.Namespace, m.MetricName, m.Dimensions[0].Name, m.Dimensions[0].Value)
+		if err != nil {
+			return []CloudEyeResponse{}, err
+		}
+		result[i] = *y
+		fmt.Println(i, result[i])
+		time.Sleep(time.Second * SleepDurationSeconds)
+	}
+	return result, nil
+
+}
 
 func (o OtcClient) GetEcsData() (*EcsResponse, error) {
 	client := http.Client{}
@@ -147,7 +176,7 @@ func (m Metric) IsFromNamespace(namespaces []string) bool {
 
 // Period = 300; from & to berechnen = akutelle Zeit in millisekunden - 1 Sekunde, aktuelle Zeit in millisekunden
 // filter = average
-func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionvalue string) (*map[string]interface{}, error) {
+func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionvalue string) (*CloudEyeResponse, error) {
 	client := http.Client{}
 	req, err := http.NewRequest("GET", o.cloudEyeEndpoint, nil)
 	req.Header.Add("X-Auth-Token", o.secret)
@@ -173,7 +202,7 @@ func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionva
 		return nil, err
 	}
 
-	var response map[string]interface{}
+	var response CloudEyeResponse
 	json.Unmarshal(body, &response)
 	if err != nil {
 		return nil, err

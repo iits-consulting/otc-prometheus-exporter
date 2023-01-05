@@ -55,9 +55,7 @@ func main() {
 	metrics, _ := client.GetMetricTypes()
 	filterdMetrics := metrics.FilterByNamespaces([]string{namesspaces})
 
-	x := filterdMetrics.Metrics[0]
-
-	y, err := client.GetMetricData(x.Namespace, x.MetricName, x.Dimensions[0].Name, x.Dimensions[0].Value)
+	y, err := client.GetAllMetricData(filterdMetrics)
 	if err != nil {
 		panic(err)
 	}
