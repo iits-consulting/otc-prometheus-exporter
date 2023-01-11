@@ -2,47 +2,18 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promauto"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"net/http"
+	"strconv"
 
 	"github.com/iits-consulting/otc-prometheus-exporter/internal"
 )
 
-// 1. ENV Namespaces auslesen und parsen(Ziel: Array von strings)
-// 2. filtern nach Namespaces
-// 3. Anfrage
 func main() {
-	const path = "~/.otc-auth-config"
-	config, err := internal.LoadConfigFromFile(path)
-	if err != nil {
-		panic(err)
-	}
 
-	projectName, ok := os.LookupEnv("PROJECT_NAME")
-	if !ok {
-		panic("PROJECT_NAME not set\n")
-	}
-
-	namesspaces, ok := os.LookupEnv("NAMESPACES")
-	if !ok {
-		panic("NAMESPACES not set\n")
-	}
-	fmt.Println(namesspaces)
-
-	project, err := internal.GetProjectByName(*config, projectName)
-	if err != nil {
-		panic(err)
-	}
-
-	//fmt.Println(project.ScopedToken.ExpiresAt)
-	valid, _ := project.ScopedToken.IsValidNow()
-	if err != nil {
-		panic(err)
-	}
-	if !valid {
-		panic("Projecttoken is not valid anymore")
-	}
-
-	client := internal.NewOtcClient(project.Id, project.ScopedToken.Secret)
+	client := internal.NewOtcClient(internal.Config.OtcProjectId, internal.Config.OtcProjectToken)
 
 	result, _ := client.GetEcsData()
 
@@ -53,7 +24,15 @@ func main() {
 	}
 
 	metrics, _ := client.GetMetricTypes()
-	filterdMetrics := metrics.FilterByNamespaces([]string{namesspaces})
+	filterdMetrics := metrics.FilterByNamespaces(internal.Config.Namespaces)
+
+	prometheusGauge := promauto.NewGaugeVec(
+		prometheus.GaugeOpts{
+			Name: "TEST",
+			Help: "The total number of processed events", // TODO
+		},
+		[]string{"unit", "resource_id", "resource_name"},
+	)
 
 	y, err := client.GetAllMetricData(filterdMetrics)
 	if err != nil {
@@ -61,10 +40,24 @@ func main() {
 	}
 	fmt.Println(y)
 
-	//MetricNameSpaces := internal.GetMetricNamespaces()
-	//fmt.Println(MetricNameSpaces)
+	for i, datapoint := range y {
+		fmt.Println("i", i)
 
-	//fmt.Println(metrics)
-	//fmt.Println(m["98a3ec65-4da2-437a-b83c-0045186d74ec"])
+		if len(datapoint.DataPoints) == 0 {
+			continue
+		}
 
+		prometheusGauge.With(
+			prometheus.Labels{
+				"unit":          datapoint.DataPoints[0].Unit,
+				"resource_id":   strconv.Itoa(i), // TODO: fix here the resource it to the dimension value
+				"resource_name": strconv.Itoa(i), // TODO: fix this todos with the translated name
+			},
+		).Set(datapoint.DataPoints[0].Average)
+	}
+
+	fmt.Println(prometheusGauge)
+
+	http.Handle("/metrics", promhttp.Handler())
+	http.ListenAndServe(":2112", nil)
 }
