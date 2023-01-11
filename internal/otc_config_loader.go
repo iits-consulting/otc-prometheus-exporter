@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-type Config struct {
+type OtcAuthConfig struct {
 	Clouds []Cloud
 }
 
@@ -54,13 +54,13 @@ func expandUserHome(path string) string {
 	return path
 }
 
-func LoadConfigFromFile(path string) (*Config, error) {
+func LoadConfigFromFile(path string) (*OtcAuthConfig, error) {
 	data, err := os.ReadFile(expandUserHome(path))
 	if err != nil {
 		return nil, err
 	}
 
-	var config Config
+	var config OtcAuthConfig
 
 	err = json.Unmarshal(data, &config)
 
@@ -71,7 +71,7 @@ func LoadConfigFromFile(path string) (*Config, error) {
 	return &config, nil
 }
 
-func GetScopedToken(c Config, projectname string) (*Token, error) {
+func GetScopedToken(c OtcAuthConfig, projectname string) (*Token, error) {
 	for _, cloud := range c.Clouds {
 		for _, project := range cloud.Projects {
 			if project.Name == projectname {
@@ -84,7 +84,7 @@ func GetScopedToken(c Config, projectname string) (*Token, error) {
 	return nil, fmt.Errorf("no such Project \"%v\"", projectname)
 }
 
-func GetProjectByName(c Config, projectname string) (*Project, error) {
+func GetProjectByName(c OtcAuthConfig, projectname string) (*Project, error) {
 	for _, cloud := range c.Clouds {
 		for _, project := range cloud.Projects {
 			if project.Name == projectname {
