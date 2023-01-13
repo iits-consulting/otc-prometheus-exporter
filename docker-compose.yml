@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+
+  otc-prometheus-exporter:
+    build: .
+    ports:
+      - "2112:2112"
+    volumes:
+      - "./docker.local/otc-prometheus-exporter:/root"
+
+    environment:
+      NAMESPACES: "SYS.ECS"
+      PROJECT_NAME: "eu-de_iits-central"
+
+  prometheus:
+    image: "prom/prometheus:latest"
+    ports:
+      - "9090:9090"
+    command:
+       - '--config.file=/tmp/prometheus/prometheus.yaml'
+    volumes:
+      - "./docker.local/prometheus:/tmp/prometheus"
+
+  grafana:
+    image: "grafana/grafana:latest"
+    ports:
+      - "3000:3000"
