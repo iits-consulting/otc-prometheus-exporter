@@ -6,6 +6,7 @@ import (
 	"io"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -21,7 +22,7 @@ type OtcClient struct {
 }
 
 type EcsResponse struct {
-	Servers []Server `json:"server"`
+	Servers []Server `json:"servers"`
 }
 
 type Links struct {
@@ -76,22 +77,21 @@ func NewOtcClient(projectId, secret string) OtcClient {
 	}
 }
 
-func (o OtcClient) GetAllMetricData(mr MetricsResponse) ([]CloudEyeResponse, error) {
+func (o OtcClient) GetAllMetricData(mr MetricsResponse) (map[string]CloudEyeResponse, error) {
 
 	const SleepDurationSeconds = 1
 
-	result := make([]CloudEyeResponse, len(mr.Metrics))
+	result := map[string]CloudEyeResponse{}
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Second)
 
-	fmt.Println(startTime, "\n", endTime)
 	for i, m := range mr.Metrics {
 		y, err := o.GetMetricData(m.Namespace, m.MetricName, m.Dimensions[0].Name, m.Dimensions[0].Value, startTime, endTime)
 		if err != nil {
-			return []CloudEyeResponse{}, err
+			return map[string]CloudEyeResponse{}, err
 		}
-		result[i] = *y
-		fmt.Println(i, result[i])
+		result[m.StandardPrometheusMetricName()] = *y
+		fmt.Println(i, result[m.StandardPrometheusMetricName()])
 
 		time.Sleep(time.Second * SleepDurationSeconds)
 	}
@@ -173,6 +173,14 @@ func (m Metric) IsFromNamespace(namespaces []string) bool {
 		}
 	}
 	return false
+}
+
+func (m Metric) StandardPrometheusMetricName() string {
+	return fmt.Sprintf(
+		"%s_%s",
+		strings.TrimPrefix(strings.ToLower(m.Namespace), "sys."),
+		strings.ToLower(m.MetricName),
+	)
 }
 
 func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionvalue string, startTime time.Time, endTime time.Time) (*CloudEyeResponse, error) {
