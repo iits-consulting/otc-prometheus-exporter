@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"time"
 )
 
 type ConfigStruct struct {
@@ -11,9 +12,11 @@ type ConfigStruct struct {
 	OtcProjectId    string
 	OtcProjectToken string
 	Port            int
+	WaitDuration    time.Duration
 }
 
 const defaultPort = 8000
+const defaultWaitDuration = 60 * time.Second
 
 var Config ConfigStruct
 
@@ -47,7 +50,17 @@ func init() {
 
 	}
 
-	fmt.Print(port)
+	waitDuration := defaultWaitDuration
+
+	rawtime, ok := os.LookupEnv("WAITDURATION")
+	if ok {
+		numseconds, err := strconv.Atoi(rawtime)
+		if err != err {
+			panic(err)
+		}
+		
+		waitDuration = time.Duration(numseconds) * time.Second
+	}
 
 	project, err := GetProjectByName(*config, projectName)
 	if err != nil {
@@ -67,5 +80,6 @@ func init() {
 		OtcProjectId:    project.Id,
 		OtcProjectToken: project.ScopedToken.Secret,
 		Port:            port,
+		WaitDuration:    waitDuration,
 	}
 }

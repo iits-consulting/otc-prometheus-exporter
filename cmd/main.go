@@ -10,9 +10,39 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func collectMetricsInBackground() {
+func collectMetricsInBackground(filteredMetrics internal.MetricsResponse, client internal.OtcClient, resourceIdToName map[string]string) {
 	go func() {
-		
+		for {
+			fmt.Println(time.Now())
+			endTime := time.Now()
+			startTime := endTime.Add(-1 * time.Second)
+			for _, metric := range filteredMetrics.Metrics {
+				cloudeyeResponse, err := client.GetMetricData(
+					metric.Namespace,
+					metric.MetricName,
+					metric.Dimensions[0].Name,
+					metric.Dimensions[0].Value,
+					startTime,
+					endTime,
+				)
+				if err != nil {
+					panic(err)
+				}
+				time.Sleep(time.Second)
+
+				for _, d := range cloudeyeResponse.DataPoints {
+					internal.PrometheusMetrics[metric.StandardPrometheusMetricName()].With(
+						prometheus.Labels{
+							"unit":          d.Unit,
+							"resource_id":   metric.Dimensions[0].Value,
+							"resource_name": resourceIdToName[metric.Dimensions[0].Value],
+						}).Set(d.Average)
+				}
+
+			}
+			fmt.Println(time.Now())
+			time.Sleep(internal.Config.WaitDuration)
+		}
 	}()
 }
 
@@ -35,31 +65,7 @@ func main() {
 
 	internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
 
-	endTime := time.Now()
-	startTime := endTime.Add(-1 * time.Second)
-	for _, metric := range filteredMetrics.Metrics {
-		cloudeyeResponse, err := client.GetMetricData(
-			metric.Namespace,
-			metric.MetricName,
-			metric.Dimensions[0].Name,
-			metric.Dimensions[0].Value,
-			startTime,
-			endTime,
-		)
-		if err != nil {
-			panic(err)
-		}
-		time.Sleep(time.Second)
-
-		for _, d := range cloudeyeResponse.DataPoints {
-			internal.PrometheusMetrics[metric.StandardPrometheusMetricName()].With(
-				prometheus.Labels{
-					"unit":          d.Unit,
-					"resource_id":   metric.Dimensions[0].Value,
-					"resource_name": resourceIdToName[metric.Dimensions[0].Value],
-				}).Set(d.Average)
-		}
-	}
+	collectMetricsInBackground(filteredMetrics, client, resourceIdToName)
 
 	http.Handle("/metrics", promhttp.Handler())
 	address := fmt.Sprintf(":%d", internal.Config.Port)

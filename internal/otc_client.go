@@ -213,8 +213,6 @@ func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionva
 		return nil, err
 	}
 
-	fmt.Println(string(body))
-
 	var response CloudEyeResponse
 	err = json.Unmarshal(body, &response)
 	if err != nil {
