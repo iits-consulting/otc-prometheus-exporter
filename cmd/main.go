@@ -1,16 +1,18 @@
 package main
 
 import (
+	"fmt"
+	"net/http"
+	"time"
+
 	"github.com/iits-consulting/otc-prometheus-exporter/internal"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"net/http"
-	"time"
 )
 
 func collectMetricsInBackground() {
 	go func() {
-
+		
 	}()
 }
 
@@ -60,7 +62,8 @@ func main() {
 	}
 
 	http.Handle("/metrics", promhttp.Handler())
-	err = http.ListenAndServe(":2112", nil)
+	address := fmt.Sprintf(":%d", internal.Config.Port)
+	err = http.ListenAndServe(address, nil)
 	if err != nil {
 		panic(err)
 	}

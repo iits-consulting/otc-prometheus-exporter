@@ -3,13 +3,17 @@ package internal
 import (
 	"fmt"
 	"os"
+	"strconv"
 )
 
 type ConfigStruct struct {
 	Namespaces      []string
 	OtcProjectId    string
 	OtcProjectToken string
+	Port            int
 }
+
+const defaultPort = 8000
 
 var Config ConfigStruct
 
@@ -31,6 +35,20 @@ func init() {
 	}
 	fmt.Println(namespaces)
 
+	port := defaultPort
+
+	rawport, ok := os.LookupEnv("PORT")
+	if ok {
+		port, err = strconv.Atoi(rawport)
+		if err != nil {
+			panic(err)
+		}
+		fmt.Print(port)
+
+	}
+
+	fmt.Print(port)
+
 	project, err := GetProjectByName(*config, projectName)
 	if err != nil {
 		panic(err)
@@ -48,5 +66,6 @@ func init() {
 		Namespaces:      []string{namespaces},
 		OtcProjectId:    project.Id,
 		OtcProjectToken: project.ScopedToken.Secret,
+		Port:            port,
 	}
 }
