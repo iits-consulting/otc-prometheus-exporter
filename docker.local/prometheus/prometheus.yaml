@@ -26,4 +26,4 @@ scrape_configs:
     # scheme defaults to 'http'.
 
     static_configs:
-      - targets: ["otc-prometheus-exporter:2112"]
+      - targets: ["otc-prometheus-exporter:8000"]

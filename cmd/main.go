@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"golang.org/x/exp/slices"
 	"net/http"
 	"time"
 
@@ -10,8 +11,20 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func collectMetricsInBackground(filteredMetrics internal.MetricsResponse, client internal.OtcClient, resourceIdToName map[string]string) {
+func collectMetricsInBackground() {
 	go func() {
+		client := internal.NewOtcClient(internal.Config.OtcProjectId, internal.Config.OtcProjectToken)
+
+		resourceIdToName, err := FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
+		if err != nil {
+			panic(err)
+		}
+
+		metrics, _ := client.GetMetricTypes()
+		filteredMetrics := metrics.FilterByNamespaces(internal.Config.Namespaces)
+
+		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
+
 		for {
 			fmt.Println(time.Now())
 			endTime := time.Now()
@@ -46,30 +59,33 @@ func collectMetricsInBackground(filteredMetrics internal.MetricsResponse, client
 	}()
 }
 
+func FetchResourceIdToNameMapping(client internal.OtcClient, namespaces []string) (map[string]string, error) {
+	resourceIdToName := make(map[string]string)
+
+	if slices.Contains(namespaces, internal.EcsNamespace) {
+		result, err := client.GetEcsData()
+		if err != nil {
+			return map[string]string{}, err
+		}
+		for _, s := range result.Servers {
+			resourceIdToName[s.Id] = s.Name
+		}
+	}
+
+	if slices.Contains(namespaces, internal.RdsNamespace) {
+		// TODO: complete this and other remaining namespaces
+	}
+
+	return resourceIdToName, nil
+}
+
 func main() {
 
-	client := internal.NewOtcClient(internal.Config.OtcProjectId, internal.Config.OtcProjectToken)
-
-	result, err := client.GetEcsData()
-	if err != nil {
-		panic(err)
-	}
-
-	resourceIdToName := make(map[string]string)
-	for _, s := range result.Servers {
-		resourceIdToName[s.Id] = s.Name
-	}
-
-	metrics, _ := client.GetMetricTypes()
-	filteredMetrics := metrics.FilterByNamespaces(internal.Config.Namespaces)
-
-	internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
-
-	collectMetricsInBackground(filteredMetrics, client, resourceIdToName)
+	collectMetricsInBackground()
 
 	http.Handle("/metrics", promhttp.Handler())
 	address := fmt.Sprintf(":%d", internal.Config.Port)
-	err = http.ListenAndServe(address, nil)
+	err := http.ListenAndServe(address, nil)
 	if err != nil {
 		panic(err)
 	}
