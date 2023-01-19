@@ -1,9 +1,9 @@
 package internal
 
 import (
-	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -32,11 +32,19 @@ func init() {
 		panic("PROJECT_NAME not set\n")
 	}
 
-	namespaces, ok := os.LookupEnv("NAMESPACES")
+	namespacesraw, ok := os.LookupEnv("NAMESPACES")
 	if !ok {
 		panic("NAMESPACES not set\n")
 	}
-	fmt.Println(namespaces)
+
+	namespacesarray := strings.Split(namespacesraw, ",")
+
+	namespaces := make([]string, len(namespacesarray))
+
+	for i, namespace := range namespacesarray {
+		namespaces[i] = WithPrefixIfNotPresent(namespace, "SYS.")
+		namespaces = append(namespaces, namespaces[i])
+	}
 
 	port := defaultPort
 
@@ -46,7 +54,6 @@ func init() {
 		if err != nil {
 			panic(err)
 		}
-		fmt.Print(port)
 
 	}
 
@@ -58,7 +65,7 @@ func init() {
 		if err != err {
 			panic(err)
 		}
-		
+
 		waitDuration = time.Duration(numseconds) * time.Second
 	}
 
@@ -76,7 +83,7 @@ func init() {
 	}
 
 	Config = ConfigStruct{
-		Namespaces:      []string{namespaces},
+		Namespaces:      namespaces,
 		OtcProjectId:    project.Id,
 		OtcProjectToken: project.ScopedToken.Secret,
 		Port:            port,
