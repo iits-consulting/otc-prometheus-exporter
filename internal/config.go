@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -52,7 +53,7 @@ func init() {
 	if ok {
 		port, err = strconv.Atoi(rawport)
 		if err != nil {
-			panic(err)
+			panic(fmt.Errorf("it looks like the input for the port '%s' was not a number", rawport))
 		}
 
 	}
