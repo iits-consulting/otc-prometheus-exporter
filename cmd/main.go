@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/iits-consulting/otc-prometheus-exporter/otc_client"
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
@@ -74,7 +75,11 @@ func FetchResourceIdToNameMapping(client otc_client.OtcClient, namespaces []stri
 	}
 
 	if slices.Contains(namespaces, internal.RdsNamespace) {
-		// TODO: complete this and other remaining namespaces
+		result, err := client.GetRdsData()
+		if err != nil {
+			return map[string]string{}, err
+		}
+		maps.Copy(resourceIdToName, internal.GetRdsIdToNameMapping(*result))
 	}
 
 	return resourceIdToName, nil
