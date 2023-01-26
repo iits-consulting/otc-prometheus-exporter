@@ -1,4 +1,4 @@
-package internal
+package otc_client
 
 import (
 	"encoding/json"
@@ -9,34 +9,6 @@ import (
 	"strings"
 	"time"
 )
-
-const EcsEndpointTemplate = "https://ecs.eu-de.otc.t-systems.com/v2.1/%s/servers"
-const MetricsEndpointTemplate = "https://ces.eu-de.otc.t-systems.com/V1.0/%s/metrics"
-const CloudEyeEndpointTemplate = "https://ces.eu-de.otc.t-systems.com/V1.0/%s/metric-data"
-
-type OtcClient struct {
-	secret           string
-	ecsEndpoint      string
-	metricsEndpoint  string
-	cloudEyeEndpoint string
-}
-
-type EcsResponse struct {
-	Servers []Server `json:"servers"`
-}
-
-type Links struct {
-	Rel  string `json:"rel"`
-	Href string `json:"href"`
-}
-
-type Server struct {
-	Name string `json:"name"`
-	Link []Links
-	Rel  string `json:"rel"`
-	Href string `json:"href"`
-	Id   string `json:"id"`
-}
 
 type MetricsResponse struct {
 	Metrics []Metric `json:"metrics"`
@@ -65,18 +37,6 @@ type CloudEyeResponse struct {
 	MetricName string      `json:"metric_name"`
 }
 
-func NewOtcClient(projectId, secret string) OtcClient {
-	ecsEndpoint := fmt.Sprintf(EcsEndpointTemplate, projectId)
-	metricsEndpoint := fmt.Sprintf(MetricsEndpointTemplate, projectId)
-	cloudEyeEndpoint := fmt.Sprintf(CloudEyeEndpointTemplate, projectId)
-	return OtcClient{
-		secret:           secret,
-		ecsEndpoint:      ecsEndpoint,
-		metricsEndpoint:  metricsEndpoint,
-		cloudEyeEndpoint: cloudEyeEndpoint,
-	}
-}
-
 func (o OtcClient) GetAllMetricData(mr MetricsResponse) (map[string]CloudEyeResponse, error) {
 
 	const SleepDurationSeconds = 1
@@ -96,35 +56,6 @@ func (o OtcClient) GetAllMetricData(mr MetricsResponse) (map[string]CloudEyeResp
 		time.Sleep(time.Second * SleepDurationSeconds)
 	}
 	return result, nil
-
-}
-
-func (o OtcClient) GetEcsData() (*EcsResponse, error) {
-	client := http.Client{}
-	req, err := http.NewRequest("GET", o.ecsEndpoint, nil)
-	if err != nil {
-		return nil, err
-	}
-	req.Header.Add("X-Auth-Token", o.secret)
-	resp, err := client.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-	defer resp.Body.Close()
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var response EcsResponse
-	err = json.Unmarshal(body, &response)
-	if err != nil {
-		return nil, err
-	}
-
-	return &response, nil
 
 }
 
@@ -154,33 +85,6 @@ func (o OtcClient) GetMetricTypes() (*MetricsResponse, error) {
 	}
 
 	return &response, nil
-}
-
-func (mR MetricsResponse) FilterByNamespaces(namespaces []string) MetricsResponse {
-	filterdMetrics := []Metric{}
-	for _, m := range mR.Metrics {
-		if m.IsFromNamespace(namespaces) {
-			filterdMetrics = append(filterdMetrics, m)
-		}
-	}
-	return MetricsResponse{filterdMetrics}
-}
-
-func (m Metric) IsFromNamespace(namespaces []string) bool {
-	for _, n := range namespaces {
-		if n == m.Namespace {
-			return true
-		}
-	}
-	return false
-}
-
-func (m Metric) StandardPrometheusMetricName() string {
-	return fmt.Sprintf(
-		"%s_%s",
-		strings.TrimPrefix(strings.ToLower(m.Namespace), "sys."),
-		strings.ToLower(m.MetricName),
-	)
 }
 
 func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionvalue string, startTime time.Time, endTime time.Time) (*CloudEyeResponse, error) {
@@ -220,4 +124,31 @@ func (o OtcClient) GetMetricData(namespace, metricname, dimesionkey, dimensionva
 	}
 
 	return &response, err
+}
+
+func (mR MetricsResponse) FilterByNamespaces(namespaces []string) MetricsResponse {
+	filterdMetrics := []Metric{}
+	for _, m := range mR.Metrics {
+		if m.IsFromNamespace(namespaces) {
+			filterdMetrics = append(filterdMetrics, m)
+		}
+	}
+	return MetricsResponse{filterdMetrics}
+}
+
+func (m Metric) IsFromNamespace(namespaces []string) bool {
+	for _, n := range namespaces {
+		if n == m.Namespace {
+			return true
+		}
+	}
+	return false
+}
+
+func (m Metric) StandardPrometheusMetricName() string {
+	return fmt.Sprintf(
+		"%s_%s",
+		strings.TrimPrefix(strings.ToLower(m.Namespace), "sys."),
+		strings.ToLower(m.MetricName),
+	)
 }

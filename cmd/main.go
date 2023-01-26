@@ -2,7 +2,10 @@ package main
 
 import (
 	"fmt"
+	"github.com/iits-consulting/otc-prometheus-exporter/otc_client"
+	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
+
 	"net/http"
 	"time"
 
@@ -13,7 +16,7 @@ import (
 
 func collectMetricsInBackground() {
 	go func() {
-		client := internal.NewOtcClient(internal.Config.OtcProjectId, internal.Config.OtcProjectToken)
+		client := otc_client.NewOtcClient(internal.Config.OtcProjectId, internal.Config.OtcProjectToken)
 
 		resourceIdToName, err := FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
 		if err != nil {
@@ -59,7 +62,7 @@ func collectMetricsInBackground() {
 	}()
 }
 
-func FetchResourceIdToNameMapping(client internal.OtcClient, namespaces []string) (map[string]string, error) {
+func FetchResourceIdToNameMapping(client otc_client.OtcClient, namespaces []string) (map[string]string, error) {
 	resourceIdToName := make(map[string]string)
 
 	if slices.Contains(namespaces, internal.EcsNamespace) {
@@ -67,9 +70,7 @@ func FetchResourceIdToNameMapping(client internal.OtcClient, namespaces []string
 		if err != nil {
 			return map[string]string{}, err
 		}
-		for _, s := range result.Servers {
-			resourceIdToName[s.Id] = s.Name
-		}
+		maps.Copy(resourceIdToName, internal.GetEcsIdToNameMapping(*result))
 	}
 
 	if slices.Contains(namespaces, internal.RdsNamespace) {

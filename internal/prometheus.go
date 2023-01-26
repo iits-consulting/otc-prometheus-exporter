@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"github.com/iits-consulting/otc-prometheus-exporter/otc_client"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
@@ -9,7 +10,7 @@ import (
 var PrometheusMetrics map[string]*prometheus.GaugeVec
 var PrometheusVectorLabels = []string{"unit", "resource_id", "resource_name"}
 
-func SetupPrometheusMetricsFromOtcMetrics(otcMetrics MetricsResponse) map[string]*prometheus.GaugeVec {
+func SetupPrometheusMetricsFromOtcMetrics(otcMetrics otc_client.MetricsResponse) map[string]*prometheus.GaugeVec {
 	metrics := make(map[string]*prometheus.GaugeVec)
 
 	for _, metric := range otcMetrics.Metrics {
