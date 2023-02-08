@@ -13,5 +13,5 @@ RUN go build -o otc-prometheus-exporter cmd/main.go && \
 
 FROM alpine:3.16
 COPY --from=build /usr/local/bin/otc-prometheus-exporter /usr/bin/otc-prometheus-exporter
-EXPOSE 2112
+EXPOSE 8000
 ENTRYPOINT [ "otc-prometheus-exporter" ]

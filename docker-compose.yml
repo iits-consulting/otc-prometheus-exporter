@@ -10,7 +10,7 @@ services:
       - "./docker.local/otc-prometheus-exporter:/root"
 
     environment:
-      NAMESPACES: "SYS.ECS"
+      NAMESPACES: "VPC,ELB,NAT,RDS,ECS,DMS"
       PROJECT_NAME: "eu-de_iits-central"
       PORT: 8000
 
