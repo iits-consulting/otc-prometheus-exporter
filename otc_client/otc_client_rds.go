@@ -50,15 +50,14 @@ type ChargeInfo struct {
 }
 
 type Instances struct {
-	Id         string   `json:"id"`
-	Name       string   `json:"name"`
-	Status     string   `json:"status"`
-	Alias      string   `json:"alias"`
-	PrivateIps []string `json:"private_ips"`
-	PublicIps  []string `json:"public_ips"`
-	Port       int      `json:"port"`
-	Type       string   `json:"type"`
-	//TO DO: ha type missing
+	Id                  string             `json:"id"`
+	Name                string             `json:"name"`
+	Status              string             `json:"status"`
+	Alias               string             `json:"alias"`
+	PrivateIps          []string           `json:"private_ips"`
+	PublicIps           []string           `json:"public_ips"`
+	Port                int                `json:"port"`
+	Type                string             `json:"type"`
 	Region              string             `json:"region"`
 	Datastore           Datastores         `json:"datastore"`
 	Created             string             `json:"created"`

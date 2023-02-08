@@ -82,6 +82,30 @@ func FetchResourceIdToNameMapping(client otc_client.OtcClient, namespaces []stri
 		maps.Copy(resourceIdToName, internal.GetRdsIdToNameMapping(*result))
 	}
 
+	if slices.Contains(namespaces, internal.DmsNamespace) {
+		result, err := client.GetDmsData()
+		if err != nil {
+			return map[string]string{}, err
+		}
+		maps.Copy(resourceIdToName, internal.GetDmsIdToNameMapping(*result))
+	}
+
+	if slices.Contains(namespaces, internal.NatNamespace) {
+		result, err := client.GetNatData()
+		if err != nil {
+			return map[string]string{}, err
+		}
+		maps.Copy(resourceIdToName, internal.GetNatIdtoNameMapping(*result))
+	}
+
+	if slices.Contains(namespaces, internal.ElbNamespace) {
+		result, err := client.GetElbData()
+		if err != nil {
+			return map[string]string{}, err
+		}
+		maps.Copy(resourceIdToName, internal.GetElbIdToNameMapping(*result))
+	}
+
 	return resourceIdToName, nil
 }
 
