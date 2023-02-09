@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      name: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Release.Name }}
+          image: "{{ .Values.image.imageRepository}}/otc-prometheus-exporter:{{ .Values.image.imageTag }}"
+          ports:
+            - containerPort: {{ .Values.metricsPort }}
+          volumeMounts:
+            - mountPath: "/data/.otc-auth-config"
+              name: OtcAuthConfig
+          env:
+            - name: PORT
+              value: {{ .Values.metricsPort }}
+            - name: WAITDURATION
+              value: {{ .Values.waitDuration }}
+            - name: NAMESPACES
+              value: {{ .Values.namespaces}}
+            - name: PROJECT_NAME
+              value: {{ .Values.projectName}}
+            - name: OTC_AUTH_CONFIG_PATH
+              value: "/data/.otc-auth-config"

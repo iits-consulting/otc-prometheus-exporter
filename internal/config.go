@@ -18,24 +18,35 @@ type ConfigStruct struct {
 
 const defaultPort = 8000
 const defaultWaitDuration = 60 * time.Second
+const defaultOtcAuthConfigLocation = "~/.otc-auth-config"
 
 var Config ConfigStruct
 
 func init() {
-	const path = "~/.otc-auth-config"
-	config, err := LoadConfigFromFile(path)
+	LoadConfig()
+}
+
+func LoadConfig() {
+
+	otcAuthConfigPath := defaultOtcAuthConfigLocation
+	newOtcAuthConfigPath, ok := os.LookupEnv("OTC_AUTH_CONFIG_PATH")
+	if ok {
+		otcAuthConfigPath = newOtcAuthConfigPath
+	}
+
+	config, err := LoadConfigFromFile(otcAuthConfigPath)
 	if err != nil {
 		panic(err)
 	}
 
 	projectName, ok := os.LookupEnv("PROJECT_NAME")
-	if !ok {
-		panic("PROJECT_NAME not set\n")
+	if !ok || projectName == "" {
+		panic("PROJECT_NAME not set or empty\n")
 	}
 
 	namespacesraw, ok := os.LookupEnv("NAMESPACES")
-	if !ok {
-		panic("NAMESPACES not set\n")
+	if !ok || namespacesraw == "" {
+		panic("NAMESPACES not set or empty\n")
 	}
 
 	namespacesarray := strings.Split(namespacesraw, ",")

@@ -212,3 +212,5 @@ Temporary Items
 
 # End of https://www.toptal.com/developers/gitignore/api/go,intellij,macos,linux,vscode
 >>>>>>> origin/main
+
+dist/

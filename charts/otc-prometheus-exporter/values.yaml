@@ -1,0 +1,11 @@
+image:
+  imageRepository: "ghcr.io/iits-consulting"
+  imageTag: "0.1.0"
+
+metricsPort: 8000
+
+namespaces: ""
+projectName: ""
+waitDuration: 60
+
+otcAuthConfig: ""
