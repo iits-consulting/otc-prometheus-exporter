@@ -1,4 +1,6 @@
 apiVersion: v1
 kind: Secret
-stringData:
-  otc-auth-config: {{ .Values.otcAuthConfig }}
+metadata:
+  name: "{{ .Release.Name }}-otcauthconfig"
+data:
+  otc-auth-config: {{ .Values.otcAuthConfig | b64enc }}

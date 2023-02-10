@@ -10,6 +10,8 @@ spec:
   template:
     metadata:
       name: {{ .Release.Name }}
+      labels:
+        app: {{ .Release.Name }}
     spec:
       containers:
         - name: {{ .Release.Name }}
@@ -17,16 +19,22 @@ spec:
           ports:
             - containerPort: {{ .Values.metricsPort }}
           volumeMounts:
-            - mountPath: "/data/.otc-auth-config"
-              name: OtcAuthConfig
+            - mountPath: "/data"
+              name: "{{ .Release.Name }}-otcauthconfig"
+              readOnly: true
           env:
             - name: PORT
-              value: {{ .Values.metricsPort }}
+              value: "{{ .Values.metricsPort }}"
             - name: WAITDURATION
-              value: {{ .Values.waitDuration }}
+              value: "{{ .Values.waitDuration }}"
             - name: NAMESPACES
-              value: {{ .Values.namespaces}}
+              value: "{{ .Values.namespaces}}"
             - name: PROJECT_NAME
-              value: {{ .Values.projectName}}
+              value: "{{ .Values.projectName}}"
             - name: OTC_AUTH_CONFIG_PATH
-              value: "/data/.otc-auth-config"
+              value: "/data/otc-auth-config"
+
+      volumes:
+        - name: "{{ .Release.Name }}-otcauthconfig"
+          secret:
+            secretName: "{{ .Release.Name }}-otcauthconfig"
