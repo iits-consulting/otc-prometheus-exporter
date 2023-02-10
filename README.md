@@ -30,9 +30,7 @@ The configuration happens via environment variables and one configuration file.
 
 3. Set the desired namespaces as a list of comma seperated values in the environment variable `NAMESPACES`.
 
-4. Run with `go run cmd/main.go`
-
-Following environmental variables can be set.
+4. The other environment variables are not required. The following table covers all environment variables.
 
 | environment variable   | default value        | allowed values        | description                                                                     |
 |------------------------|----------------------|-----------------------|---------------------------------------------------------------------------------|
@@ -42,14 +40,36 @@ Following environmental variables can be set.
 | `WAITDURATION`         | `60`                 | any positive integer  | Time in seconds between two API call fetches                                    |
 | `OTC_AUTH_CONFIG_PATH` | `~/.otc-auth-config` | any valid path        | Path to the `.otc-auth-config`                                                  |
 
-### Example
 
+### Binary
+
+1. Download and decompress the binary from the release page
+2. `chmod +x otc-prometheus-exporter` to make it executable.
+3. On MacOs it might be necessary to remove the Apple quarantine property from it too. This can be done with: `xattr -d com.apple.quarantine otc-prometheues-exporter`
+4. Export the required environment variables and run the programm.
+5. 
 ```shell
 export PROJECT_NAME="eu-de_iits-cool-project"
 export NAMESPACES="ECS,VPC,RDS"
-go run cmd/main.go
+./otc-prometheues-exporter
+```
+
+### Docker
+
+```shell
+docker pull ghcr.io/iits-consulting/otc-prometheus-exporter:latest
+docker run --platform 'linux/amd64' -e "PROJECT_NAME=eu-de_iits-central" -e "OTC_AUTH_CONFIG_PATH=/data/otc-auth-config" -e "NAMESPACES=VPC,ECS" --mount type=bind,source="/Users/zeljkobekcic/.otc-auth-config",target="/data/otc-auth-config"  ghcr.io/iits-consulting/otc-prometheus-exporter:latest
+```
+
+### Kubernetes (Helm)
+
+```shell
+helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter/
+helm search repo otc-prometheus-exporter
+helm install otc-prometheus-exporter otc-prometheus-exporterE/otc-prometheus-exporter --set your_values.yaml
 ```
 
 ## References
 
 - [Open Telekom Cloud Docs](https://docs.otc.t-systems.com/)
+- https://github.com/tiagoReichert/otc-cloudeye-prometheus-exporter
