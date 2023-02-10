@@ -60,29 +60,3 @@ jobs:
             ghcr.io/iits-consulting/otc-prometheus-exporter:${{ env.RELEASE_VERSION }}
 
 
-  helmrelease:
-    permissions:
-      contents: write
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-
-      - name: Configure Git
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
-      - name: Install Helm
-        uses: azure/setup-helm@v1.1
-        with:
-          version: v3.4.0
-
-      - name: Lint chart
-        run: helm lint charts/* --strict
-
-      - name: Run chart-releaser
-        uses: helm/chart-releaser-action@v1.2.1
-        env:
-          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
