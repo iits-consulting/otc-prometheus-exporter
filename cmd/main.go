@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 
-	"github.com/iits-consulting/otc-prometheus-exporter/otc_client"
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 
@@ -17,38 +16,37 @@ import (
 
 func collectMetricsInBackground() {
 	go func() {
-		client := otc_client.NewOtcClient(internal.Config.OtcProjectId, internal.Config.OtcProjectToken)
+		client, err := internal.NewOtcClientFromConfig(internal.Config)
+		if err != nil {
+			panic(err)
+		}
 
 		resourceIdToName, err := FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
 		if err != nil {
 			panic(err)
 		}
 
-		metrics, _ := client.GetMetricTypes()
-		filteredMetrics := metrics.FilterByNamespaces(internal.Config.Namespaces)
+		metrics, err := client.GetMetrics()
+		if err != nil {
+			panic(err)
+		}
+
+		filteredMetrics := internal.FilterByNamespaces(metrics, internal.Config.Namespaces)
 
 		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
 
 		for {
 			fmt.Println(time.Now())
-			endTime := time.Now()
-			startTime := endTime.Add(-1 * time.Second)
-			for _, metric := range filteredMetrics.Metrics {
-				cloudeyeResponse, err := client.GetMetricData(
-					metric.Namespace,
-					metric.MetricName,
-					metric.Dimensions[0].Name,
-					metric.Dimensions[0].Value,
-					startTime,
-					endTime,
-				)
+
+			for _, metric := range filteredMetrics {
+				cloudeyeResponse, err := client.GetMetricData(metric)
 				if err != nil {
 					panic(err)
 				}
 				time.Sleep(time.Second)
 
-				for _, d := range cloudeyeResponse.DataPoints {
-					internal.PrometheusMetrics[metric.StandardPrometheusMetricName()].With(
+				for _, d := range cloudeyeResponse.Datapoints {
+					internal.PrometheusMetrics[internal.StandardPrometheusMetricName(metric)].With(
 						prometheus.Labels{
 							"unit":          d.Unit,
 							"resource_id":   metric.Dimensions[0].Value,
@@ -63,49 +61,49 @@ func collectMetricsInBackground() {
 	}()
 }
 
-func FetchResourceIdToNameMapping(client otc_client.OtcClient, namespaces []string) (map[string]string, error) {
+func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []string) (map[string]string, error) {
 	resourceIdToName := make(map[string]string)
 
 	if slices.Contains(namespaces, internal.EcsNamespace) {
-		result, err := client.GetEcsData()
+		result, err := client.GetEcsIdNameMapping()
 		if err != nil {
 			return map[string]string{}, err
 		}
-		maps.Copy(resourceIdToName, internal.GetEcsIdToNameMapping(*result))
+		maps.Copy(resourceIdToName, result)
 	}
 
 	if slices.Contains(namespaces, internal.RdsNamespace) {
-		result, err := client.GetRdsData()
+		result, err := client.GetRdsIdNameMapping()
 		if err != nil {
 			return map[string]string{}, err
 		}
-		maps.Copy(resourceIdToName, internal.GetRdsIdToNameMapping(*result))
+		maps.Copy(resourceIdToName, result)
 	}
 
 	if slices.Contains(namespaces, internal.DmsNamespace) {
-		result, err := client.GetDmsData()
+		result, err := client.GetDmsIdNameMapping()
 		if err != nil {
 			return map[string]string{}, err
 		}
-		maps.Copy(resourceIdToName, internal.GetDmsIdToNameMapping(*result))
+		maps.Copy(resourceIdToName, result)
 	}
 
 	if slices.Contains(namespaces, internal.NatNamespace) {
-		result, err := client.GetNatData()
+		result, err := client.GetNatIdNameMapping()
 		if err != nil {
 			return map[string]string{}, err
 		}
-		maps.Copy(resourceIdToName, internal.GetNatIdtoNameMapping(*result))
+		maps.Copy(resourceIdToName, result)
 	}
 
 	if slices.Contains(namespaces, internal.ElbNamespace) {
-		result, err := client.GetElbData()
+		result, err := client.GetElbIdNameMapping()
 		if err != nil {
 			return map[string]string{}, err
 		}
-		maps.Copy(resourceIdToName, internal.GetElbIdToNameMapping(*result))
+		maps.Copy(resourceIdToName, result)
 	}
-
+	fmt.Printf("Collected %d resources\n", len(resourceIdToName))
 	return resourceIdToName, nil
 }
 

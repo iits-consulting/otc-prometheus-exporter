@@ -47,7 +47,7 @@ The configuration happens via environment variables and one configuration file.
 2. `chmod +x otc-prometheus-exporter` to make it executable.
 3. On MacOs it might be necessary to remove the Apple quarantine property from it too. This can be done with: `xattr -d com.apple.quarantine otc-prometheues-exporter`
 4. Export the required environment variables and run the programm.
-5. 
+
 ```shell
 export PROJECT_NAME="eu-de_iits-cool-project"
 export NAMESPACES="ECS,VPC,RDS"
