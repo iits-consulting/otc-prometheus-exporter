@@ -49,6 +49,9 @@ func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
 		return []otcMetrics.MetricInfoList{}, err
 	}
 	metricsResponsePages, err := otcMetrics.ListMetrics(cesClient, otcMetrics.ListMetricsRequest{}).AllPages()
+	if err != nil {
+		return []otcMetrics.MetricInfoList{}, err
+	}
 	metricsResponse, err := otcMetrics.ExtractMetrics(metricsResponsePages)
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
