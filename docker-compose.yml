@@ -6,13 +6,14 @@ services:
     build: .
     ports:
       - "8000:8000"
-    volumes:
-      - "./docker.local/otc-prometheus-exporter:/root"
 
     environment:
-      NAMESPACES: "VPC,ELB,NAT,RDS,ECS,DMS"
-      PROJECT_NAME: "eu-de_iits-central"
+      NAMESPACES: "$NAMESPACES"
       PORT: 8000
+      OTC_USERNAME: "$OTC_USERNAME"
+      OTC_PASSWORD: "$OTC_PASSWORD"
+      OTC_PROJECT_ID: "$OTC_PROJECT_ID"
+      OTC_DOMAIN_NAME: "$OTC_DOMAIN_NAME"
 
   prometheus:
     image: "prom/prometheus:latest"
@@ -27,3 +28,6 @@ services:
     image: "grafana/grafana:latest"
     ports:
       - "3000:3000"
+    volumes:
+      - "./docker.local/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources"
+      - "./docker.local/grafana/data:/var/lib/grafana"

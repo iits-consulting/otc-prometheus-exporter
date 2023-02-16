@@ -38,7 +38,8 @@ func collectMetricsInBackground() {
 		for {
 			fmt.Println(time.Now())
 
-			for _, metric := range filteredMetrics {
+			for i, metric := range filteredMetrics {
+				fmt.Printf("%4d | %4d | Fetching %##v\n", i, len(filteredMetrics), metric)
 				cloudeyeResponse, err := client.GetMetricData(metric)
 				if err != nil {
 					panic(err)

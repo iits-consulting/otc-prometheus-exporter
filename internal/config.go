@@ -41,8 +41,8 @@ func LoadConfig() {
 	namespaces := strings.Split(namespacesRaw, ",")
 	namespacesProcessed := make([]string, len(namespaces))
 
-	for _, namespace := range namespaces {
-		namespacesProcessed = append(namespacesProcessed, WithPrefixIfNotPresent(namespace, "SYS."))
+	for i, namespace := range namespaces {
+		namespacesProcessed[i] = WithPrefixIfNotPresent(namespace, "SYS.")
 	}
 
 	port := defaultPort
