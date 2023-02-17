@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	otcMetrics "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metrics"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promauto"
@@ -17,11 +16,10 @@ func SetupPrometheusMetricsFromOtcMetrics(otcMetrics []otcMetrics.MetricInfoList
 		metricName := StandardPrometheusMetricName(metric)
 
 		if _, ok := metrics[metricName]; !ok {
-			fmt.Println("created prometheus metric", metricName)
 			metrics[metricName] = promauto.NewGaugeVec(
 				prometheus.GaugeOpts{
 					Name: metricName,
-					Help: "The total number of processed events", // TODO
+					Help: "",
 				},
 				PrometheusVectorLabels,
 			)
@@ -29,5 +27,4 @@ func SetupPrometheusMetricsFromOtcMetrics(otcMetrics []otcMetrics.MetricInfoList
 	}
 
 	return metrics
-
 }

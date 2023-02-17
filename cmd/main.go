@@ -36,27 +36,23 @@ func collectMetricsInBackground() {
 		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
 
 		for {
-			fmt.Println(time.Now())
-
-			for i, metric := range filteredMetrics {
-				fmt.Printf("%4d | %4d | Fetching %##v\n", i, len(filteredMetrics), metric)
-				cloudeyeResponse, err := client.GetMetricData(metric)
-				if err != nil {
-					panic(err)
-				}
-				time.Sleep(time.Second)
-
-				for _, d := range cloudeyeResponse.Datapoints {
-					internal.PrometheusMetrics[internal.StandardPrometheusMetricName(metric)].With(
-						prometheus.Labels{
-							"unit":          d.Unit,
-							"resource_id":   metric.Dimensions[0].Value,
-							"resource_name": resourceIdToName[metric.Dimensions[0].Value],
-						}).Set(d.Average)
-				}
-
+			batchedMetricsResponse, err := client.GetMetricDataBatched(filteredMetrics)
+			if err != nil {
+				panic(err)
 			}
-			fmt.Println(time.Now())
+
+			for _, metric := range batchedMetricsResponse {
+				if len(metric.Datapoints) == 0 {
+					continue
+				}
+				internal.PrometheusMetrics[internal.StandardPrometheusBatchMetricName(metric)].With(
+					prometheus.Labels{
+						"unit":          metric.Unit,
+						"resource_id":   metric.Dimensions[0].Value,
+						"resource_name": resourceIdToName[metric.Dimensions[0].Value],
+					}).Set(metric.Datapoints[len(metric.Datapoints)-1].Average)
+			}
+
 			time.Sleep(internal.Config.WaitDuration)
 		}
 	}()

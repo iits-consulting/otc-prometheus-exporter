@@ -155,7 +155,7 @@ func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
 
 func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 	opts := golangsdk.EndpointOpts{Region: "eu-de"}
-	elbClient, err := openstack.NewELBV1(c.providerClient, opts)
+	elbClient, err := openstack.NewELBV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -187,7 +187,7 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 	}
 
 	endTime := time.Now()
-	startTime := endTime.Add(-1 * time.Second)
+	startTime := endTime.Add(-1 * time.Minute)
 
 	dim0Formatted := fmt.Sprintf("%s,%s", metric.Dimensions[0].Name, metric.Dimensions[0].Value)
 	metricData, err := otcMetricData.ShowMetricData(
@@ -199,7 +199,7 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 			From:       strconv.FormatInt(startTime.UnixMilli(), 10),
 			To:         strconv.FormatInt(endTime.UnixMilli(), 10),
 			Filter:     "average",
-			Period:     300,
+			Period:     1,
 		},
 	)
 
@@ -207,6 +207,44 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 		return nil, err
 	}
 	return metricData, nil
+}
+
+func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
+	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
+	if err != nil {
+		return []otcMetricData.BatchMetricData{}, err
+	}
+
+	endTime := time.Now()
+	startTime := endTime.Add(-1 * time.Minute)
+
+	requestedMetrics := make([]otcMetricData.Metric, len(metrics))
+	for i, m := range metrics {
+		requestedMetrics[i] = otcMetricData.Metric{
+			Namespace:  m.Namespace,
+			MetricName: m.MetricName,
+			Dimensions: []otcMetricData.MetricsDimension{
+				{
+					Name:  m.Dimensions[0].Name,
+					Value: m.Dimensions[0].Value,
+				},
+			},
+		}
+	}
+
+	metricData, err := otcMetricData.BatchListMetricData(
+		cesClient,
+		otcMetricData.BatchListMetricDataOpts{
+			Metrics: requestedMetrics,
+			From:    startTime.UnixMilli(),
+			To:      endTime.UnixMilli(),
+			Filter:  "average",
+			Period:  "1",
+		},
+	)
+
+	return metricData, err
 }
 
 func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) []otcMetrics.MetricInfoList {
@@ -224,6 +262,14 @@ func IsFromNamespace(metric otcMetrics.MetricInfoList, namespaces []string) bool
 }
 
 func StandardPrometheusMetricName(metric otcMetrics.MetricInfoList) string {
+	return fmt.Sprintf(
+		"%s_%s",
+		strings.TrimPrefix(strings.ToLower(metric.Namespace), "sys."),
+		strings.ToLower(metric.MetricName),
+	)
+}
+
+func StandardPrometheusBatchMetricName(metric otcMetricData.BatchMetricData) string {
 	return fmt.Sprintf(
 		"%s_%s",
 		strings.TrimPrefix(strings.ToLower(metric.Namespace), "sys."),
