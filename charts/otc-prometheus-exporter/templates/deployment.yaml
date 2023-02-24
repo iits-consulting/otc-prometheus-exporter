@@ -18,10 +18,6 @@ spec:
           image: "{{ .Values.image.imageRepository}}/otc-prometheus-exporter:{{ .Values.image.imageTag }}"
           ports:
             - containerPort: {{ .Values.metricsPort }}
-          volumeMounts:
-            - mountPath: "/data"
-              name: "{{ .Release.Name }}-otcauthconfig"
-              readOnly: true
           env:
             - name: PORT
               value: "{{ .Values.metricsPort }}"
@@ -29,12 +25,27 @@ spec:
               value: "{{ .Values.waitDuration }}"
             - name: NAMESPACES
               value: "{{ .Values.namespaces}}"
-            - name: PROJECT_NAME
-              value: "{{ .Values.projectName}}"
-            - name: OTC_AUTH_CONFIG_PATH
-              value: "/data/otc-auth-config"
+            - name: OTC_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OTC_USERNAME
 
-      volumes:
-        - name: "{{ .Release.Name }}-otcauthconfig"
-          secret:
-            secretName: "{{ .Release.Name }}-otcauthconfig"
+            - name: OTC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OTC_PASSWORD
+
+            - name: OTC_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OTC_PROJECT_ID
+
+            - name: OTC_DOMAIN_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OTC_DOMAIN_NAME
+

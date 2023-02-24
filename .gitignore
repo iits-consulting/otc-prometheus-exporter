@@ -1,4 +1,7 @@
-docker.local/otc-prometues-exporter/.otc-auth-config
+docker.local/grafana/data
+docker.local/prometheus
+.env
+
 # Created by https://www.toptal.com/developers/gitignore/api/go,intellij,macos,linux,visualstudiocode
 # Edit at https://www.toptal.com/developers/gitignore?templates=go,intellij,macos,linux,visualstudiocode
 

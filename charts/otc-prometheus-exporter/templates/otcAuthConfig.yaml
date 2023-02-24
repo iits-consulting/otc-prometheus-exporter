@@ -1,6 +1,9 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: "{{ .Release.Name }}-otcauthconfig"
-data:
-  otc-auth-config: {{ .Values.otcAuthConfig | b64enc }}
+  name: "{{ .Release.Name }}-credentials"
+stringData:
+  OTC_USERNAME: "{{ .Values.otcUsername}}"
+  OTC_PASSWORD: "{{ .Values.otcPassword}}"
+  OTC_PROJECT_ID: "{{ .Values.otcProjectId}}"
+  OTC_DOMAIN_NAME: "{{ .Values.otcDomainName}}"

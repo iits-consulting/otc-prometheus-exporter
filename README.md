@@ -1,7 +1,8 @@
 # OTC Prometheus Exporter
 
-This software gathers metrics from the [Open Telekom Cloud](https://open-telekom-cloud.com/)
-for [Prometheus](https://prometheus.io/).
+This software gathers metrics from the [Open Telekom Cloud (OTC)](https://open-telekom-cloud.com/)
+for [Prometheus](https://prometheus.io/). The metrics are then usable in any service which can use Prometheus as a
+datasource. For example [Grafana](https://grafana.com/)
 
 ## Available Metrics
 
@@ -16,50 +17,64 @@ Metrics for the following services are available
 ## Requirements
 
 - OTC-Credentials
-- Download the tool [otc-auth](https://github.com/iits-consulting/otc-auth)
 
 ## Usage & Configuration
 
 In this section you will learn how to use and configure this software.
 The configuration happens via environment variables and one configuration file.
 
-1. To authenticate please use `otc-auth`, to do so please follow the instructions in the readme of the project.
+1. Obtain the necessary credentials for the OTC. You need a username, password, project id and domain name.
 
-2. After authenticating you obtained an unscoped token and scoped token. Set environment variable `PROJECT_NAME` with
-   your target project name the way it's written in the config file (`~/.otc-auth-config`).
+2. Set the desired namespaces as a list of comma seperated values in the environment variable `NAMESPACES`.
 
-3. Set the desired namespaces as a list of comma seperated values in the environment variable `NAMESPACES`.
+3. The other environment variables are not required. The following table covers all environment variables.
 
-4. The other environment variables are not required. The following table covers all environment variables.
-
-| environment variable   | default value        | allowed values        | description                                                                     |
-|------------------------|----------------------|-----------------------|---------------------------------------------------------------------------------|
-| `PROJECT_NAME`         | none                 |                       | **REQUIRED** Project name on CloudEye where your instances are running          |
-| `NAMESPACES`           | none                 | ECS,DMS,VPC,NAT,ELB   | **REQUIRED** Specific namespaces for instances you want to get the metrics from |
-| `PORT`                 | `8000`               | any valid unused port | Port on which metrics are served                                                |
-| `WAITDURATION`         | `60`                 | any positive integer  | Time in seconds between two API call fetches                                    |
-| `OTC_AUTH_CONFIG_PATH` | `~/.otc-auth-config` | any valid path        | Path to the `.otc-auth-config`                                                  |
-
+| environment variable | default value | allowed values        | description                                                                                                                                                         |
+|----------------------|---------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `OTC_USERNAME`       | none          | valid username        | **REQUIRED** User in the OTC with access to the API                                                                                                                 |
+| `OTC_PASSWORD`       | none          | valid password        | **REQUIRED** Password for the user                                                                                                                                  |
+| `OTC_PROJECT_ID`     | none          | valid project id      | **REQUIRED** Project from which the metrics should be gathered. Obtainable in the OTC console IAM -> Projects -> View your Project -> You can now see the ProjectID |
+| `OTC_DOMAIN_NAME`    | none          | valid domain name     | **REQUIRED** Domainname/Tenant ID. The value in the OTC console on the top right `OTC-EU-DE-{somenumberhere}`.                                                      |
+| `NAMESPACES`         | none          | ECS,DMS,VPC,NAT,ELB   | **REQUIRED** Specific namespaces for instances you want to get the metrics from                                                                                     |
+| `PORT`               | `8000`        | any valid unused port | Port on which metrics are served                                                                                                                                    |
+| `WAITDURATION`       | `60`          | any positive integer  | Time in seconds between two API call fetches                                                                                                                        |
 
 ### Binary
 
+If you want to run the application directly as a binary then you can do it by following these steps.
+
+
 1. Download and decompress the binary from the release page
 2. `chmod +x otc-prometheus-exporter` to make it executable.
-3. On MacOs it might be necessary to remove the Apple quarantine property from it too. This can be done with: `xattr -d com.apple.quarantine otc-prometheues-exporter`
-4. Export the required environment variables and run the programm.
-5. 
-```shell
-export PROJECT_NAME="eu-de_iits-cool-project"
-export NAMESPACES="ECS,VPC,RDS"
-./otc-prometheues-exporter
-```
+3. On macOS, it might be necessary to remove the Apple quarantine property from it too.
+   This can be done with: `xattr -d com.apple.quarantine otc-prometheues-exporter`
+4. `cp .env.template .env`
+5. Fill out the values in the `.env` file
+6. Run the programm: `env $(cat .env) ./otc-prometheues-exporter`
 
 ### Docker
 
+If you want a single docker container with the application running then you can do it by following these steps.
+
+1. Make sure you have docker installed and running
+2. Copy the `.env.template` to `.env` and fill it out. This makes the docker command much shorter this way and your
+   secrets are not listed in your shell history.
+3. Run the following:
+
 ```shell
 docker pull ghcr.io/iits-consulting/otc-prometheus-exporter:latest
-docker run --platform 'linux/amd64' -e "PROJECT_NAME=eu-de_iits-central" -e "OTC_AUTH_CONFIG_PATH=/data/otc-auth-config" -e "NAMESPACES=VPC,ECS" --mount type=bind,source="/Users/zeljkobekcic/.otc-auth-config",target="/data/otc-auth-config"  ghcr.io/iits-consulting/otc-prometheus-exporter:latest
+docker run --env-file .env ghcr.io/iits-consulting/otc-prometheus-exporter:latest
 ```
+
+### Docker Compose
+
+If you want to start the application, a Prometheus and Grafana server all at once then you can do it by following these steps.
+This is suitable for a quick test or local development because the entire tool chain is running.
+
+1. Make sure you have docker and docker-compose installed and running
+2. Copy the `.env.template` to `.env` and fill it out. This makes the docker command much shorter this way and your
+   secrets are not listed in your shell history.
+3. Run the following: `docker compose --env-file .env up`
 
 ### Kubernetes (Helm)
 
