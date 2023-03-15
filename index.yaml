@@ -3,9 +3,9 @@ entries:
   otc-prometheus-exporter:
   - apiVersion: v2
     appVersion: 0.2.0
-    created: "2023-02-24T12:33:08.550343694Z"
+    created: "2023-03-15T14:54:22.019193621Z"
     description: A Helm chart for Kubernetes
-    digest: 9955d66e4d57ff2ca0d7c610a5300adacaac3a3a5f3db2e130af4c5864a4530e
+    digest: 5f57f9eec18bfa5bc11433dff1b89d4eb5273348c2fe985e3289678f20c98154
     name: otc-prometheus-exporter
     type: application
     urls:
@@ -21,4 +21,4 @@ entries:
     urls:
     - https://iits-consulting.github.io/otc-prometheus-exporter/otc-prometheus-exporter-0.1.0.tgz
     version: 0.1.0
-generated: "2023-02-24T12:33:08.549758578Z"
+generated: "2023-03-15T14:54:22.018222765Z"
