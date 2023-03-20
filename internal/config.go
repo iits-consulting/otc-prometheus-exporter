@@ -1,7 +1,9 @@
 package internal
 
 import (
+	"errors"
 	"fmt"
+	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 	"os"
 	"strconv"
 	"strings"
@@ -9,14 +11,44 @@ import (
 )
 
 type ConfigStruct struct {
-	Namespaces          []string
-	OtcUsername         string
-	OtcPassword         string
-	OtcDomainName       string
-	OtcProjectId        string
-	OtcIdentityEndpoint string
-	Port                int
-	WaitDuration        time.Duration
+	AuthenticationData AuthenticationData
+	Namespaces         []string
+	Port               int
+	WaitDuration       time.Duration
+}
+
+type AuthenticationData struct {
+	Username             string
+	Password             string
+	AccessKey            string
+	SecretKey            string
+	IsAkSkAuthentication bool
+	ProjectId            string
+	DomainName           string
+	IdentityEndpoint     string
+}
+
+func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOptionsProvider {
+	var opts golangsdk.AuthOptionsProvider
+
+	if ad.IsAkSkAuthentication {
+		opts = golangsdk.AKSKAuthOptions{
+			IdentityEndpoint: ad.IdentityEndpoint,
+			AccessKey:        ad.AccessKey,
+			SecretKey:        ad.SecretKey,
+			Domain:           ad.DomainName,
+		}
+	} else {
+		opts = golangsdk.AuthOptions{
+			IdentityEndpoint: ad.IdentityEndpoint,
+			Username:         ad.Username,
+			Password:         ad.Password,
+			DomainName:       ad.DomainName,
+			TenantID:         ad.ProjectId,
+			AllowReauth:      true,
+		}
+	}
+	return opts
 }
 
 const (
@@ -28,14 +60,21 @@ const (
 var Config ConfigStruct
 
 func init() {
-	LoadConfig()
+	var err error
+	Config, err = LoadConfig()
+	if err != nil {
+		panic(err)
+	}
+
 }
 
-func LoadConfig() {
-	var err error
+func loadNamespacesFromEnv() ([]string, error) {
 	namespacesRaw, ok := os.LookupEnv("NAMESPACES")
-	if !ok || namespacesRaw == "" {
-		panic("NAMESPACES not set or empty\n")
+	if !ok {
+		return []string{}, errors.New("environment variable \"NAMESPACES\" is not set")
+	}
+	if namespacesRaw == "" {
+		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
 	}
 
 	namespaces := strings.Split(namespacesRaw, ",")
@@ -44,52 +83,97 @@ func LoadConfig() {
 	for i, namespace := range namespaces {
 		namespacesProcessed[i] = WithPrefixIfNotPresent(namespace, "SYS.")
 	}
+	return namespacesProcessed, nil
+}
 
+func loadPortFromEnv() (int, error) {
 	port := defaultPort
 	rawport, ok := os.LookupEnv("PORT")
-	if ok {
-		port, err = strconv.Atoi(rawport)
-		if err != nil {
-			panic(fmt.Errorf("it looks like the input for the port '%s' was not a number", rawport))
-		}
+	if !ok {
+		return port, nil
 	}
+	port, err := strconv.Atoi(rawport)
+	if err != nil {
+		return 0, fmt.Errorf("input port is not a number. got '%s'", rawport)
+	}
+	return port, nil
 
+}
+
+func loadWaitDurationFromEnv() (time.Duration, error) {
 	waitDuration := defaultWaitDuration
 	rawtime, ok := os.LookupEnv("WAITDURATION")
-	if ok {
-		numSeconds, err := strconv.Atoi(rawtime)
-		if err != nil {
-			panic(err)
-		}
 
-		waitDuration = time.Duration(numSeconds) * time.Second
+	if !ok {
+		return waitDuration, nil
 	}
 
-	otcUsername, ok := os.LookupEnv("OTC_USERNAME")
-	if !ok {
-		panic("OTC_USERNAME environment variable is not set")
-	}
-	otcPassword, ok := os.LookupEnv("OTC_PASSWORD")
-	if !ok {
-		panic("OTC_PASSWORD environment variable is not set")
-	}
-	otcProjectId, ok := os.LookupEnv("OTC_PROJECT_ID")
-	if !ok {
-		panic("OTC_PROJECT_ID environment variable is not set")
-	}
-	otcDomainName, ok := os.LookupEnv("OTC_DOMAIN_NAME")
-	if !ok {
-		panic("OTC_DOMAIN_NAME environment variable is not set")
+	numSeconds, err := strconv.Atoi(rawtime)
+	if err != nil {
+		return 0, fmt.Errorf("input duration is not a number. got '%s'", waitDuration)
 	}
 
-	Config = ConfigStruct{
-		OtcUsername:         otcUsername,
-		OtcPassword:         otcPassword,
-		OtcProjectId:        otcProjectId,
-		OtcDomainName:       otcDomainName,
-		OtcIdentityEndpoint: defaultIdentityEndpoint,
-		Namespaces:          namespacesProcessed,
-		Port:                port,
-		WaitDuration:        waitDuration,
+	waitDuration = time.Duration(numSeconds) * time.Second
+	return waitDuration, nil
+}
+
+func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
+	isAkSkAuthentication := false
+	otcUsername, usernameOk := os.LookupEnv("OS_USERNAME")
+	otcPassword, passwordOk := os.LookupEnv("OS_PASSWORD")
+	otcAccessKey, accessKeyOk := os.LookupEnv("OS_ACCESS_KEY")
+	otcSecretKey, secretKeyOk := os.LookupEnv("OS_SECRET_KEY")
+
+	if (!usernameOk || !passwordOk) && accessKeyOk && secretKeyOk {
+		isAkSkAuthentication = true
 	}
+
+	otcProjectId, projectIdOk := os.LookupEnv("OS_PROJECT_ID")
+	if !projectIdOk {
+		return nil, errors.New("environment variable \"OS_PROJECT_ID\" is not set")
+	}
+	otcDomainName, domainNameOk := os.LookupEnv("OS_DOMAIN_NAME")
+	if !domainNameOk {
+		return nil, errors.New("environment variable \"OS_DOMAIN_NAME\" is not set")
+	}
+
+	otcIdentityEndpoint := defaultIdentityEndpoint
+
+	return &AuthenticationData{
+		Username:             otcUsername,
+		Password:             otcPassword,
+		AccessKey:            otcAccessKey,
+		SecretKey:            otcSecretKey,
+		IsAkSkAuthentication: isAkSkAuthentication,
+		ProjectId:            otcProjectId,
+		DomainName:           otcDomainName,
+		IdentityEndpoint:     otcIdentityEndpoint,
+	}, nil
+}
+
+func LoadConfig() (ConfigStruct, error) {
+
+	namespaces, err := loadNamespacesFromEnv()
+	if err != nil {
+		return ConfigStruct{}, err
+	}
+	port, err := loadPortFromEnv()
+	if err != nil {
+		return ConfigStruct{}, err
+	}
+	waitDuration, err := loadWaitDurationFromEnv()
+	if err != nil {
+		return ConfigStruct{}, err
+	}
+	authenticationData, err := loadAuthenticationDataFromEnv()
+	if err != nil {
+		return ConfigStruct{}, err
+	}
+
+	return ConfigStruct{
+		AuthenticationData: *authenticationData,
+		Namespaces:         namespaces,
+		Port:               port,
+		WaitDuration:       waitDuration,
+	}, nil
 }

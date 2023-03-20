@@ -9,3 +9,9 @@ const (
 	NatNamespace = "SYS.NAT"
 	ElbNamespace = "SYS.ELB"
 )
+
+var OtcNamespacesMapping = map[string]string{
+	"ECS": EcsNamespace,
+	"BMS": "SERVICE.BMS",
+	// find more stuff
+}

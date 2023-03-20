@@ -31,10 +31,12 @@ The configuration happens via environment variables and one configuration file.
 
 | environment variable | default value | allowed values        | description                                                                                                                                                         |
 |----------------------|---------------|-----------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `OTC_USERNAME`       | none          | valid username        | **REQUIRED** User in the OTC with access to the API                                                                                                                 |
-| `OTC_PASSWORD`       | none          | valid password        | **REQUIRED** Password for the user                                                                                                                                  |
-| `OTC_PROJECT_ID`     | none          | valid project id      | **REQUIRED** Project from which the metrics should be gathered. Obtainable in the OTC console IAM -> Projects -> View your Project -> You can now see the ProjectID |
-| `OTC_DOMAIN_NAME`    | none          | valid domain name     | **REQUIRED** Domainname/Tenant ID. The value in the OTC console on the top right `OTC-EU-DE-{somenumberhere}`.                                                      |
+| `OS_USERNAME`        | none          | valid username        | **REQUIRED** User in the OTC with access to the API                                                                                                                 |
+| `OS_PASSWORD`        | none          | valid password        | **REQUIRED** Password for the user                                                                                                                                  |
+| `OS_ACCESS_KEY`      | none          | valid access key      | **REQUIRED** You can instead of username/password also provide the users AK and SK                                                                                  |
+| `OS_SECRET_KEY`      | none          | valid secret key      | **REQUIRED** You can instead of username/password also provide the users AK and SK                                                                                  |
+| `OS_PROJECT_ID`      | none          | valid project id      | **REQUIRED** Project from which the metrics should be gathered. Obtainable in the OTC console IAM -> Projects -> View your Project -> You can now see the ProjectID |
+| `OS_DOMAIN_NAME`     | none          | valid domain name     | **REQUIRED** Domainname/Tenant ID. The value in the OTC console on the top right `OTC-EU-DE-{somenumberhere}`.                                                      |
 | `NAMESPACES`         | none          | ECS,DMS,VPC,NAT,ELB   | **REQUIRED** Specific namespaces for instances you want to get the metrics from                                                                                     |
 | `PORT`               | `8000`        | any valid unused port | Port on which metrics are served                                                                                                                                    |
 | `WAITDURATION`       | `60`          | any positive integer  | Time in seconds between two API call fetches                                                                                                                        |
@@ -42,7 +44,6 @@ The configuration happens via environment variables and one configuration file.
 ### Binary
 
 If you want to run the application directly as a binary then you can do it by following these steps.
-
 
 1. Download and decompress the binary from the release page
 2. `chmod +x otc-prometheus-exporter` to make it executable.

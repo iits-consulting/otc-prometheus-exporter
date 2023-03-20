@@ -3,7 +3,9 @@ kind: Secret
 metadata:
   name: "{{ .Release.Name }}-credentials"
 stringData:
-  OTC_USERNAME: "{{ .Values.otcUsername}}"
-  OTC_PASSWORD: "{{ .Values.otcPassword}}"
-  OTC_PROJECT_ID: "{{ .Values.otcProjectId}}"
-  OTC_DOMAIN_NAME: "{{ .Values.otcDomainName}}"
+  OS_USERNAME: "{{ .Values.osUsername}}"
+  OS_PASSWORD: "{{ .Values.osPassword}}"
+  OS_ACCESS_KEY: "{{ .Values.osAccessKey}}"
+  OS_SECRET_KEY: "{{ .Values.osAccessKey }}"
+  OS_PROJECT_ID: "{{ .Values.osProjectId}}"
+  OS_DOMAIN_NAME: "{{ .Values.osDomainName}}"

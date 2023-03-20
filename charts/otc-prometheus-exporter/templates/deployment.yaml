@@ -25,27 +25,40 @@ spec:
               value: "{{ .Values.waitDuration }}"
             - name: NAMESPACES
               value: "{{ .Values.namespaces}}"
-            - name: OTC_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OTC_USERNAME
 
-            - name: OTC_PASSWORD
+            - name: OS_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: "{{ .Release.Name }}-credentials"
-                  key: OTC_PASSWORD
+                  key: OS_USERNAME
 
-            - name: OTC_PROJECT_ID
+            - name: OS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: "{{ .Release.Name }}-credentials"
-                  key: OTC_PROJECT_ID
+                  key: OS_PASSWORD
 
-            - name: OTC_DOMAIN_NAME
+            - name: OS_ACCESS_KEY
               valueFrom:
                 secretKeyRef:
                   name: "{{ .Release.Name }}-credentials"
-                  key: OTC_DOMAIN_NAME
+                  key: OS_ACCESS_KEY
+
+            - name: OS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OS_SECRET_KEY
+
+            - name: OS_PROJECT_ID
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OS_PROJECT_ID
+
+            - name: OS_DOMAIN_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: "{{ .Release.Name }}-credentials"
+                  key: OS_DOMAIN_NAME
 
