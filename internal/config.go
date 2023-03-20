@@ -30,9 +30,6 @@ type AuthenticationData struct {
 
 func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOptionsProvider {
 	var opts golangsdk.AuthOptionsProvider
-	// env := openstack.NewEnv("OS_") // use OS_ prefixed env variables
-	// client, _ := env.AuthenticatedClient()
-	// fmt.Println(client.DomainID)
 	if ad.IsAkSkAuthentication {
 		opts = golangsdk.AKSKAuthOptions{
 			IdentityEndpoint: ad.IdentityEndpoint,
