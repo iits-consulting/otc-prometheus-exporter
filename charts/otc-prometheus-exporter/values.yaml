@@ -1,12 +1,14 @@
 image:
   imageRepository: "ghcr.io/iits-consulting"
-  imageTag: "0.2.0"
+  imageTag: "0.3.0"
 
 
-otcUsername: ""
-otcPassword: ""
-otcProjectId: ""
-otcDomainName: ""
+osUsername: ""
+osPassword: ""
+osAccessKey: ""
+osSecretKey: ""
+osProjectId: ""
+osDomainName: ""
 namespaces: ""
 metricsPort: 8000
 waitDuration: 60

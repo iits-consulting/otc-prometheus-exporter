@@ -22,18 +22,7 @@ type OtcWrapper struct {
 }
 
 func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
-	return NewOtcClient(config.OtcUsername, config.OtcPassword, config.OtcDomainName, config.OtcProjectId, config.OtcIdentityEndpoint)
-}
-
-func NewOtcClient(username, password, domainName, projectId, identityEndpoint string) (*OtcWrapper, error) {
-	opts := golangsdk.AuthOptions{
-		IdentityEndpoint: identityEndpoint,
-		Username:         username,
-		Password:         password,
-		DomainName:       domainName,
-		TenantID:         projectId,
-		AllowReauth:      true,
-	}
+	var opts golangsdk.AuthOptionsProvider = config.AuthenticationData.ToOtcGopherAuthOptionsProvider()
 	provider, err := openstack.AuthenticatedClient(opts)
 	if err != nil {
 		return nil, err
