@@ -6,6 +6,6 @@ stringData:
   OS_USERNAME: "{{ .Values.osUsername}}"
   OS_PASSWORD: "{{ .Values.osPassword}}"
   OS_ACCESS_KEY: "{{ .Values.osAccessKey}}"
-  OS_SECRET_KEY: "{{ .Values.osAccessKey }}"
+  OS_SECRET_KEY: "{{ .Values.osSecretKey }}"
   OS_PROJECT_ID: "{{ .Values.osProjectId}}"
   OS_DOMAIN_NAME: "{{ .Values.osDomainName}}"
