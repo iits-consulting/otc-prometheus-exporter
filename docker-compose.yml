@@ -10,10 +10,10 @@ services:
     environment:
       NAMESPACES: "$NAMESPACES"
       PORT: 8000
-      OTC_USERNAME: "$OTC_USERNAME"
-      OTC_PASSWORD: "$OTC_PASSWORD"
-      OTC_PROJECT_ID: "$OTC_PROJECT_ID"
-      OTC_DOMAIN_NAME: "$OTC_DOMAIN_NAME"
+      OS_USERNAME: "$OS_USERNAME"
+      OS_PASSWORD: "$OS_PASSWORD"
+      OS_PROJECT_ID: "$OS_PROJECT_ID"
+      OS_DOMAIN_NAME: "$OS_DOMAIN_NAME"
 
   prometheus:
     image: "prom/prometheus:latest"
