@@ -64,6 +64,7 @@ func init() {
 	Config, err = LoadConfig()
 	if err != nil {
 		panic(err)
+
 	}
 
 }
@@ -76,12 +77,18 @@ func loadNamespacesFromEnv() ([]string, error) {
 	if namespacesRaw == "" {
 		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
 	}
-
+	
 	namespaces := strings.Split(namespacesRaw, ",")
 	namespacesProcessed := make([]string, len(namespaces))
-
+	
+	
 	for i, namespace := range namespaces {
-		namespacesProcessed[i] = WithPrefixIfNotPresent(namespace, "SYS.")
+		namespacesProcessed[i] = namespace
+		fullnamespace, ok := OtcNamespacesMapping[namespace]
+		if ok {
+			namespacesProcessed[i] = fullnamespace
+		} 
+		
 	}
 	return namespacesProcessed, nil
 }
