@@ -82,14 +82,14 @@ func loadNamespacesFromEnv() ([]string, error) {
 	namespacesProcessed := make([]string, len(namespaces))
 	
 	
-	for i, namespace := range namespaces {	
-		for key, val := range OtcNamespacesMapping {
-			if namespace == key || namespace == val{
-				namespacesProcessed[i] = val
-			}
-		}
+	for i, namespace := range namespaces {
+		namespacesProcessed[i] = namespace
+		fullnamespace, ok := OtcNamespacesMapping[namespace]
+		if ok {
+			namespacesProcessed[i] = fullnamespace
+		} 
+		
 	}
-
 	return namespacesProcessed, nil
 }
 
