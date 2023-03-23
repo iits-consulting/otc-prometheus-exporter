@@ -79,15 +79,25 @@ func loadNamespacesFromEnv() ([]string, error) {
 	if namespacesRaw == "" {
 		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
 	}
-
+	
 	namespaces := strings.Split(namespacesRaw, ",")
 	namespacesProcessed := make([]string, len(namespaces))
-
-	for i, namespace := range namespaces {
-		namespacesProcessed[i] = WithPrefixIfNotPresent(namespace, "SYS.")
+	
+	
+	for i, namespace := range namespaces {	
+		for key, val := range OtcNamespacesMapping {
+			if namespace == key || namespace == val{
+				namespacesProcessed[i] = val
+			}
+		}
 	}
+	
+	fmt.Println(namespacesProcessed)
+	
 	return namespacesProcessed, nil
 }
+
+
 
 func loadPortFromEnv() (int, error) {
 	port := defaultPort
