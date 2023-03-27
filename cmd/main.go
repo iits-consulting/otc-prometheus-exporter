@@ -1,7 +1,6 @@
 package main
 
 import (
-	"os"
 	"fmt"
 	
 	"golang.org/x/exp/maps"
@@ -24,8 +23,7 @@ func collectMetricsInBackground() {
 
 		var resourceIdToName map[string]string
 
-	
-		if fetchResourceEnabled, ok := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME"); ok && fetchResourceEnabled == "True" {
+		if internal.Config.ParseIfTrue {
 			resourceIdToName, err = FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
 			if err != nil {
 				panic(err)
