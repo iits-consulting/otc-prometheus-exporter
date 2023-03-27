@@ -1,8 +1,9 @@
 package main
 
 import (
+	"os"
 	"fmt"
-
+	
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 
@@ -21,9 +22,14 @@ func collectMetricsInBackground() {
 			panic(err)
 		}
 
-		resourceIdToName, err := FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
-		if err != nil {
-			panic(err)
+		var resourceIdToName map[string]string
+
+	
+		if fetchResourceEnabled, ok := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME"); ok && fetchResourceEnabled == "True" {
+			resourceIdToName, err = FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
+			if err != nil {
+				panic(err)
+			}
 		}
 
 		metrics, err := client.GetMetrics()

@@ -41,7 +41,7 @@ The configuration happens via environment variables and one configuration file.
 | `PORT`               | `8000`        | any valid unused port            | Port on which metrics are served                                                                                                                                    |
 | `WAITDURATION`       | `60`          | any positive integer             | Time in seconds between two API call fetches                                                                                                                        |
 
-[CloudEyeDoc]:https://docs.otc.t-systems.com/cloud-eye/api-ref/appendix/services_interconnected_with_cloud_eye.html#ces-03-0059
+a[CloudEyeDoc]:https://docs.otc.t-systems.com/cloud-eye/api-ref/appendix/services_interconnected_with_cloud_eye.html#ces-03-0059
 ### Binary
 
 If you want to run the application directly as a binary then you can do it by following these steps.
