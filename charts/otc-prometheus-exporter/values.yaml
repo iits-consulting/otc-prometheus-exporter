@@ -12,3 +12,4 @@ osDomainName: ""
 namespaces: ""
 metricsPort: 8000
 waitDuration: 60
+fetchResourceIdToName: false

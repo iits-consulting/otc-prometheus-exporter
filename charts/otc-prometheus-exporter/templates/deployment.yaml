@@ -24,8 +24,9 @@ spec:
             - name: WAITDURATION
               value: "{{ .Values.waitDuration }}"
             - name: NAMESPACES
-              value: "{{ .Values.namespaces}}"
-
+              value: "{{ .Values.namespaces }}"
+            - name:  FETCH_RESOURCE_ID_TO_NAME
+              value: "{{ .Values.fetchResourceIdToName }}"
             - name: OS_USERNAME
               valueFrom:
                 secretKeyRef:

@@ -23,7 +23,7 @@ func collectMetricsInBackground() {
 
 		var resourceIdToName map[string]string
 
-		if internal.Config.ParseIfTrue {
+		if internal.Config.ResourceIdNameMappingFlag {
 			resourceIdToName, err = FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
 			if err != nil {
 				panic(err)
