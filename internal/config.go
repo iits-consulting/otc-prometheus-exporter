@@ -15,6 +15,7 @@ type ConfigStruct struct {
 	Namespaces         []string
 	Port               int
 	WaitDuration       time.Duration
+	ParseIfTrue        bool
 }
 
 type AuthenticationData struct {
@@ -124,6 +125,16 @@ func loadWaitDurationFromEnv() (time.Duration, error) {
 	return waitDuration, nil
 }
 
+func ParsingIfTrue() (bool, error) {
+	fetchResourceEnabledRaw, _ := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME")
+	fetchResourceEnabled, err := strconv.ParseBool(fetchResourceEnabledRaw)
+	if err != nil {
+		fmt.Println(err) 
+	}
+	return fetchResourceEnabled, nil 
+	
+}
+
 func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
 	isAkSkAuthentication := false
 	otcUsername, usernameOk := os.LookupEnv("OS_USERNAME")
@@ -159,7 +170,10 @@ func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
 }
 
 func LoadConfig() (ConfigStruct, error) {
-
+	value, err := ParsingIfTrue()
+	if err != nil {
+		panic(err)
+	}
 	namespaces, err := loadNamespacesFromEnv()
 	if err != nil {
 		return ConfigStruct{}, err
@@ -182,5 +196,6 @@ func LoadConfig() (ConfigStruct, error) {
 		Namespaces:         namespaces,
 		Port:               port,
 		WaitDuration:       waitDuration,
+		ParseIfTrue : value,
 	}, nil
 }
