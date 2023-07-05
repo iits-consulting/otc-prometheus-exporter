@@ -3,19 +3,20 @@ package internal
 import (
 	"errors"
 	"fmt"
-	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 )
 
 type ConfigStruct struct {
-	AuthenticationData AuthenticationData
-	Namespaces         []string
-	Port               int
-	WaitDuration       time.Duration
-	ResourceIdNameMappingFlag        bool
+	AuthenticationData        AuthenticationData
+	Namespaces                []string
+	Port                      int
+	WaitDuration              time.Duration
+	ResourceIdNameMappingFlag bool
 }
 
 type AuthenticationData struct {
@@ -78,18 +79,17 @@ func loadNamespacesFromEnv() ([]string, error) {
 	if namespacesRaw == "" {
 		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
 	}
-	
+
 	namespaces := strings.Split(namespacesRaw, ",")
 	namespacesProcessed := make([]string, len(namespaces))
-	
-	
+
 	for i, namespace := range namespaces {
 		namespacesProcessed[i] = namespace
 		fullnamespace, ok := OtcNamespacesMapping[namespace]
 		if ok {
 			namespacesProcessed[i] = fullnamespace
-		} 
-		
+		}
+
 	}
 	return namespacesProcessed, nil
 }
@@ -128,14 +128,14 @@ func loadWaitDurationFromEnv() (time.Duration, error) {
 func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
 	fetchResourceEnabledRaw, ok := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME")
 	if !ok {
-		return false, nil 
+		return false, nil
 	}
 	fetchResourceEnabled, err := strconv.ParseBool(fetchResourceEnabledRaw)
 	if err != nil {
 		return false, err
 	}
-	return fetchResourceEnabled, nil 
-	
+	return fetchResourceEnabled, nil
+
 }
 
 func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
@@ -195,10 +195,10 @@ func LoadConfig() (ConfigStruct, error) {
 	}
 
 	return ConfigStruct{
-		AuthenticationData: *authenticationData,
-		Namespaces:         namespaces,
-		Port:               port,
-		WaitDuration:       waitDuration,
-		ResourceIdNameMappingFlag : value,
+		AuthenticationData:        *authenticationData,
+		Namespaces:                namespaces,
+		Port:                      port,
+		WaitDuration:              waitDuration,
+		ResourceIdNameMappingFlag: value,
 	}, nil
 }

@@ -2,19 +2,21 @@ package internal
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
+
 	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 	"github.com/opentelekomcloud/gophertelekomcloud/openstack"
 	otcMetricData "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metricdata"
 	otcMetrics "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metrics"
 	otcCompute "github.com/opentelekomcloud/gophertelekomcloud/openstack/compute/v2/servers"
+	ddsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dds/v3/instances"
 	dmsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dms/v1/instances"
 	elbInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/lbaas_v2/loadbalancers"
 	natgatewayInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/natgateways"
 	rdsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/rds/v3/instances"
 	"golang.org/x/exp/slices"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type OtcWrapper struct {
@@ -168,6 +170,29 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 	return result, nil
 }
 
+// Add in the DDS Service client here (openstack client.go line 719) - David
+func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
+	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	ddsClient, err := openstack.NewDDSServiceV3(c.providerClient, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ddsListResponse, err := ddsInstances.List(ddsClient, ddsInstances.ListInstanceOpts{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+	for _, instance := range ddsListResponse.Instances {
+		result[instance.Groups[0].Nodes[0].Id] = instance.Name
+	}
+
+	return result, nil
+}
+
 func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetricData.MetricData, error) {
 	opts := golangsdk.EndpointOpts{Region: "eu-de"}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
@@ -202,13 +227,18 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	opts := golangsdk.EndpointOpts{Region: "eu-de"}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
+		fmt.Print("Error creating CES Client!\n")
 		return []otcMetricData.BatchMetricData{}, err
 	}
+
+	// cesClient.ResourceBase = "http://localhost:3001/"
+	// log.Printf(cesClient.Endpoint)
 
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
 
 	requestedMetrics := make([]otcMetricData.Metric, len(metrics))
+
 	for i, m := range metrics {
 		requestedMetrics[i] = otcMetricData.Metric{
 			Namespace:  m.Namespace,
