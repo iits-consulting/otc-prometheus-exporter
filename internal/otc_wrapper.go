@@ -2,6 +2,10 @@ package internal
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
+	"time"
+
 	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 	"github.com/opentelekomcloud/gophertelekomcloud/openstack"
 	otcMetricData "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metricdata"
@@ -12,13 +16,11 @@ import (
 	natgatewayInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/natgateways"
 	rdsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/rds/v3/instances"
 	"golang.org/x/exp/slices"
-	"strconv"
-	"strings"
-	"time"
 )
 
 type OtcWrapper struct {
 	providerClient *golangsdk.ProviderClient
+	Region         string
 }
 
 func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
@@ -28,11 +30,11 @@ func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
 		return nil, err
 	}
 
-	return &OtcWrapper{providerClient: provider}, nil
+	return &OtcWrapper{providerClient: provider, Region: config.Region}, nil
 }
 
 func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
@@ -50,7 +52,7 @@ func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
 }
 
 func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	computeClient, err := openstack.NewComputeV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -75,7 +77,7 @@ func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	rdsClient, err := openstack.NewRDSV3(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -94,7 +96,7 @@ func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetDmsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	dmsClient, err := openstack.NewDMSServiceV1(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -118,7 +120,7 @@ func (c *OtcWrapper) GetDmsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	natClient, err := openstack.NewNatV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -143,7 +145,7 @@ func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	elbClient, err := openstack.NewELBV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -169,7 +171,7 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetricData.MetricData, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -199,7 +201,7 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 }
 
 func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
 		return []otcMetricData.BatchMetricData{}, err

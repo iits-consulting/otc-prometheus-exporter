@@ -61,7 +61,10 @@ const (
 	defaultWaitDuration = 60 * time.Second
 )
 
-var regionToEndpointMapping = map[string]string{"eu-de": "https://iam.eu-de.otc.t-systems.com:443/v3"}
+var regionToEndpointMapping = map[string]string{
+	"eu-de": "https://iam.eu-de.otc.t-systems.com:443/v3", 
+	"eu-nl": "https://iam.eu-nl.otc.t-systems.com:443/v3", 
+}
 var Config ConfigStruct
 
 func init() {
