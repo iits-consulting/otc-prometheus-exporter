@@ -84,7 +84,7 @@ This is suitable for a quick test or local development because the entire tool c
 ```shell
 helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter/
 helm search repo otc-prometheus-exporter
-helm install otc-prometheus-exporter otc-prometheus-exporterE/otc-prometheus-exporter --set your_values.yaml
+helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter --set your_values.yaml
 ```
 
 ## References
