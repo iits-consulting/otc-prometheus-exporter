@@ -139,14 +139,21 @@ func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
 }
 
 func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
-	isAkSkAuthentication := false
-	otcUsername, usernameOk := os.LookupEnv("OS_USERNAME")
-	otcPassword, passwordOk := os.LookupEnv("OS_PASSWORD")
-	otcAccessKey, accessKeyOk := os.LookupEnv("OS_ACCESS_KEY")
-	otcSecretKey, secretKeyOk := os.LookupEnv("OS_SECRET_KEY")
+	
+	otcUsername := os.Getenv("OS_USERNAME")
+	otcPassword := os.Getenv("OS_PASSWORD")
+	otcAccessKey := os.Getenv("OS_ACCESS_KEY")
+	otcSecretKey := os.Getenv("OS_SECRET_KEY")
 
-	if (!usernameOk || !passwordOk) && accessKeyOk && secretKeyOk {
+	isAkSkAuthentication := false
+
+	switch {
+	case otcUsername != "" && otcPassword != "":
+		isAkSkAuthentication = false
+	case otcAccessKey != "" && otcSecretKey != "":
 		isAkSkAuthentication = true
+	default:
+		return nil, errors.New("no valid authentication data provided. please provide either \"OS_USERNAME\" and \"OS_PASSWORD\" or \"OS_ACCESS_KEY\" and \"OS_SECRET_KEY\"")
 	}
 
 	otcProjectId, projectIdOk := os.LookupEnv("OS_PROJECT_ID")

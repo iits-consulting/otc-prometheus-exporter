@@ -1,6 +1,6 @@
 image:
   imageRepository: "ghcr.io/iits-consulting"
-  imageTag: "0.3.0"
+  imageTag: "0.3.1"
 
 
 osUsername: ""
