@@ -3,19 +3,21 @@ package internal
 import (
 	"errors"
 	"fmt"
-	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
+	"golang.org/x/exp/slices"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 )
 
 type ConfigStruct struct {
-	AuthenticationData AuthenticationData
-	Namespaces         []string
-	Port               int
-	WaitDuration       time.Duration
-	ResourceIdNameMappingFlag        bool
+	AuthenticationData        AuthenticationData
+	Namespaces                []string
+	Port                      int
+	WaitDuration              time.Duration
+	ResourceIdNameMappingFlag bool
 }
 
 type AuthenticationData struct {
@@ -26,14 +28,14 @@ type AuthenticationData struct {
 	IsAkSkAuthentication bool
 	ProjectId            string
 	DomainName           string
-	IdentityEndpoint     string
+	Region               OtcRegion
 }
 
 func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOptionsProvider {
 	var opts golangsdk.AuthOptionsProvider
 	if ad.IsAkSkAuthentication {
 		opts = golangsdk.AKSKAuthOptions{
-			IdentityEndpoint: ad.IdentityEndpoint,
+			IdentityEndpoint: ad.Region.IamEndpoint(),
 			AccessKey:        ad.AccessKey,
 			SecretKey:        ad.SecretKey,
 			Domain:           ad.DomainName,
@@ -41,7 +43,7 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 		}
 	} else {
 		opts = golangsdk.AuthOptions{
-			IdentityEndpoint: ad.IdentityEndpoint,
+			IdentityEndpoint: ad.Region.IamEndpoint(),
 			Username:         ad.Username,
 			Password:         ad.Password,
 			DomainName:       ad.DomainName,
@@ -53,10 +55,30 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 }
 
 const (
-	defaultPort             = 8000
-	defaultWaitDuration     = 60 * time.Second
-	defaultIdentityEndpoint = "https://iam.eu-de.otc.t-systems.com:443/v3"
+	defaultRegion       = otcRegionEuDe
+	defaultPort         = 8000
+	defaultWaitDuration = 60 * time.Second
 )
+
+type OtcRegion string
+
+const (
+	otcRegionEuDe OtcRegion = "eu-de"
+	otcRegionEuNl OtcRegion = "eu-nl"
+)
+
+func NewOtcRegionFromString(region string) (OtcRegion, error) {
+	otcRegion := OtcRegion(region)
+	if slices.Contains([]OtcRegion{otcRegionEuNl, otcRegionEuDe}, otcRegion) {
+		return otcRegion, nil
+	}
+
+	return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
+}
+
+func (r OtcRegion) IamEndpoint() string {
+	return fmt.Sprintf("https://iam.%s.otc.t-systems.com:443/v3", r)
+}
 
 var Config ConfigStruct
 
@@ -78,18 +100,17 @@ func loadNamespacesFromEnv() ([]string, error) {
 	if namespacesRaw == "" {
 		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
 	}
-	
+
 	namespaces := strings.Split(namespacesRaw, ",")
 	namespacesProcessed := make([]string, len(namespaces))
-	
-	
+
 	for i, namespace := range namespaces {
 		namespacesProcessed[i] = namespace
 		fullnamespace, ok := OtcNamespacesMapping[namespace]
 		if ok {
 			namespacesProcessed[i] = fullnamespace
-		} 
-		
+		}
+
 	}
 	return namespacesProcessed, nil
 }
@@ -128,18 +149,26 @@ func loadWaitDurationFromEnv() (time.Duration, error) {
 func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
 	fetchResourceEnabledRaw, ok := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME")
 	if !ok {
-		return false, nil 
+		return false, nil
 	}
 	fetchResourceEnabled, err := strconv.ParseBool(fetchResourceEnabledRaw)
 	if err != nil {
 		return false, err
 	}
-	return fetchResourceEnabled, nil 
-	
+	return fetchResourceEnabled, nil
+
+}
+
+func loadRegionFromEnv() (OtcRegion, error) {
+	if region, ok := os.LookupEnv("REGION"); ok {
+		return NewOtcRegionFromString(region)
+	}
+
+	return defaultRegion, nil
 }
 
 func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
-	
+
 	otcUsername := os.Getenv("OS_USERNAME")
 	otcPassword := os.Getenv("OS_PASSWORD")
 	otcAccessKey := os.Getenv("OS_ACCESS_KEY")
@@ -165,7 +194,10 @@ func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
 		return nil, errors.New("environment variable \"OS_DOMAIN_NAME\" is not set")
 	}
 
-	otcIdentityEndpoint := defaultIdentityEndpoint
+	region, err := loadRegionFromEnv()
+	if err != nil {
+		return nil, err
+	}
 
 	return &AuthenticationData{
 		Username:             otcUsername,
@@ -175,7 +207,7 @@ func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
 		IsAkSkAuthentication: isAkSkAuthentication,
 		ProjectId:            otcProjectId,
 		DomainName:           otcDomainName,
-		IdentityEndpoint:     otcIdentityEndpoint,
+		Region:               region,
 	}, nil
 }
 
@@ -202,10 +234,10 @@ func LoadConfig() (ConfigStruct, error) {
 	}
 
 	return ConfigStruct{
-		AuthenticationData: *authenticationData,
-		Namespaces:         namespaces,
-		Port:               port,
-		WaitDuration:       waitDuration,
-		ResourceIdNameMappingFlag : value,
+		AuthenticationData:        *authenticationData,
+		Namespaces:                namespaces,
+		Port:                      port,
+		WaitDuration:              waitDuration,
+		ResourceIdNameMappingFlag: value,
 	}, nil
 }
