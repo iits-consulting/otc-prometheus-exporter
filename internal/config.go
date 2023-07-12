@@ -17,7 +17,6 @@ type ConfigStruct struct {
 	Port                      int
 	WaitDuration              time.Duration
 	ResourceIdNameMappingFlag bool
-	Region                    string
 }
 
 type AuthenticationData struct {
@@ -28,15 +27,14 @@ type AuthenticationData struct {
 	IsAkSkAuthentication bool
 	ProjectId            string
 	DomainName           string
-	Region               string
+	Region               OtcRegion
 }
 
 func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOptionsProvider {
 	var opts golangsdk.AuthOptionsProvider
-	identityEndpoint := regionToEndpointMapping[ad.Region]
 	if ad.IsAkSkAuthentication {
 		opts = golangsdk.AKSKAuthOptions{
-			IdentityEndpoint: identityEndpoint,
+			IdentityEndpoint: ad.Region.IamEndpoint(),
 			AccessKey:        ad.AccessKey,
 			SecretKey:        ad.SecretKey,
 			Domain:           ad.DomainName,
@@ -44,7 +42,7 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 		}
 	} else {
 		opts = golangsdk.AuthOptions{
-			IdentityEndpoint: identityEndpoint,
+			IdentityEndpoint: ad.Region.IamEndpoint(),
 			Username:         ad.Username,
 			Password:         ad.Password,
 			DomainName:       ad.DomainName,
@@ -56,15 +54,33 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 }
 
 const (
-	defaultRegion       = "eu-de"
+	defaultRegion       = otcRegionEuDe
 	defaultPort         = 8000
 	defaultWaitDuration = 60 * time.Second
 )
 
-var regionToEndpointMapping = map[string]string{
-	"eu-de": "https://iam.eu-de.otc.t-systems.com:443/v3", 
-	"eu-nl": "https://iam.eu-nl.otc.t-systems.com:443/v3", 
+type OtcRegion string
+
+const (
+	otcRegionEuDe OtcRegion = "eu-de"
+	otcRegionEuNl OtcRegion = "eu-nl"
+)
+
+func NewOtcRegionFromString(region string) (OtcRegion, error) {
+	switch OtcRegion(region) {
+	case otcRegionEuDe:
+		return otcRegionEuDe, nil
+	case otcRegionEuNl:
+		return otcRegionEuNl, nil
+	default:
+		return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
+	}
 }
+
+func (r OtcRegion) IamEndpoint() string {
+	return fmt.Sprintf("https://iam.%s.otc.t-systems.com:443/v3", r)
+}
+
 var Config ConfigStruct
 
 func init() {
@@ -144,16 +160,16 @@ func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
 
 }
 
-func loadRegionFromEnv() (string, error) {
+func loadRegionFromEnv() (OtcRegion, error) {
 	if region, ok := os.LookupEnv("REGION"); ok {
-		return region, nil
+		return NewOtcRegionFromString(region)
 	}
 
 	return defaultRegion, nil
 }
 
 func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
-	
+
 	otcUsername := os.Getenv("OS_USERNAME")
 	otcPassword := os.Getenv("OS_PASSWORD")
 	otcAccessKey := os.Getenv("OS_ACCESS_KEY")
@@ -209,10 +225,6 @@ func LoadConfig() (ConfigStruct, error) {
 	if err != nil {
 		return ConfigStruct{}, err
 	}
-	region, err := loadRegionFromEnv()
-	if err != nil {
-		return ConfigStruct{}, err
-	}
 	waitDuration, err := loadWaitDurationFromEnv()
 	if err != nil {
 		return ConfigStruct{}, err
@@ -228,6 +240,5 @@ func LoadConfig() (ConfigStruct, error) {
 		Port:                      port,
 		WaitDuration:              waitDuration,
 		ResourceIdNameMappingFlag: value,
-		Region:                    region,
 	}, nil
 }
