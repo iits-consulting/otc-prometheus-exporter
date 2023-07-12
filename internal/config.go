@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"fmt"
+	"golang.org/x/exp/slices"
 	"os"
 	"strconv"
 	"strings"
@@ -67,14 +68,12 @@ const (
 )
 
 func NewOtcRegionFromString(region string) (OtcRegion, error) {
-	switch OtcRegion(region) {
-	case otcRegionEuDe:
-		return otcRegionEuDe, nil
-	case otcRegionEuNl:
-		return otcRegionEuNl, nil
-	default:
-		return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
+	otcRegion := OtcRegion(region)
+	if slices.Contains([]OtcRegion{otcRegionEuNl, otcRegionEuDe}, otcRegion) {
+		return otcRegion, nil
 	}
+
+	return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
 }
 
 func (r OtcRegion) IamEndpoint() string {
