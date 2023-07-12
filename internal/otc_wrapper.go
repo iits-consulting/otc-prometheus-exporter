@@ -30,7 +30,7 @@ func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
 		return nil, err
 	}
 
-	return &OtcWrapper{providerClient: provider, Region: config.Region}, nil
+	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region)}, nil
 }
 
 func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
