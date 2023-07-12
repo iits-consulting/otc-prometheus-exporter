@@ -11,11 +11,11 @@ import (
 )
 
 type ConfigStruct struct {
-	AuthenticationData AuthenticationData
-	Namespaces         []string
-	Port               int
-	WaitDuration       time.Duration
-	ResourceIdNameMappingFlag        bool
+	AuthenticationData        AuthenticationData
+	Namespaces                []string
+	Port                      int
+	WaitDuration              time.Duration
+	ResourceIdNameMappingFlag bool
 }
 
 type AuthenticationData struct {
@@ -53,7 +53,7 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 }
 
 const (
-	defaultPort             = 8000
+	defaultPort             = 39100
 	defaultWaitDuration     = 60 * time.Second
 	defaultIdentityEndpoint = "https://iam.eu-de.otc.t-systems.com:443/v3"
 )
@@ -78,18 +78,17 @@ func loadNamespacesFromEnv() ([]string, error) {
 	if namespacesRaw == "" {
 		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
 	}
-	
+
 	namespaces := strings.Split(namespacesRaw, ",")
 	namespacesProcessed := make([]string, len(namespaces))
-	
-	
+
 	for i, namespace := range namespaces {
 		namespacesProcessed[i] = namespace
 		fullnamespace, ok := OtcNamespacesMapping[namespace]
 		if ok {
 			namespacesProcessed[i] = fullnamespace
-		} 
-		
+		}
+
 	}
 	return namespacesProcessed, nil
 }
@@ -128,18 +127,18 @@ func loadWaitDurationFromEnv() (time.Duration, error) {
 func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
 	fetchResourceEnabledRaw, ok := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME")
 	if !ok {
-		return false, nil 
+		return false, nil
 	}
 	fetchResourceEnabled, err := strconv.ParseBool(fetchResourceEnabledRaw)
 	if err != nil {
 		return false, err
 	}
-	return fetchResourceEnabled, nil 
-	
+	return fetchResourceEnabled, nil
+
 }
 
 func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
-	
+
 	otcUsername := os.Getenv("OS_USERNAME")
 	otcPassword := os.Getenv("OS_PASSWORD")
 	otcAccessKey := os.Getenv("OS_ACCESS_KEY")
@@ -202,10 +201,10 @@ func LoadConfig() (ConfigStruct, error) {
 	}
 
 	return ConfigStruct{
-		AuthenticationData: *authenticationData,
-		Namespaces:         namespaces,
-		Port:               port,
-		WaitDuration:       waitDuration,
-		ResourceIdNameMappingFlag : value,
+		AuthenticationData:        *authenticationData,
+		Namespaces:                namespaces,
+		Port:                      port,
+		WaitDuration:              waitDuration,
+		ResourceIdNameMappingFlag: value,
 	}, nil
 }

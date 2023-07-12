@@ -5,11 +5,11 @@ services:
   otc-prometheus-exporter:
     build: .
     ports:
-      - "8000:8000"
+      - "39100:39100"
 
     environment:
       NAMESPACES: "$NAMESPACES"
-      PORT: 8000
+      PORT: 39100
       OS_USERNAME: "$OS_USERNAME"
       OS_PASSWORD: "$OS_PASSWORD"
       OS_PROJECT_ID: "$OS_PROJECT_ID"

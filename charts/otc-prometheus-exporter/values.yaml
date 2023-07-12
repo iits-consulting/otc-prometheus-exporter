@@ -10,6 +10,6 @@ osSecretKey: ""
 osProjectId: ""
 osDomainName: ""
 namespaces: ""
-metricsPort: 8000
+metricsPort: 39100
 waitDuration: 60
 fetchResourceIdToName: false
