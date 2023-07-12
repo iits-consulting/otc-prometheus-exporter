@@ -208,6 +208,11 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
 
+	// we don't want to perform an empty request to the OTC Api because it returns an error
+	if len(metrics) == 0 {
+		return []otcMetricData.BatchMetricData{}, nil
+	}
+
 	requestedMetrics := make([]otcMetricData.Metric, len(metrics))
 	for i, m := range metrics {
 		requestedMetrics[i] = otcMetricData.Metric{
