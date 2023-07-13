@@ -56,8 +56,8 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 
 const (
 	defaultRegion       = otcRegionEuDe
-	defaultPort         = 8000
-	defaultWaitDuration = 60 * time.Second
+	defaultPort             = 39100
+	defaultWaitDuration     = 60 * time.Second
 )
 
 type OtcRegion string
