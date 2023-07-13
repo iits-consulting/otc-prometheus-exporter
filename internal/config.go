@@ -57,8 +57,8 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 
 const (
 	defaultRegion       = otcRegionEuDe
-	defaultPort             = 39100
-	defaultWaitDuration     = 60 * time.Second
+	defaultPort         = 39100
+	defaultWaitDuration = 60 * time.Second
 )
 
 type OtcRegion string
@@ -84,13 +84,11 @@ func (r OtcRegion) IamEndpoint() string {
 var Config ConfigStruct
 
 func init() {
-	var err error
-	Config, err = LoadConfig()
-	if err != nil {
-		panic(err)
-
-	}
-
+	// var err error
+	// Config, err = LoadConfig()
+	// if err != nil {
+	// 	panic(err)
+	// }
 }
 
 func loadNamespacesFromEnv() ([]string, error) {

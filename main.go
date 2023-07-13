@@ -2,16 +2,17 @@ package main
 
 import (
 	"fmt"
+	cmdPackage "github.com/iits-consulting/otc-prometheus-exporter/cmd"
+	"os"
 
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 
-	"net/http"
 	"time"
 
 	"github.com/iits-consulting/otc-prometheus-exporter/internal"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/spf13/cobra"
 )
 
 func collectMetricsInBackground() {
@@ -109,13 +110,34 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 }
 
 func main() {
+	var port uint16
 
-	collectMetricsInBackground()
-
-	http.Handle("/metrics", promhttp.Handler())
-	address := fmt.Sprintf(":%d", internal.Config.Port)
-	err := http.ListenAndServe(address, nil)
-	if err != nil {
-		panic(err)
+	var rootCmd = &cobra.Command{
+		Use: "otc-prometheus-exporter",
+		PreRunE: func(cmd *cobra.Command, args []string) error {
+			return cmdPackage.InitializeConfig(cmd, map[string]string{
+				"port": "PORT",
+			})
+		},
+		RunE: func(cmd *cobra.Command, args []string) error {
+			fmt.Println(">>>>", port)
+			return nil
+		},
 	}
+
+	rootCmd.Flags().Uint16VarP(&port, "port", "p", 39100, "Port on which metrics are served")
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
+	// collectMetricsInBackground()
+	//
+	// http.Handle("/metrics", promhttp.Handler())
+	// address := fmt.Sprintf(":%d", internal.Config.Port)
+	// err := http.ListenAndServe(address, nil)
+	// if err != nil {
+	//	panic(err)
+	// }
 }
