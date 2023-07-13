@@ -3,6 +3,7 @@ package internal
 import (
 	"errors"
 	"fmt"
+	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 	"os"
 	"strconv"
@@ -93,12 +94,9 @@ func init() {
 }
 
 func loadNamespacesFromEnv() ([]string, error) {
-	namespacesRaw, ok := os.LookupEnv("NAMESPACES")
-	if !ok {
-		return []string{}, errors.New("environment variable \"NAMESPACES\" is not set")
-	}
+	namespacesRaw := os.Getenv("NAMESPACES")
 	if namespacesRaw == "" {
-		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
+		return maps.Keys(OtcNamespacesMapping), nil
 	}
 
 	namespaces := strings.Split(namespacesRaw, ",")
@@ -106,12 +104,11 @@ func loadNamespacesFromEnv() ([]string, error) {
 
 	for i, namespace := range namespaces {
 		namespacesProcessed[i] = namespace
-		fullnamespace, ok := OtcNamespacesMapping[namespace]
-		if ok {
-			namespacesProcessed[i] = fullnamespace
+		if fullNamespace, ok := OtcNamespacesMapping[namespace]; ok {
+			namespacesProcessed[i] = fullNamespace
 		}
-
 	}
+
 	return namespacesProcessed, nil
 }
 
