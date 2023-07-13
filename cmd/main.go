@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	
+
 	"golang.org/x/exp/maps"
 	"golang.org/x/exp/slices"
 
