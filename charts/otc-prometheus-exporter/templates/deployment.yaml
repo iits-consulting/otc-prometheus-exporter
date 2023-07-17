@@ -28,38 +28,14 @@ spec:
             - name:  FETCH_RESOURCE_ID_TO_NAME
               value: "{{ .Values.fetchResourceIdToName }}"
             - name: OS_USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OS_USERNAME
-
+              value: "{{ .Values.osUsername }}"
             - name: OS_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OS_PASSWORD
-
+              value: "{{ .Values.osPassword }}" 
             - name: OS_ACCESS_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OS_ACCESS_KEY
-
+              value: "{{ .Values.osAccessKey }}" 
             - name: OS_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OS_SECRET_KEY
-
+              value: "{{ .Values.osSecretKey }}"
             - name: OS_PROJECT_ID
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OS_PROJECT_ID
-
+              value: "{{ .Values.osProjectId }}"
             - name: OS_DOMAIN_NAME
-              valueFrom:
-                secretKeyRef:
-                  name: "{{ .Release.Name }}-credentials"
-                  key: OS_DOMAIN_NAME
-
+              value: "{{ .Values.osDomainName }}"
