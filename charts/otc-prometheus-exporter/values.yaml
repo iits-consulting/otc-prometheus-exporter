@@ -13,3 +13,4 @@ namespaces: ""
 metricsPort: 39100
 waitDuration: 60
 fetchResourceIdToName: false
+createServiceMonitor: false

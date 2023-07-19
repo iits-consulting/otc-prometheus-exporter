@@ -1,0 +1,14 @@
+{{- if .Values.createServiceMonitor }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: "{{ .Release.Name }}"
+spec:
+  endpoints:
+  - targetPort: "{{ .Values.metricsPort }}"
+    interval: "{{ .Values.waitDuration }}s"
+    path: /metrics
+  selector:
+    matchLabels:
+      app: "{{ .Release.Name }}"
+{{- end }}
