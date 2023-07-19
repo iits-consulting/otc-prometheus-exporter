@@ -200,39 +200,19 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 	return metricData, nil
 }
 
-func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
-	opts := golangsdk.EndpointOpts{Region: c.Region}
-	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
-	if err != nil {
-		return []otcMetricData.BatchMetricData{}, err
+func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList, cesClient *golangsdk.ServiceClient) ([]otcMetricData.BatchMetricData, error) {
+	miniBatchMetricsRequest := make([]otcMetricData.Metric, len(metrics))
+	for i, m := range metrics {
+		miniBatchMetricsRequest[i] = OtcMetricInfoListToMetric(m)
 	}
 
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
 
-	// we don't want to perform an empty request to the OTC Api because it returns an error
-	if len(metrics) == 0 {
-		return []otcMetricData.BatchMetricData{}, nil
-	}
-
-	requestedMetrics := make([]otcMetricData.Metric, len(metrics))
-	for i, m := range metrics {
-		requestedMetrics[i] = otcMetricData.Metric{
-			Namespace:  m.Namespace,
-			MetricName: m.MetricName,
-			Dimensions: []otcMetricData.MetricsDimension{
-				{
-					Name:  m.Dimensions[0].Name,
-					Value: m.Dimensions[0].Value,
-				},
-			},
-		}
-	}
-
 	metricData, err := otcMetricData.BatchListMetricData(
 		cesClient,
 		otcMetricData.BatchListMetricDataOpts{
-			Metrics: requestedMetrics,
+			Metrics: miniBatchMetricsRequest,
 			From:    startTime.UnixMilli(),
 			To:      endTime.UnixMilli(),
 			Filter:  "average",
@@ -241,6 +221,36 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	)
 
 	return metricData, err
+}
+
+func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
+	opts := golangsdk.EndpointOpts{Region: c.Region}
+	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
+	if err != nil {
+		return []otcMetricData.BatchMetricData{}, err
+	}
+
+	// we don't want to perform an empty request to the OTC Api because it returns an error
+	if len(metrics) == 0 {
+		return []otcMetricData.BatchMetricData{}, nil
+	}
+
+	const miniBatchSize = 500
+	result := make([]otcMetricData.BatchMetricData, 0)
+	miniBatchGenerator, _ := NewSliceWindow(metrics, miniBatchSize)
+
+	for miniBatchGenerator.HasNext() {
+		miniBatch := miniBatchGenerator.Window()
+		metricData, errMiniBatch := c.getMetricDataMiniBatch(miniBatch, cesClient)
+		if errMiniBatch != nil {
+			return nil, errMiniBatch
+		}
+
+		result = append(result, metricData...)
+		miniBatchGenerator.NextWindow()
+	}
+
+	return result, err
 }
 
 func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) []otcMetrics.MetricInfoList {
@@ -271,4 +281,20 @@ func StandardPrometheusBatchMetricName(metric otcMetricData.BatchMetricData) str
 		strings.TrimPrefix(strings.ToLower(metric.Namespace), "sys."),
 		strings.ToLower(metric.MetricName),
 	)
+}
+
+func OtcMetricInfoListToMetric(m otcMetrics.MetricInfoList) otcMetricData.Metric {
+	dimensions := make([]otcMetricData.MetricsDimension, len(m.Dimensions))
+	for i, d := range m.Dimensions {
+		dimensions[i] = otcMetricData.MetricsDimension{
+			Name:  d.Name,
+			Value: d.Value,
+		}
+	}
+
+	return otcMetricData.Metric{
+		Namespace:  m.Namespace,
+		MetricName: m.MetricName,
+		Dimensions: dimensions,
+	}
 }
