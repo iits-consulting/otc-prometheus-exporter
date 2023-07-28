@@ -24,7 +24,7 @@ type SliceWindow[T any] struct {
 // It returns a SliceWindow if the windowSize is positive and not zero. Valid values are 1, 2, 3, 4, ...
 func NewSliceWindow[T any](slice []T, windowSize int) (SliceWindow[T], error) {
 	if windowSize <= 0 {
-		return SliceWindow[T]{}, errors.New("The window size must be positive and not zero!")
+		return SliceWindow[T]{}, errors.New("the window size must be positive and not zero")
 	}
 	return SliceWindow[T]{
 		slice:               slice,

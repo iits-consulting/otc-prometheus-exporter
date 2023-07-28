@@ -204,8 +204,6 @@ func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
 	}
 
 	return result, nil
-
-	return result, nil
 }
 
 func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetricData.MetricData, error) {
