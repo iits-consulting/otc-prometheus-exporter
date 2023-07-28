@@ -30,7 +30,7 @@ The configuration happens via environment variables and one configuration file.
 3. The other environment variables are not required. The following table covers all environment variables.
 
 | environment variable        | default value | allowed values                   | description                                                                                                                                                                                                                                                                |
-| --------------------------- | ------------- | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|-----------------------------|---------------|----------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `OS_USERNAME`               | none          | valid username                   | **REQUIRED** User in the OTC with access to the API                                                                                                                                                                                                                        |
 | `OS_PASSWORD`               | none          | valid password                   | **REQUIRED** Password for the user                                                                                                                                                                                                                                         |
 | `OS_ACCESS_KEY`             | none          | valid access key                 | **REQUIRED** You can instead of username/password also provide the users AK and SK                                                                                                                                                                                         |
@@ -38,11 +38,13 @@ The configuration happens via environment variables and one configuration file.
 | `OS_PROJECT_ID`             | none          | valid project id                 | **REQUIRED** Project from which the metrics should be gathered. Obtainable in the OTC console IAM -> Projects -> View your Project -> You can now see the ProjectID                                                                                                        |
 | `OS_DOMAIN_NAME`            | none          | valid domain name                | **REQUIRED** Domainname/Tenant ID. The value in the OTC console on the top right `OTC-EU-DE-{somenumberhere}`.                                                                                                                                                             |
 | `NAMESPACES`                | none          | e.g. SYS.ECS,SERVICE.BMS,ECS,BMS | **REQUIRED** Specific namespaces for instances you want to get the metrics from. See list of all namespaces in the CloudEye docs [CloudEyeDoc]. If namespace is available in CloudEye docs you can also use namespace without prefix (SYS.ECS -> ECS, SERVICE.BMS -> BMS). |
-| `PORT`                      | `8000`        | any valid unused port            | Port on which metrics are served                                                                                                                                                                                                                                           |
+| `REGION`                    | `eu-de`       | `eu-de`, `eu-nl`                 | Region where your project is located                                                                                                                                                                                                                                       |
+| `PORT`                      | `39100`       | any valid unused port            | Port on which metrics are served                                                                                                                                                                                                                                           |
 | `WAITDURATION`              | `60`          | any positive integer             | Time in seconds between two API call fetches                                                                                                                                                                                                                               |
 | `FETCH_RESOURCE_ID_TO_NAME` | false         | boolean                          | Turns the mapping of resource id to resource name on or off                                                                                                                                                                                                                |
 
 [CloudEyeDoc]:https://docs.otc.t-systems.com/cloud-eye/api-ref/appendix/services_interconnected_with_cloud_eye.html#ces-03-0059
+
 ### Binary
 
 If you want to run the application directly as a binary then you can do it by following these steps.
@@ -84,7 +86,7 @@ This is suitable for a quick test or local development because the entire tool c
 ```shell
 helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter/
 helm search repo otc-prometheus-exporter
-helm install otc-prometheus-exporter otc-prometheus-exporterE/otc-prometheus-exporter --set your_values.yaml
+helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter --set your_values.yaml
 ```
 
 ## References

@@ -8,6 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
+
 	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 )
 
@@ -27,14 +30,14 @@ type AuthenticationData struct {
 	IsAkSkAuthentication bool
 	ProjectId            string
 	DomainName           string
-	IdentityEndpoint     string
+	Region               OtcRegion
 }
 
 func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOptionsProvider {
 	var opts golangsdk.AuthOptionsProvider
 	if ad.IsAkSkAuthentication {
 		opts = golangsdk.AKSKAuthOptions{
-			IdentityEndpoint: ad.IdentityEndpoint,
+			IdentityEndpoint: ad.Region.IamEndpoint(),
 			AccessKey:        ad.AccessKey,
 			SecretKey:        ad.SecretKey,
 			Domain:           ad.DomainName,
@@ -42,7 +45,7 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 		}
 	} else {
 		opts = golangsdk.AuthOptions{
-			IdentityEndpoint: ad.IdentityEndpoint,
+			IdentityEndpoint: ad.Region.IamEndpoint(),
 			Username:         ad.Username,
 			Password:         ad.Password,
 			DomainName:       ad.DomainName,
@@ -54,10 +57,30 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 }
 
 const (
-	defaultPort             = 8000
-	defaultWaitDuration     = 60 * time.Second
-	defaultIdentityEndpoint = "https://iam.eu-de.otc.t-systems.com:443/v3"
+	defaultRegion       = otcRegionEuDe
+	defaultPort         = 39100
+	defaultWaitDuration = 60 * time.Second
 )
+
+type OtcRegion string
+
+const (
+	otcRegionEuDe OtcRegion = "eu-de"
+	otcRegionEuNl OtcRegion = "eu-nl"
+)
+
+func NewOtcRegionFromString(region string) (OtcRegion, error) {
+	otcRegion := OtcRegion(region)
+	if slices.Contains([]OtcRegion{otcRegionEuNl, otcRegionEuDe}, otcRegion) {
+		return otcRegion, nil
+	}
+
+	return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
+}
+
+func (r OtcRegion) IamEndpoint() string {
+	return fmt.Sprintf("https://iam.%s.otc.t-systems.com:443/v3", r)
+}
 
 var Config ConfigStruct
 
@@ -72,12 +95,9 @@ func init() {
 }
 
 func loadNamespacesFromEnv() ([]string, error) {
-	namespacesRaw, ok := os.LookupEnv("NAMESPACES")
-	if !ok {
-		return []string{}, errors.New("environment variable \"NAMESPACES\" is not set")
-	}
+	namespacesRaw := os.Getenv("NAMESPACES")
 	if namespacesRaw == "" {
-		return []string{}, errors.New("environment variable \"NAMESPACES\" is empty")
+		return maps.Keys(OtcNamespacesMapping), nil
 	}
 
 	namespaces := strings.Split(namespacesRaw, ",")
@@ -85,12 +105,11 @@ func loadNamespacesFromEnv() ([]string, error) {
 
 	for i, namespace := range namespaces {
 		namespacesProcessed[i] = namespace
-		fullnamespace, ok := OtcNamespacesMapping[namespace]
-		if ok {
-			namespacesProcessed[i] = fullnamespace
+		if fullNamespace, ok := OtcNamespacesMapping[namespace]; ok {
+			namespacesProcessed[i] = fullNamespace
 		}
-
 	}
+
 	return namespacesProcessed, nil
 }
 
@@ -138,15 +157,30 @@ func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
 
 }
 
-func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
-	isAkSkAuthentication := false
-	otcUsername, usernameOk := os.LookupEnv("OS_USERNAME")
-	otcPassword, passwordOk := os.LookupEnv("OS_PASSWORD")
-	otcAccessKey, accessKeyOk := os.LookupEnv("OS_ACCESS_KEY")
-	otcSecretKey, secretKeyOk := os.LookupEnv("OS_SECRET_KEY")
+func loadRegionFromEnv() (OtcRegion, error) {
+	if region, ok := os.LookupEnv("REGION"); ok {
+		return NewOtcRegionFromString(region)
+	}
 
-	if (!usernameOk || !passwordOk) && accessKeyOk && secretKeyOk {
+	return defaultRegion, nil
+}
+
+func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
+
+	otcUsername := os.Getenv("OS_USERNAME")
+	otcPassword := os.Getenv("OS_PASSWORD")
+	otcAccessKey := os.Getenv("OS_ACCESS_KEY")
+	otcSecretKey := os.Getenv("OS_SECRET_KEY")
+
+	isAkSkAuthentication := false
+
+	switch {
+	case otcUsername != "" && otcPassword != "":
+		isAkSkAuthentication = false
+	case otcAccessKey != "" && otcSecretKey != "":
 		isAkSkAuthentication = true
+	default:
+		return nil, errors.New("no valid authentication data provided. please provide either \"OS_USERNAME\" and \"OS_PASSWORD\" or \"OS_ACCESS_KEY\" and \"OS_SECRET_KEY\"")
 	}
 
 	otcProjectId, projectIdOk := os.LookupEnv("OS_PROJECT_ID")
@@ -158,7 +192,10 @@ func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
 		return nil, errors.New("environment variable \"OS_DOMAIN_NAME\" is not set")
 	}
 
-	otcIdentityEndpoint := defaultIdentityEndpoint
+	region, err := loadRegionFromEnv()
+	if err != nil {
+		return nil, err
+	}
 
 	return &AuthenticationData{
 		Username:             otcUsername,
@@ -168,7 +205,7 @@ func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
 		IsAkSkAuthentication: isAkSkAuthentication,
 		ProjectId:            otcProjectId,
 		DomainName:           otcDomainName,
-		IdentityEndpoint:     otcIdentityEndpoint,
+		Region:               region,
 	}, nil
 }
 

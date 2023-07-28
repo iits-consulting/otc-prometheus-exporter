@@ -21,6 +21,7 @@ import (
 
 type OtcWrapper struct {
 	providerClient *golangsdk.ProviderClient
+	Region         string
 }
 
 func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
@@ -30,11 +31,11 @@ func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
 		return nil, err
 	}
 
-	return &OtcWrapper{providerClient: provider}, nil
+	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region)}, nil
 }
 
 func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
@@ -52,7 +53,7 @@ func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
 }
 
 func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	computeClient, err := openstack.NewComputeV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -77,7 +78,7 @@ func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	rdsClient, err := openstack.NewRDSV3(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -96,7 +97,7 @@ func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetDmsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	dmsClient, err := openstack.NewDMSServiceV1(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -120,7 +121,7 @@ func (c *OtcWrapper) GetDmsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	natClient, err := openstack.NewNatV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -145,7 +146,7 @@ func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	elbClient, err := openstack.NewELBV2(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -208,7 +209,7 @@ func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetricData.MetricData, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
 		return nil, err
@@ -237,12 +238,10 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 	return metricData, nil
 }
 
-func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
-	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
-	if err != nil {
-		fmt.Print("Error creating CES Client!\n")
-		return []otcMetricData.BatchMetricData{}, err
+func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList, cesClient *golangsdk.ServiceClient) ([]otcMetricData.BatchMetricData, error) {
+	miniBatchMetricsRequest := make([]otcMetricData.Metric, len(metrics))
+	for i, m := range metrics {
+		miniBatchMetricsRequest[i] = OtcMetricInfoListToMetric(m)
 	}
 
 	// cesClient.ResourceBase = "http://localhost:3001/"
@@ -251,25 +250,10 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
 
-	requestedMetrics := make([]otcMetricData.Metric, len(metrics))
-
-	for i, m := range metrics {
-		requestedMetrics[i] = otcMetricData.Metric{
-			Namespace:  m.Namespace,
-			MetricName: m.MetricName,
-			Dimensions: []otcMetricData.MetricsDimension{
-				{
-					Name:  m.Dimensions[0].Name,
-					Value: m.Dimensions[0].Value,
-				},
-			},
-		}
-	}
-
 	metricData, err := otcMetricData.BatchListMetricData(
 		cesClient,
 		otcMetricData.BatchListMetricDataOpts{
-			Metrics: requestedMetrics,
+			Metrics: miniBatchMetricsRequest,
 			From:    startTime.UnixMilli(),
 			To:      endTime.UnixMilli(),
 			Filter:  "average",
@@ -278,6 +262,36 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	)
 
 	return metricData, err
+}
+
+func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
+	opts := golangsdk.EndpointOpts{Region: c.Region}
+	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
+	if err != nil {
+		return []otcMetricData.BatchMetricData{}, err
+	}
+
+	// we don't want to perform an empty request to the OTC Api because it returns an error
+	if len(metrics) == 0 {
+		return []otcMetricData.BatchMetricData{}, nil
+	}
+
+	const miniBatchSize = 500
+	result := make([]otcMetricData.BatchMetricData, 0)
+	miniBatchGenerator, _ := NewSliceWindow(metrics, miniBatchSize)
+
+	for miniBatchGenerator.HasNext() {
+		miniBatch := miniBatchGenerator.Window()
+		metricData, errMiniBatch := c.getMetricDataMiniBatch(miniBatch, cesClient)
+		if errMiniBatch != nil {
+			return nil, errMiniBatch
+		}
+
+		result = append(result, metricData...)
+		miniBatchGenerator.NextWindow()
+	}
+
+	return result, err
 }
 
 func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) []otcMetrics.MetricInfoList {
@@ -308,4 +322,20 @@ func StandardPrometheusBatchMetricName(metric otcMetricData.BatchMetricData) str
 		strings.TrimPrefix(strings.ToLower(metric.Namespace), "sys."),
 		strings.ToLower(metric.MetricName),
 	)
+}
+
+func OtcMetricInfoListToMetric(m otcMetrics.MetricInfoList) otcMetricData.Metric {
+	dimensions := make([]otcMetricData.MetricsDimension, len(m.Dimensions))
+	for i, d := range m.Dimensions {
+		dimensions[i] = otcMetricData.MetricsDimension{
+			Name:  d.Name,
+			Value: d.Value,
+		}
+	}
+
+	return otcMetricData.Metric{
+		Namespace:  m.Namespace,
+		MetricName: m.MetricName,
+		Dimensions: dimensions,
+	}
 }
