@@ -189,7 +189,6 @@ Temporary Items
 # iCloud generated files
 *.icloud
 
-<<<<<<< HEAD
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/settings.json
@@ -210,10 +209,6 @@ Temporary Items
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/go,intellij,macos,linux,visualstudiocode
-=======
-#!! ERROR: vscode is undefined. Use list command to see defined gitignore types !!#
-
-# End of https://www.toptal.com/developers/gitignore/api/go,intellij,macos,linux,vscode
->>>>>>> origin/main
 
 dist/
+.DS_Store
