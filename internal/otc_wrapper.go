@@ -187,8 +187,22 @@ func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
 
 	result := map[string]string{}
 	for _, instance := range ddsListResponse.Instances {
-		result[instance.Groups[0].Nodes[0].Id] = instance.Name
+		if instance.Name != "" {
+			result[instance.Id] = instance.Name
+		}
+		for _, group := range instance.Groups {
+			if group.Name != "" {
+				result[group.Id] = group.Name
+			}
+			for _, node := range group.Nodes {
+				if node.Name != "" {
+					result[node.Id] = node.Name
+				}
+			}
+		}
 	}
+
+	return result, nil
 
 	return result, nil
 }
