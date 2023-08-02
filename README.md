@@ -45,6 +45,44 @@ The configuration happens via environment variables and one configuration file.
 
 [CloudEyeDoc]:https://docs.otc.t-systems.com/cloud-eye/api-ref/appendix/services_interconnected_with_cloud_eye.html#ces-03-0059
 
+
+### Kubernetes (Helm)
+
+```shell
+helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter/
+helm search repo otc-prometheus-exporter
+helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter --set your_values.yaml
+```
+
+
+
+
+
+### Docker and Docker Compose
+
+You can choose to run the application either as a single docker container or in combination with a Prometheus and Grafana server using Docker Compose.
+
+**Running a Single Docker Container**
+
+If you want a single docker container with the application running then you can do it by following these steps.
+
+1. Make sure you have docker installed and running.
+2. Copy the `.env.template` to `.env` and fill it out. This makes the docker command much shorter this way and your secrets are not listed in your shell history.
+3. Run the following:
+
+```shell
+docker pull ghcr.io/iits-consulting/otc-prometheus-exporter:latest
+docker run --env-file .env ghcr.io/iits-consulting/otc-prometheus-exporter:latest
+```
+
+
+If you want to start the application, a Prometheus, and Grafana server all at once, then Docker Compose will allow you to do so. This is particularly useful for a quick test or local development, as the entire tool chain is running in this scenario.
+
+1. Make sure you have Docker and Docker Compose installed and running.
+2. Copy the .env.template to .env and fill it out, similar to the single container setup. This keeps your docker command short and avoids having your secrets listed in your shell history.
+3. Run the following: `docker-compose --env-file .env up`
+
+
 ### Binary
 
 If you want to run the application directly as a binary then you can do it by following these steps.
@@ -57,37 +95,6 @@ If you want to run the application directly as a binary then you can do it by fo
 5. Fill out the values in the `.env` file
 6. Run the programm: `env $(cat .env) ./otc-prometheues-exporter`
 
-### Docker
-
-If you want a single docker container with the application running then you can do it by following these steps.
-
-1. Make sure you have docker installed and running
-2. Copy the `.env.template` to `.env` and fill it out. This makes the docker command much shorter this way and your
-   secrets are not listed in your shell history.
-3. Run the following:
-
-```shell
-docker pull ghcr.io/iits-consulting/otc-prometheus-exporter:latest
-docker run --env-file .env ghcr.io/iits-consulting/otc-prometheus-exporter:latest
-```
-
-### Docker Compose
-
-If you want to start the application, a Prometheus and Grafana server all at once then you can do it by following these steps.
-This is suitable for a quick test or local development because the entire tool chain is running.
-
-1. Make sure you have docker and docker-compose installed and running
-2. Copy the `.env.template` to `.env` and fill it out. This makes the docker command much shorter this way and your
-   secrets are not listed in your shell history.
-3. Run the following: `docker compose --env-file .env up`
-
-### Kubernetes (Helm)
-
-```shell
-helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter/
-helm search repo otc-prometheus-exporter
-helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter --set your_values.yaml
-```
 
 ## References
 
