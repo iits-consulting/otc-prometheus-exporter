@@ -45,56 +45,30 @@ The configuration happens via environment variables and one configuration file.
 
 
 
-
-| Category       | Service                                               | Namespace   | Reference                                              |
-| -------------- | ----------------------------------------------------- | ----------- | ------------------------------------------------------ |
-| Compute        | Elastic Cloud Server                                   | SYS.ECS     | [Basic ECS metrics](https://docs.otc.t-systems.com/elastic-cloud-server/umn/monitoring/basic_ecs_metrics.html) |
-|                | Bare Metal Server                                     | SERVICE.BMS | [BMS Metrics Under OS Monitoring](https://docs.otc.t-systems.com/bare-metal-server/umn/server_monitoring/monitored_metrics_with_agent_installed.html) |
-|                | Auto Scaling                                          | SYS.AS      | [AS metrics](https://docs.otc.t-systems.com/auto-scaling/umn/as_management/as_group_and_instance_monitoring/monitoring_metrics.html) |
-| Storage        | Elastic Volume Service (attached to an ECS or BMS)      | SYS.EVS     | [EVS metrics](https://docs.otc.t-systems.com/elastic-volume-service/umn/viewing_evs_monitoring_data.html) |
-|                | Scalable File Service                                 | SYS.SFS     | [SFS metrics](https://docs.otc.t-systems.com/scalable-file-service/umn/management/monitoring/sfs_metrics.html) |
-|                | SFS Turbo                                             | SYS.EFS     | [SFS Turbo metrics](https://docs.otc.t-systems.com/scalable-file-service/umn/management/monitoring/sfs_turbo_metrics.html) |
-|                | Cloud Backup and Recovery                             | SYS.CBR     | [CBR metrics](https://docs.otc.t-systems.com/cloud-backup-recovery/umn/monitoring/cbr_metrics.html) |
-| Network        | Elastic IP and bandwidth                              | SYS.VPC     | [VPC metrics](https://docs.otc.t-systems.com/virtual-private-cloud/umn/operation_guide_new_console_edition/monitoring/supported_metrics.html) |
-|                | Elastic Load Balance                                  | SYS.ELB     | [ELB metrics](https://docs.otc.t-systems.com/elastic-load-balancing/umn/monitoring/monitoring_metrics.html) |
-|                | NAT Gateway                                           | SYS.NAT     | [NAT Gateway metrics](https://docs.otc.t-systems.com/nat-gateway/umn/monitoring_management/supported_metrics.html) |
-| Security       | Web Application Firewall                             | SYS.WAF     | [WAF metrics](https://docs.otc.t-systems.com/web-application-firewall/umn/monitoring_metrics.html) |
-| Application    | Distributed Message Service                           | SYS.DMS     | [DMS metrics](https://docs.otc.t-systems.com/distributed-message-service/umn/monitoring/kafka_metrics.html) |
-|                | Distributed Cache Service                             | SYS.DCS     | [DCS metrics](https://docs.otc.t-systems.com/distributed-cache-service/umn/monitoring/dcs_metrics.html) |
-| Database       | Relational Database Service                           | SYS.RDS     | [RDS for MySQL metrics](https://docs.otc.t-systems.com/relational-database-service/umn/working_with_rds_for_mysql/metrics_and_alarms/configuring_displayed_metrics.html)<br>[RDS for PostgreSQL metrics](https://docs.otc.t-systems.com/relational-database-service/umn/working_with_rds_for_postgresql/metrics_and_alarms/configuring_displayed_metrics.html)<br>[RDS for SQL Server metrics](https://docs.otc.t-systems.com/relational-database-service/umn/working_with_rds_for_sql_server/metrics_and_alarms/configuring_displayed_metrics.html) |
-|                | Document Database Service                             | SYS.DDS     | [DDS metrics](https://docs.otc.t-systems.com/document-database-service/umn/monitoring/interconnected_with_cloud_eye/dds_metrics.html) |
-|                | GaussDB NoSQL                                         | SYS.NoSQL   | [GaussDB(for Cassandra) metrics](https://docs.otc.t-systems.com/gaussdb-nosql/umn/working_with_gaussdbfor_cassandra/monitoring_and_alarm_reporting/gaussdbfor_cassandra_monitoring_metrics.html) |
-|                | GaussDB(for MySQL)                                   | SYS.GAUSSDB | [GaussDB(for MySQL) metrics](https://docs.otc.t-systems.com/gaussdb-mysql/umn/working_with_gaussdbfor_mysql/monitoring/configuring_displayed_metrics.html) |
-|                | GaussDB(for openGauss)                               | SYS.GAUSSDBV5 | [GaussDB(for openGauss) metrics](https://docs.otc.t-systems.com/gaussdb-opengauss/umn/working_with_gaussdbopengauss/monitoring_and_alarming/metrics.html) |
-| Data analysis  | Data Warehouse Service                               | SYS.DWS     | [DWS metrics](https://docs.otc.t-systems.com/data-warehouse-service/umn/monitoring_and_alarms/monitoring_clusters_using_cloud_eye.html) |
-|                | Cloud Search Service                                  | SYS.ES      | [CSS metrics](https://docs.otc.t-systems.com/cloud-search-service/umn/monitoring_a_cluster/supported_metrics.html) |
-
+| Category       | Service                                               | Namespace     | Translatable | Reference                                              |
+| -------------- | ----------------------------------------------------- | ------------- | ------------ | ------------------------------------------------------ |
+| Compute        | Elastic Cloud Server                                  | SYS.ECS       | Yes          | [Basic ECS metrics](https://docs.otc.t-systems.com/elastic-cloud-server/umn/monitoring/basic_ecs_metrics.html) |
+|                | Bare Metal Server                                     | SERVICE.BMS   | No           | [BMS Metrics Under OS Monitoring](https://docs.otc.t-systems.com/bare-metal-server/umn/server_monitoring/monitored_metrics_with_agent_installed.html) |
+|                | Auto Scaling                                          | SYS.AS        | No           | [AS metrics](https://docs.otc.t-systems.com/auto-scaling/umn/as_management/as_group_and_instance_monitoring/monitoring_metrics.html) |
+| Storage        | Elastic Volume Service (attached to an ECS or BMS)    | SYS.EVS       | Yes          | [EVS metrics](https://docs.otc.t-systems.com/elastic-volume-service/umn/viewing_evs_monitoring_data.html) |
+|                | Scalable File Service                                 | SYS.SFS       | No           | [SFS metrics](https://docs.otc.t-systems.com/scalable-file-service/umn/management/monitoring/sfs_metrics.html) |
+|                | SFS Turbo                                             | SYS.EFS       | Yes          | [SFS Turbo metrics](https://docs.otc.t-systems.com/scalable-file-service/umn/management/monitoring/sfs_turbo_metrics.html) |
+|                | Cloud Backup and Recovery                             | SYS.CBR       | Yes          | [CBR metrics](https://docs.otc.t-systems.com/cloud-backup-recovery/umn/monitoring/cbr_metrics.html) |
+| Network        | Elastic IP and bandwidth                              | SYS.VPC       | Yes          | [VPC metrics](https://docs.otc.t-systems.com/virtual-private-cloud/umn/operation_guide_new_console_edition/monitoring/supported_metrics.html) |
+|                | Elastic Load Balance                                  | SYS.ELB       | Yes          | [ELB metrics](https://docs.otc.t-systems.com/elastic-load-balancing/umn/monitoring/monitoring_metrics.html) |
+|                | NAT Gateway                                           | SYS.NAT       | Yes          | [NAT Gateway metrics](https://docs.otc.t-systems.com/nat-gateway/umn/monitoring_management/supported_metrics.html) |
+| Security       | Web Application Firewall                              | SYS.WAF       | Yes          | [WAF metrics](https://docs.otc.t-systems.com/web-application-firewall/umn/monitoring_metrics.html) |
+| Application    | Distributed Message Service                           | SYS.DMS       | Yes          | [DMS metrics](https://docs.otc.t-systems.com/distributed-message-service/umn/monitoring/kafka_metrics.html) |
+|                | Distributed Cache Service                             | SYS.DCS       | Yes          | [DCS metrics](https://docs.otc.t-systems.com/distributed-cache-service/umn/monitoring/dcs_metrics.html) |
+| Database       | Relational Database Service                           | SYS.RDS       | Yes          | [RDS for MySQL metrics](https://docs.otc.t-systems.com/relational-database-service/umn/working_with_rds_for_mysql/metrics_and_alarms/configuring_displayed_metrics.html)<br>[RDS for PostgreSQL metrics](https://docs.otc.t-systems.com/relational-database-service/umn/working_with_rds_for_postgresql/metrics_and_alarms/configuring_displayed_metrics.html)<br>[RDS for SQL Server metrics](https://docs.otc.t-systems.com/relational-database-service/umn/working_with_rds_for_sql_server/metrics_and_alarms/configuring_displayed_metrics.html) |
+|                | Document Database Service                             | SYS.DDS       | No           | [DDS metrics](https://docs.otc.t-systems.com/document-database-service/umn/monitoring/interconnected_with_cloud_eye/dds_metrics.html) |
+|                | GaussDB NoSQL                                         | SYS.NoSQL     | Yes          | [GaussDB(for Cassandra) metrics](https://docs.otc.t-systems.com/gaussdb-nosql/umn/working_with_gaussdbfor_cassandra/monitoring_and_alarm_reporting/gaussdbfor_cassandra_monitoring_metrics.html) |
+|                | GaussDB(for MySQL)                                    | SYS.GAUSSDB   | No           | [GaussDB(for MySQL) metrics](https://docs.otc.t-systems.com/gaussdb-mysql/umn/working_with_gaussdbfor_mysql/monitoring/configuring_displayed_metrics.html) |
+|                | GaussDB(for openGauss)                                | SYS.GAUSSDBV5 | Yes          | [GaussDB(for openGauss) metrics](https://docs.otc.t-systems.com/gaussdb-opengauss/umn/working_with_gaussdbopengauss/monitoring_and_alarming/metrics.html) |
+| Data analysis  | Data Warehouse Service                                | SYS.DWS       | Yes          | [DWS metrics](https://docs.otc.t-systems.com/data-warehouse-service/umn/monitoring_and_alarms/monitoring_clusters_using_cloud_eye.html) |
+|                | Cloud Search Service                                  | SYS.ES        | No           | [CSS metrics](https://docs.otc.t-systems.com/cloud-search-service/umn/monitoring_a_cluster/supported_metrics.html) |
 
 
-
-| Metrics                  | Translatable    |
-|--------------------------|-----------------|
-| ECS                      | Yes             |
-| BMS                      | No              |
-| AS                       | No              |
-| EVS                      | Yes             |
-| SFS                      | No              |
-| SFS turbo metrics        | Yes             |
-| CBR                      | Yes             |
-| VPC                      | Yes             |
-| ELB                      | Yes             |
-| NAT                      | Yes             |
-| WAF                      | Yes             |
-| DMS                      | Yes             |
-| DCS                      | Yes             |
-| RDS for MySQL            | Yes             |
-| Postgres                 | Yes             |
-| sql server               | Yes             |
-| DDS                      | No              |
-| GAUSSDB (for cassandra)  | Yes             |
-| GaussDB(for MySQL) metrics | No            |
-| DWS                      | Yes             |
-| CSS metrics              | No              |
 
 
 [CloudEyeDoc]:https://docs.otc.t-systems.com/cloud-eye/api-ref/appendix/services_interconnected_with_cloud_eye.html#ces-03-0059
