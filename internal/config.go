@@ -3,12 +3,13 @@ package internal
 import (
 	"errors"
 	"fmt"
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"golang.org/x/exp/maps"
+	"golang.org/x/exp/slices"
 
 	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
 )
@@ -57,8 +58,8 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 
 const (
 	defaultRegion       = otcRegionEuDe
-	defaultPort             = 39100
-	defaultWaitDuration     = 60 * time.Second
+	defaultPort         = 39100
+	defaultWaitDuration = 60 * time.Second
 )
 
 type OtcRegion string
@@ -74,7 +75,7 @@ func NewOtcRegionFromString(region string) (OtcRegion, error) {
 		return otcRegion, nil
 	}
 
-	return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
+	return "", fmt.Errorf("invalid argument %s does not represent a valid region", region)
 }
 
 func (r OtcRegion) IamEndpoint() string {

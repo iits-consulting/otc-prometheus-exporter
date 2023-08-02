@@ -104,12 +104,26 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 		}
 		maps.Copy(resourceIdToName, result)
 	}
-	fmt.Printf("Collected %d resources\n", len(resourceIdToName))
+
+	// Add DDS namespace
+	if slices.Contains(namespaces, internal.DdsNamespace) {
+		result, err := client.GetDdsIdNameMapping()
+		if err != nil {
+			fmt.Printf("DDS error! : %s", err)
+			return map[string]string{}, err
+		}
+		fmt.Printf("DDS resources collected")
+		maps.Copy(resourceIdToName, result)
+	}
+
+	fmt.Printf("Collected %d resources:\n", len(resourceIdToName))
+	for _, resource := range resourceIdToName {
+		fmt.Printf("Resource collected: %s\n", resource)
+	}
 	return resourceIdToName, nil
 }
 
 func main() {
-
 	collectMetricsInBackground()
 
 	http.Handle("/metrics", promhttp.Handler())

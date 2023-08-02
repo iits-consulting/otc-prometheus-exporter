@@ -8,6 +8,7 @@ const (
 	DmsNamespace = "SYS.DMS"
 	NatNamespace = "SYS.NAT"
 	ElbNamespace = "SYS.ELB"
+	DdsNamespace = "SYS.DDS"
 )
 
 var OtcNamespacesMapping = map[string]string{
@@ -25,7 +26,7 @@ var OtcNamespacesMapping = map[string]string{
 	"DMS":       DmsNamespace,
 	"DCS":       "SYS.DCS",
 	"RDS":       RdsNamespace,
-	"DDS":       "SYS.DDS",
+	"DDS":       DdsNamespace,
 	"NoSQL":     "SYS.NoSQL",
 	"GAUSSDB":   "SYS.GAUSSDB",
 	"GAUSSDBV5": "SYS.GAUSSDBV5",

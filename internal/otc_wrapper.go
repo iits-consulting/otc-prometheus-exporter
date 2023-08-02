@@ -11,6 +11,7 @@ import (
 	otcMetricData "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metricdata"
 	otcMetrics "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metrics"
 	otcCompute "github.com/opentelekomcloud/gophertelekomcloud/openstack/compute/v2/servers"
+	ddsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dds/v3/instances"
 	dmsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dms/v1/instances"
 	elbInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/lbaas_v2/loadbalancers"
 	natgatewayInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/natgateways"
@@ -170,6 +171,41 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 	return result, nil
 }
 
+// Add in the DDS Service client here (openstack client.go line 719) - David
+func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
+	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	ddsClient, err := openstack.NewDDSServiceV3(c.providerClient, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	ddsListResponse, err := ddsInstances.List(ddsClient, ddsInstances.ListInstanceOpts{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+	for _, instance := range ddsListResponse.Instances {
+		if instance.Name != "" {
+			result[instance.Id] = instance.Name
+		}
+		for _, group := range instance.Groups {
+			if group.Name != "" {
+				result[group.Id] = group.Name
+			}
+			for _, node := range group.Nodes {
+				if node.Name != "" {
+					result[node.Id] = node.Name
+				}
+			}
+		}
+	}
+
+	return result, nil
+}
+
 func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetricData.MetricData, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
@@ -205,6 +241,9 @@ func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList,
 	for i, m := range metrics {
 		miniBatchMetricsRequest[i] = OtcMetricInfoListToMetric(m)
 	}
+
+	// cesClient.ResourceBase = "http://localhost:3001/"
+	// log.Printf(cesClient.Endpoint)
 
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
