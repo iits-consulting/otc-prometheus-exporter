@@ -80,7 +80,7 @@ If you want to start the application, a Prometheus, and Grafana server all at on
 
 1. Make sure you have Docker and Docker Compose installed and running.
 2. Copy the .env.template to .env and fill it out, similar to the single container setup. This keeps your docker command short and avoids having your secrets listed in your shell history.
-3. Run the following: docker-compose --env-file .env up
+3. Run the following: `docker-compose --env-file .env up`
 
 
 ### Binary
