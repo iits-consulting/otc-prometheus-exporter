@@ -44,6 +44,8 @@ The configuration happens via environment variables and one configuration file.
 | `FETCH_RESOURCE_ID_TO_NAME` | false         | boolean                          | Turns the mapping of resource id to resource name on or off                                                                                                                                                                                                                |
 
 
+Below is a comprehensive list of metrics that this software can gather:
+
 
 | Category       | Service                                               | Namespace     | Translatable | Reference                                              |
 | -------------- | ----------------------------------------------------- | ------------- | ------------ | ------------------------------------------------------ |
