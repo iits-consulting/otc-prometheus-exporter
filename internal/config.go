@@ -64,7 +64,7 @@ func NewOtcRegionFromString(region string) (OtcRegion, error) {
 		return otcRegion, nil
 	}
 
-	return "", fmt.Errorf("Invalid argument %s does not represent a valid region.", region)
+	return "", fmt.Errorf("invalid argument %s does not represent a valid region", region)
 }
 
 func (r OtcRegion) IamEndpoint() string {

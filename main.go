@@ -109,7 +109,17 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 		}
 		maps.Copy(resourceIdToName, result)
 	}
-	fmt.Printf("Collected %d resources\n", len(resourceIdToName))
+
+	if slices.Contains(namespaces, internal.DdsNamespace) {
+		result, err := client.GetDdsIdNameMapping()
+		if err != nil {
+			fmt.Printf("DDS error! : %s", err)
+			return map[string]string{}, err
+		}
+		maps.Copy(resourceIdToName, result)
+	}
+
+	log.Printf("Collected %d resources\n", len(resourceIdToName))
 	return resourceIdToName, nil
 }
 
