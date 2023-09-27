@@ -242,11 +242,8 @@ func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList,
 		miniBatchMetricsRequest[i] = OtcMetricInfoListToMetric(m)
 	}
 
-	// cesClient.ResourceBase = "http://localhost:3001/"
-	// log.Printf(cesClient.Endpoint)
-
 	endTime := time.Now()
-	startTime := endTime.Add(-1 * time.Minute)
+	startTime := endTime.Add(-2 * time.Minute)
 
 	metricData, err := otcMetricData.BatchListMetricData(
 		cesClient,
