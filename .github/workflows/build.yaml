@@ -2,36 +2,31 @@ name: Build
 on:
   - pull_request
   - push
+
 jobs:
   lint:
-    name: Lint
+    name: Lint Test Build
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout
         uses: actions/checkout@v2
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3
+        with:
+          go-version: ^1.20
+
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v3
         with:
           version: latest
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  build:
-    name: Build
-    runs-on: ubuntu-22.04
-    steps:
-      - name: Setup Go environment
-        uses: actions/setup-go@v3
-        with:
-          go-version: ^1.19
-      - name: Checkout
-        uses: actions/checkout@v2
+      
       - name: Get dependencies
-        run: |
-          go get ./...
+        run: go get ./...
+      
+      - name: Run tests
+        run: go test ./...
+
       - name: Build
-        run: go build -o otc-prometheus-exporter cmd/main.go
-      - name: Upload the built binary executable for testing
-        uses: actions/upload-artifact@v2
-        with:
-          name: build
-          path: otc-auth
+        run: go build -o otc-prometheus-exporter .

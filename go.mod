@@ -1,6 +1,6 @@
 module github.com/iits-consulting/otc-prometheus-exporter
 
-go 1.19
+go 1.20
 
 require (
 	github.com/opentelekomcloud/gophertelekomcloud v0.5.28
