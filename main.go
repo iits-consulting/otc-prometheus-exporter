@@ -3,7 +3,8 @@ package main
 import (
 	"errors"
 	"fmt"
-	"os"
+	"log"
+	"net/http"
 
 	cmdPackage "github.com/iits-consulting/otc-prometheus-exporter/cmd"
 
@@ -14,20 +15,21 @@ import (
 
 	"github.com/iits-consulting/otc-prometheus-exporter/internal"
 	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/spf13/cobra"
 )
 
-func collectMetricsInBackground() {
+func collectMetricsInBackground(config internal.ConfigStruct) {
 	go func() {
-		client, err := internal.NewOtcClientFromConfig(internal.Config)
+		client, err := internal.NewOtcClientFromConfig(config)
 		if err != nil {
 			panic(err)
 		}
 
 		var resourceIdToName map[string]string
 
-		if internal.Config.ResourceIdNameMappingFlag {
-			resourceIdToName, err = FetchResourceIdToNameMapping(client, internal.Config.Namespaces)
+		if config.ResourceIdNameMappingFlag {
+			resourceIdToName, err = FetchResourceIdToNameMapping(client, config.Namespaces)
 			if err != nil {
 				panic(err)
 			}
@@ -38,7 +40,7 @@ func collectMetricsInBackground() {
 			panic(err)
 		}
 
-		filteredMetrics := internal.FilterByNamespaces(metrics, internal.Config.Namespaces)
+		filteredMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
 
 		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
 
@@ -60,7 +62,7 @@ func collectMetricsInBackground() {
 					}).Set(metric.Datapoints[len(metric.Datapoints)-1].Average)
 			}
 
-			time.Sleep(internal.Config.WaitDuration)
+			time.Sleep(config.WaitDuration)
 		}
 	}()
 }
@@ -129,19 +131,18 @@ func main() {
 	var rootCmd = &cobra.Command{
 		Use: "otc-prometheus-exporter",
 		PreRunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println(region)
 			return cmdPackage.InitializeConfig(cmd, map[string]string{
-				"port":                  "PORT",
-				"region":                "REGION",
-				"namespaces":            "NAMESPACES",
-				"os_Username":           "Os_USERNAME",
-				"os_Password":           "Os_PASSWORD",
-				"os_access_key":         "OS_ACCESS_KEY",
-				"os_secret_key":         "OS_SECRET_KEY",
-				"projectId":             "OS_PROJECT_ID",
-				"osDomainName":          "OS_DOMAIN_NAME",
-				"waitDuration":          "WAITDURATION",
-				"fetchResourceIdToname": "FETCH_RESOURCE_ID_TO_NAME",
+				"port":                      "PORT",
+				"region":                    "REGION",
+				"namespaces":                "NAMESPACES",
+				"os-username":               "OS_USERNAME",
+				"os-password":               "OS_PASSWORD",
+				"access-key":                "OS_ACCESS_KEY",
+				"secret-key":                "OS_SECRET_KEY",
+				"projectId":                 "OS_PROJECT_ID",
+				"od-domain-name":            "OS_DOMAIN_NAME",
+				"wait-duration":             "WAITDURATION",
+				"fetch-resource-it-to-name": "FETCH_RESOURCE_ID_TO_NAME",
 			})
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -154,41 +155,48 @@ func main() {
 			default:
 				return errors.New("no valid authentication data provided. please provide either username and password or accessKey and secretKey")
 			}
-			fmt.Println(isAkSkAuthentication)
+
 			otcRegion, err := internal.NewOtcRegionFromString(region)
 			if err != nil {
 				return err
 			}
-			fmt.Println(otcRegion)
-			fmt.Println(">>>>", port)
-			fmt.Println(region)
-			fmt.Println(namespaces, username, password, accessKey, secretKey, waitDuration, fetchResourceIdToname)
-			return nil
+
+			collectMetricsInBackground(internal.ConfigStruct{
+				Port:                      int(port),
+				Namespaces:                namespaces,
+				WaitDuration:              waitDuration,
+				ResourceIdNameMappingFlag: fetchResourceIdToname,
+				AuthenticationData: internal.AuthenticationData{
+					Username:             username,
+					Password:             password,
+					AccessKey:            accessKey,
+					SecretKey:            secretKey,
+					IsAkSkAuthentication: isAkSkAuthentication,
+					ProjectId:            projectId,
+					DomainName:           osDomainName,
+					Region:               otcRegion,
+				},
+			})
+
+			http.Handle("/metrics", promhttp.Handler())
+			address := fmt.Sprintf(":%d", port)
+			err = http.ListenAndServe(address, nil)
+			return err
 		},
 	}
 	rootCmd.Flags().Uint16VarP(&port, "port", "", 39100, "Port on which metrics are served")
 	rootCmd.Flags().StringVarP(&region, "region", "r", "eu-de", "region where your project is located ")
 	rootCmd.Flags().StringSliceVarP(&namespaces, "namespaces", "n", maps.Values(internal.OtcNamespacesMapping), "namespaces for instances you want to get the metrics from")
-	rootCmd.Flags().StringVarP(&username, "username", "u", "", "user in the OTC with access to the API. Must be provided together with password and can't be provided with AK/SK")
-	rootCmd.Flags().StringVarP(&password, "password", "p", "", "password for the user. Must be provided together with username and can't be provided with AK/SK")
-	rootCmd.Flags().StringVarP(&accessKey, "accessKey", "", "", "you can instead of username/password also provide the users AK and SK")
-	rootCmd.Flags().StringVarP(&secretKey, "secretKey", "", "", "you can instead of username/password also provide the users AK and SK")
+	rootCmd.Flags().StringVarP(&username, "os-username", "u", "", "user in the OTC with access to the API. Must be provided together with password and can't be provided with AK/SK")
+	rootCmd.Flags().StringVarP(&password, "os-password", "p", "", "password for the user. Must be provided together with username and can't be provided with AK/SK")
+	rootCmd.Flags().StringVarP(&accessKey, "access-key", "", "", "you can instead of username/password also provide the users AK and SK")
+	rootCmd.Flags().StringVarP(&secretKey, "secret-key", "", "", "you can instead of username/password also provide the users AK and SK")
 	rootCmd.Flags().StringVarP(&projectId, "projectId", "", "", "project from which the metrics should be gathered")
-	rootCmd.Flags().StringVarP(&osDomainName, "osDomainName", "", "", "Domainname/Tenant ID")
-	rootCmd.Flags().BoolVarP(&fetchResourceIdToname, "fetchResourceIdToname", "", false, "turns the mapping of resource id to resource name on or off")
-	rootCmd.Flags().DurationVarP(&waitDuration, "waitDuration", "", 60*time.Second, "time in seconds between two API call fetches")
+	rootCmd.Flags().StringVarP(&osDomainName, "os-domain-name", "", "", "Domainname/Tenant ID")
+	rootCmd.Flags().BoolVarP(&fetchResourceIdToname, "fetch-resource-id-to-name", "", false, "turns the mapping of resource id to resource name on or off")
+	rootCmd.Flags().DurationVarP(&waitDuration, "wait-duration", "", 60*time.Second, "time in seconds between two API call fetches")
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		log.Fatal(err)
 	}
-
-	// collectMetricsInBackground()
-	//
-	// http.Handle("/metrics", promhttp.Handler())
-	// address := fmt.Sprintf(":%d", internal.Config.Port)
-	// err := http.ListenAndServe(address, nil)
-	// if err != nil {
-	//	panic(err)
-	// }
 }
