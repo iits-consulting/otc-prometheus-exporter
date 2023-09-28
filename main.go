@@ -150,7 +150,7 @@ func main() {
 				"access-key":                "OS_ACCESS_KEY",
 				"secret-key":                "OS_SECRET_KEY",
 				"projectId":                 "OS_PROJECT_ID",
-				"od-domain-name":            "OS_DOMAIN_NAME",
+				"os-domain-name":            "OS_DOMAIN_NAME",
 				"wait-duration":             "WAITDURATION",
 				"fetch-resource-it-to-name": "FETCH_RESOURCE_ID_TO_NAME",
 			})
