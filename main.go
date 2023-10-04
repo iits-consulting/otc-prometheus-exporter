@@ -135,7 +135,7 @@ func main() {
 		projectId             string
 		osDomainName          string
 		fetchResourceIdToname bool
-		waitDuration          time.Duration
+		waitDuration          uint
 	)
 
 	var rootCmd = &cobra.Command{
@@ -176,7 +176,7 @@ func main() {
 			collectMetricsInBackground(internal.ConfigStruct{
 				Port:                      int(port),
 				Namespaces:                namespaces,
-				WaitDuration:              waitDuration,
+				WaitDuration:              time.Duration(waitDuration) * time.Second,
 				ResourceIdNameMappingFlag: fetchResourceIdToname,
 				AuthenticationData: internal.AuthenticationData{
 					Username:             username,
@@ -206,7 +206,7 @@ func main() {
 	rootCmd.Flags().StringVarP(&projectId, "projectId", "", "", "project from which the metrics should be gathered")
 	rootCmd.Flags().StringVarP(&osDomainName, "os-domain-name", "", "", "Domainname/Tenant ID")
 	rootCmd.Flags().BoolVarP(&fetchResourceIdToname, "fetch-resource-id-to-name", "", false, "turns the mapping of resource id to resource name on or off")
-	rootCmd.Flags().DurationVarP(&waitDuration, "wait-duration", "", 60*time.Second, "time in seconds between two API call fetches")
+	rootCmd.Flags().UintVarP(&waitDuration, "wait-duration", "", 60, "time in seconds between two API call fetches")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)
