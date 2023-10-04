@@ -70,3 +70,17 @@ func NewOtcRegionFromString(region string) (OtcRegion, error) {
 func (r OtcRegion) IamEndpoint() string {
 	return fmt.Sprintf("https://iam.%s.otc.t-systems.com:443/v3", r)
 }
+
+// ResolveOtcShortHandNamespace maps the short code for the namespaces to the actual namespace name.
+func ResolveOtcShortHandNamespace(namespaces []string) []string {
+	fullNamespaces := make([]string, len(namespaces))
+	for i, v := range namespaces {
+		correctNamespaceName, ok := OtcNamespacesMapping[v]
+		fullNamespaces[i] = v
+		if ok {
+			fullNamespaces[i] = correctNamespaceName
+		}
+	}
+
+	return fullNamespaces
+}

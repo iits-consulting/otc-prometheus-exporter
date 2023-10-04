@@ -171,6 +171,8 @@ func main() {
 				return err
 			}
 
+			namespaces = internal.ResolveOtcShortHandNamespace(namespaces)
+
 			collectMetricsInBackground(internal.ConfigStruct{
 				Port:                      int(port),
 				Namespaces:                namespaces,
