@@ -8,7 +8,7 @@ ENV GO111MODULE=on
 WORKDIR /go/src/github.com/iits-consulting/otc-prometheus-exporter
 COPY . /go/src/github.com/iits-consulting/otc-prometheus-exporter
 
-RUN go build -o otc-prometheus-exporter cmd/main.go && \
+RUN go build -o otc-prometheus-exporter main.go && \
     mv otc-prometheus-exporter /usr/local/bin
 
 FROM alpine:3.17
