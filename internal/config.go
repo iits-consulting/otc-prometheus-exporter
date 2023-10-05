@@ -4,9 +4,8 @@ import (
 	"fmt"
 	"time"
 
-	"golang.org/x/exp/slices"
-
 	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
+	"golang.org/x/exp/slices"
 )
 
 type ConfigStruct struct {

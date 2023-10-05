@@ -26,5 +26,27 @@ func TestResolveOtcShortHandNamespace(t *testing.T) {
 			}
 		})
 	}
+}
 
+func TestNewOtcRegionFromString(t *testing.T) {
+	input := "eu-de"
+	expected := otcRegionEuDe
+	actual, err := NewOtcRegionFromString(input)
+
+	if err != nil {
+		t.Error("Incorrectly returned error")
+	}
+
+	if actual != expected {
+		t.Error("Wrong result")
+	}
+}
+
+func TestInvalidNewOtcRegionFromString(t *testing.T) {
+	input := "something-else"
+	_, err := NewOtcRegionFromString(input)
+
+	if err == nil {
+		t.Error("Must return error on invalid input")
+	}
 }
