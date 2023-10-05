@@ -9,10 +9,10 @@ metadata:
     {{- end}}
 spec:
   endpoints:
-  - targetPort: "{{ .Values.metricsPort }}"
+  - targetPort: {{ .Values.metricsPort }}
     interval: "{{ .Values.waitDuration }}s"
     path: /metrics
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      app: "{{ .Release.Name }}"
 {{- end }}

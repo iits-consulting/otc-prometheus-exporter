@@ -15,7 +15,6 @@ waitDuration: 60
 fetchResourceIdToName: false
 
 serviceMonitor:
-  enabled: true 
+  enabled: false 
   labels:
-    foo: bar
     release: kube-prom
