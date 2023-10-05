@@ -1,17 +1,11 @@
 package internal
 
 import (
-	"errors"
 	"fmt"
-	"os"
-	"strconv"
-	"strings"
 	"time"
 
-	"golang.org/x/exp/maps"
-	"golang.org/x/exp/slices"
-
 	golangsdk "github.com/opentelekomcloud/gophertelekomcloud"
+	"golang.org/x/exp/slices"
 )
 
 type ConfigStruct struct {
@@ -56,12 +50,6 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 	return opts
 }
 
-const (
-	defaultRegion       = otcRegionEuDe
-	defaultPort         = 39100
-	defaultWaitDuration = 60 * time.Second
-)
-
 type OtcRegion string
 
 const (
@@ -82,160 +70,16 @@ func (r OtcRegion) IamEndpoint() string {
 	return fmt.Sprintf("https://iam.%s.otc.t-systems.com:443/v3", r)
 }
 
-var Config ConfigStruct
-
-func init() {
-	var err error
-	Config, err = LoadConfig()
-	if err != nil {
-		panic(err)
-
-	}
-
-}
-
-func loadNamespacesFromEnv() ([]string, error) {
-	namespacesRaw := os.Getenv("NAMESPACES")
-	if namespacesRaw == "" {
-		return maps.Keys(OtcNamespacesMapping), nil
-	}
-
-	namespaces := strings.Split(namespacesRaw, ",")
-	namespacesProcessed := make([]string, len(namespaces))
-
-	for i, namespace := range namespaces {
-		namespacesProcessed[i] = namespace
-		if fullNamespace, ok := OtcNamespacesMapping[namespace]; ok {
-			namespacesProcessed[i] = fullNamespace
+// ResolveOtcShortHandNamespace maps the short code for the namespaces to the actual namespace name.
+func ResolveOtcShortHandNamespace(namespaces []string) []string {
+	fullNamespaces := make([]string, len(namespaces))
+	for i, v := range namespaces {
+		correctNamespaceName, ok := OtcNamespacesMapping[v]
+		fullNamespaces[i] = v
+		if ok {
+			fullNamespaces[i] = correctNamespaceName
 		}
 	}
 
-	return namespacesProcessed, nil
-}
-
-func loadPortFromEnv() (int, error) {
-	port := defaultPort
-	rawport, ok := os.LookupEnv("PORT")
-	if !ok {
-		return port, nil
-	}
-	port, err := strconv.Atoi(rawport)
-	if err != nil {
-		return 0, fmt.Errorf("input port is not a number. got '%s'", rawport)
-	}
-	return port, nil
-
-}
-
-func loadWaitDurationFromEnv() (time.Duration, error) {
-	waitDuration := defaultWaitDuration
-	rawtime, ok := os.LookupEnv("WAITDURATION")
-
-	if !ok {
-		return waitDuration, nil
-	}
-
-	numSeconds, err := strconv.Atoi(rawtime)
-	if err != nil {
-		return 0, fmt.Errorf("input duration is not a number. got '%s'", waitDuration)
-	}
-
-	waitDuration = time.Duration(numSeconds) * time.Second
-	return waitDuration, nil
-}
-
-func loadResourceIdNameMappingFlagFromEnv() (bool, error) {
-	fetchResourceEnabledRaw, ok := os.LookupEnv("FETCH_RESOURCE_ID_TO_NAME")
-	if !ok {
-		return false, nil
-	}
-	fetchResourceEnabled, err := strconv.ParseBool(fetchResourceEnabledRaw)
-	if err != nil {
-		return false, err
-	}
-	return fetchResourceEnabled, nil
-
-}
-
-func loadRegionFromEnv() (OtcRegion, error) {
-	if region, ok := os.LookupEnv("REGION"); ok {
-		return NewOtcRegionFromString(region)
-	}
-
-	return defaultRegion, nil
-}
-
-func loadAuthenticationDataFromEnv() (*AuthenticationData, error) {
-
-	otcUsername := os.Getenv("OS_USERNAME")
-	otcPassword := os.Getenv("OS_PASSWORD")
-	otcAccessKey := os.Getenv("OS_ACCESS_KEY")
-	otcSecretKey := os.Getenv("OS_SECRET_KEY")
-
-	isAkSkAuthentication := false
-
-	switch {
-	case otcUsername != "" && otcPassword != "":
-		isAkSkAuthentication = false
-	case otcAccessKey != "" && otcSecretKey != "":
-		isAkSkAuthentication = true
-	default:
-		return nil, errors.New("no valid authentication data provided. please provide either \"OS_USERNAME\" and \"OS_PASSWORD\" or \"OS_ACCESS_KEY\" and \"OS_SECRET_KEY\"")
-	}
-
-	otcProjectId, projectIdOk := os.LookupEnv("OS_PROJECT_ID")
-	if !projectIdOk {
-		return nil, errors.New("environment variable \"OS_PROJECT_ID\" is not set")
-	}
-	otcDomainName, domainNameOk := os.LookupEnv("OS_DOMAIN_NAME")
-	if !domainNameOk {
-		return nil, errors.New("environment variable \"OS_DOMAIN_NAME\" is not set")
-	}
-
-	region, err := loadRegionFromEnv()
-	if err != nil {
-		return nil, err
-	}
-
-	return &AuthenticationData{
-		Username:             otcUsername,
-		Password:             otcPassword,
-		AccessKey:            otcAccessKey,
-		SecretKey:            otcSecretKey,
-		IsAkSkAuthentication: isAkSkAuthentication,
-		ProjectId:            otcProjectId,
-		DomainName:           otcDomainName,
-		Region:               region,
-	}, nil
-}
-
-func LoadConfig() (ConfigStruct, error) {
-	value, err := loadResourceIdNameMappingFlagFromEnv()
-	if err != nil {
-		panic(err)
-	}
-	namespaces, err := loadNamespacesFromEnv()
-	if err != nil {
-		return ConfigStruct{}, err
-	}
-	port, err := loadPortFromEnv()
-	if err != nil {
-		return ConfigStruct{}, err
-	}
-	waitDuration, err := loadWaitDurationFromEnv()
-	if err != nil {
-		return ConfigStruct{}, err
-	}
-	authenticationData, err := loadAuthenticationDataFromEnv()
-	if err != nil {
-		return ConfigStruct{}, err
-	}
-
-	return ConfigStruct{
-		AuthenticationData:        *authenticationData,
-		Namespaces:                namespaces,
-		Port:                      port,
-		WaitDuration:              waitDuration,
-		ResourceIdNameMappingFlag: value,
-	}, nil
+	return fullNamespaces
 }
