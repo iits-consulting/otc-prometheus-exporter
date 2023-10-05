@@ -13,4 +13,9 @@ namespaces: ""
 metricsPort: 39100
 waitDuration: 60
 fetchResourceIdToName: false
-createServiceMonitor: false
+
+serviceMonitor:
+  enabled: true 
+  labels:
+    foo: bar
+    release: kube-prom

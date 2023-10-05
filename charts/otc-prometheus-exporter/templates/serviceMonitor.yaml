@@ -1,8 +1,12 @@
-{{- if .Values.createServiceMonitor }}
+{{- if .Values.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
-  name: "{{ .Release.Name }}"
+  name: {{ .Release.Name }}
+  labels:
+    {{- range $key, $val := .Values.serviceMonitor.labels }}
+      {{ $key }}: {{ $val | quote }}
+    {{- end}}
 spec:
   endpoints:
   - targetPort: "{{ .Values.metricsPort }}"
@@ -10,5 +14,5 @@ spec:
     path: /metrics
   selector:
     matchLabels:
-      app: "{{ .Release.Name }}"
+      app: {{ .Release.Name }}
 {{- end }}
