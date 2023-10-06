@@ -9,7 +9,7 @@ builds:
       - linux
       - windows
       - darwin
-    main: ./cmd/main.go
+    main: ./main.go
 
 
 archives:
