@@ -9,7 +9,7 @@ import (
 var PrometheusMetrics map[string]*prometheus.GaugeVec
 var PrometheusVectorLabels = []string{"unit", "resource_id", "resource_name"}
 
-func SetupPrometheusMetricsFromOtcMetrics(otcMetrics []otcMetrics.MetricInfoList) map[string]*prometheus.GaugeVec {
+func SetupPrometheusMetricsFromOtcMetrics(otcMetrics []otcMetrics.MetricInfoList, logger ILogger) map[string]*prometheus.GaugeVec {
 	metrics := make(map[string]*prometheus.GaugeVec)
 
 	for _, metric := range otcMetrics {
@@ -23,6 +23,7 @@ func SetupPrometheusMetricsFromOtcMetrics(otcMetrics []otcMetrics.MetricInfoList
 				},
 				PrometheusVectorLabels,
 			)
+			logger.Debug("Prometheus metric created", "metric", metricName)
 		}
 	}
 

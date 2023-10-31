@@ -34,7 +34,7 @@ func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
 	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region)}, nil
 }
 
-func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
+func (c *OtcWrapper) GetMetrics(logger ILogger) ([]otcMetrics.MetricInfoList, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
@@ -44,6 +44,7 @@ func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
 	}
+
 	metricsResponse, err := otcMetrics.ExtractMetrics(metricsResponsePages)
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
@@ -206,7 +207,7 @@ func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
 	return result, nil
 }
 
-func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetricData.MetricData, error) {
+func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList, logger ILogger) (*otcMetricData.MetricData, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
@@ -215,6 +216,8 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
+
+	logger.Debug(fmt.Sprintf("Requesting time period %s to %s\n", endTime, startTime))
 
 	dim0Formatted := fmt.Sprintf("%s,%s", metric.Dimensions[0].Name, metric.Dimensions[0].Value)
 	metricData, err := otcMetricData.ShowMetricData(
@@ -236,7 +239,7 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 	return metricData, nil
 }
 
-func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList, cesClient *golangsdk.ServiceClient) ([]otcMetricData.BatchMetricData, error) {
+func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList, cesClient *golangsdk.ServiceClient, logger ILogger) ([]otcMetricData.BatchMetricData, error) {
 	miniBatchMetricsRequest := make([]otcMetricData.Metric, len(metrics))
 	for i, m := range metrics {
 		miniBatchMetricsRequest[i] = OtcMetricInfoListToMetric(m)
@@ -244,6 +247,8 @@ func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList,
 
 	endTime := time.Now()
 	startTime := endTime.Add(-2 * time.Minute)
+
+	logger.Debug(fmt.Sprintf("Requesting time period %s to %s\n", endTime, startTime))
 
 	metricData, err := otcMetricData.BatchListMetricData(
 		cesClient,
@@ -259,7 +264,7 @@ func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList,
 	return metricData, err
 }
 
-func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
+func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList, logger ILogger) ([]otcMetricData.BatchMetricData, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
 	cesClient, err := openstack.NewCESClient(c.providerClient, opts)
 	if err != nil {
@@ -277,7 +282,7 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 
 	for miniBatchGenerator.HasNext() {
 		miniBatch := miniBatchGenerator.Window()
-		metricData, errMiniBatch := c.getMetricDataMiniBatch(miniBatch, cesClient)
+		metricData, errMiniBatch := c.getMetricDataMiniBatch(miniBatch, cesClient, logger)
 		if errMiniBatch != nil {
 			return nil, errMiniBatch
 		}
@@ -289,13 +294,17 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	return result, err
 }
 
-func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) []otcMetrics.MetricInfoList {
+func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string, logger ILogger) []otcMetrics.MetricInfoList {
+	logger.Debug("Filtering metrics by namespaces", "namespaces", namespaces)
 	var filteredMetrics = []otcMetrics.MetricInfoList{}
 	for _, m := range metrics {
 		if IsFromNamespace(m, namespaces) {
 			filteredMetrics = append(filteredMetrics, m)
+		} else {
+			logger.Debug("Metric removed by filter!", "metric", m)
 		}
 	}
+
 	return filteredMetrics
 }
 
