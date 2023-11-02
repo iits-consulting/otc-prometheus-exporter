@@ -40,7 +40,11 @@ func (c *OtcWrapper) GetMetrics(logger ILogger) ([]otcMetrics.MetricInfoList, er
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
 	}
-	metricsResponsePages, err := otcMetrics.ListMetrics(cesClient, otcMetrics.ListMetricsRequest{}).AllPages()
+
+	// Explicitly set limit to the maximum allowed, as the default seems to not be set (should be 1000, currently is nothing)
+	limit := 1000
+
+	metricsResponsePages, err := otcMetrics.ListMetrics(cesClient, otcMetrics.ListMetricsRequest{Limit: &limit}).AllPages()
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
 	}
