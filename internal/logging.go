@@ -18,7 +18,7 @@ type Logger struct {
 	internalLogger *zap.Logger
 }
 
-func New(logLevel string) ILogger {
+func NewLogger(logLevel string) ILogger {
 	var level zapcore.Level
 	switch logLevel {
 	case "DEBUG":

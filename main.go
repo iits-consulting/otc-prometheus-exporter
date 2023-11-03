@@ -21,7 +21,7 @@ import (
 
 func collectMetricsInBackground(config internal.ConfigStruct, logger internal.ILogger) {
 	go func() {
-		client, err := internal.NewOtcClientFromConfig(config)
+		client, err := internal.NewOtcClientFromConfig(config, logger)
 		if err != nil {
 			logger.Panic("Error creating OTC client", "error", err)
 		}
@@ -31,30 +31,30 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 		var resourceIdToName map[string]string
 
 		if config.ResourceIdNameMappingFlag {
-			resourceIdToName, err = FetchResourceIdToNameMapping(client, config.Namespaces, logger)
-			if err != nil || resourceIdToName == nil {
+			resourceIdToName, err = FetchResourceIdToNameMapping(client, config.Namespaces)
+			if err != nil {
 				logger.Panic("Error mapping resource IDs to Names", "error", err)
 			}
 			logger.Info("Resource ID names mapped!", "idmaps", resourceIdToName)
 		}
 
-		metrics, err := client.GetMetrics(logger)
+		metrics, err := client.GetMetrics()
 		if err != nil {
 			logger.Panic("Unable to get metrics", "error", err, "context", "Initial get metrics call to get metric baseline.")
 		}
 
 		logger.Info("Initial metrics retrieved!")
 
-		filteredMetrics := internal.FilterByNamespaces(metrics, config.Namespaces, logger)
+		filteredMetrics := client.FilterByNamespaces(metrics, config.Namespaces)
 
 		logger.Info("Metrics filtered.")
 
-		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics, logger)
+		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics, client.Logger)
 
 		logger.Info("Prometheus metrics initiated!")
 
 		for {
-			batchedMetricsResponse, err := client.GetMetricDataBatched(filteredMetrics, logger)
+			batchedMetricsResponse, err := client.GetMetricDataBatched(filteredMetrics)
 			if err != nil {
 				logger.Panic("Unable to retrieve batched metric data", "error", err)
 			}
@@ -80,13 +80,13 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 	}()
 }
 
-func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []string, logger internal.ILogger) (map[string]string, error) {
+func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []string) (map[string]string, error) {
 	resourceIdToName := make(map[string]string)
 
 	if slices.Contains(namespaces, internal.EcsNamespace) {
 		result, err := client.GetEcsIdNameMapping()
 		if err != nil {
-			logger.Error("Unable to map namespace!", "context", "ECS Name mapping")
+			client.Logger.Error("Unable to map namespace!", "context", "ECS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -95,7 +95,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.RdsNamespace) {
 		result, err := client.GetRdsIdNameMapping()
 		if err != nil {
-			logger.Error("Unable to map namespace!", "context", "RDS Name mapping")
+			client.Logger.Error("Unable to map namespace!", "context", "RDS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -104,7 +104,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.DmsNamespace) {
 		result, err := client.GetDmsIdNameMapping()
 		if err != nil {
-			logger.Error("Unable to map namespace!", "context", "DMS Name mapping")
+			client.Logger.Error("Unable to map namespace!", "context", "DMS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -113,7 +113,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.NatNamespace) {
 		result, err := client.GetNatIdNameMapping()
 		if err != nil {
-			logger.Error("Unable to map namespace!", "context", "NAT Name mapping")
+			client.Logger.Error("Unable to map namespace!", "context", "NAT Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -122,7 +122,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.ElbNamespace) {
 		result, err := client.GetElbIdNameMapping()
 		if err != nil {
-			logger.Error("Unable to map namespace!", "context", "ELB Name mapping")
+			client.Logger.Error("Unable to map namespace!", "context", "ELB Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -131,13 +131,13 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.DdsNamespace) {
 		result, err := client.GetDdsIdNameMapping()
 		if err != nil {
-			logger.Error("Unable to map namespace!", "context", "DDS Name mapping")
+			client.Logger.Error("Unable to map namespace!", "context", "DDS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
 	}
 
-	logger.Info(fmt.Sprintf("Collected %d resources\n", len(resourceIdToName)))
+	client.Logger.Info(fmt.Sprintf("Collected %d resources\n", len(resourceIdToName)))
 	return resourceIdToName, nil
 }
 
@@ -177,7 +177,7 @@ func main() {
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Add main log system, passed as dependency
-			logger := internal.New(logging)
+			logger := internal.NewLogger(logging)
 			defer logger.Sync()
 
 			logger.Info("Env settings",
