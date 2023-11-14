@@ -45,9 +45,11 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 
 		logger.Info("Initial metrics retrieved!")
 
-		filteredMetrics := client.FilterByNamespaces(metrics, config.Namespaces)
+		filteredMetrics, removedMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
 
 		logger.Info("Metrics filtered.")
+
+		logger.Debug("Metrics removed.", "removed_metrics", removedMetrics)
 
 		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics, client.Logger)
 
@@ -178,6 +180,8 @@ func main() {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Add main log system, passed as dependency
 			logger := internal.NewLogger(logging)
+
+			//nolint:errcheck // not relevant
 			defer logger.Sync()
 
 			logger.Info("Env settings",

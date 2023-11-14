@@ -299,18 +299,18 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	return result, err
 }
 
-func (c *OtcWrapper) FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) []otcMetrics.MetricInfoList {
-	c.Logger.Debug("Filtering metrics by namespaces", "namespaces", namespaces)
+func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) ([]otcMetrics.MetricInfoList, []otcMetrics.MetricInfoList) {
 	var filteredMetrics = []otcMetrics.MetricInfoList{}
+	var removedMetrics = []otcMetrics.MetricInfoList{}
 	for _, m := range metrics {
 		if IsFromNamespace(m, namespaces) {
 			filteredMetrics = append(filteredMetrics, m)
 		} else {
-			c.Logger.Debug("Metric removed by filter!", "metric", m)
+			removedMetrics = append(removedMetrics, m)
 		}
 	}
 
-	return filteredMetrics
+	return filteredMetrics, removedMetrics
 }
 
 func IsFromNamespace(metric otcMetrics.MetricInfoList, namespaces []string) bool {
