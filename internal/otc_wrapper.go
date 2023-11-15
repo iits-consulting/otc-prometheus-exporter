@@ -22,16 +22,17 @@ import (
 type OtcWrapper struct {
 	providerClient *golangsdk.ProviderClient
 	Region         string
+	Logger         ILogger
 }
 
-func NewOtcClientFromConfig(config ConfigStruct) (*OtcWrapper, error) {
+func NewOtcClientFromConfig(config ConfigStruct, logger ILogger) (*OtcWrapper, error) {
 	var opts golangsdk.AuthOptionsProvider = config.AuthenticationData.ToOtcGopherAuthOptionsProvider()
 	provider, err := openstack.AuthenticatedClient(opts)
 	if err != nil {
 		return nil, err
 	}
 
-	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region)}, nil
+	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region), Logger: logger}, nil
 }
 
 func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
@@ -40,10 +41,15 @@ func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
 	}
-	metricsResponsePages, err := otcMetrics.ListMetrics(cesClient, otcMetrics.ListMetricsRequest{}).AllPages()
+
+	// Explicitly set limit to the maximum allowed, as the default seems to not be set (should be 1000, currently is nothing)
+	limit := 1000
+
+	metricsResponsePages, err := otcMetrics.ListMetrics(cesClient, otcMetrics.ListMetricsRequest{Limit: &limit}).AllPages()
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
 	}
+
 	metricsResponse, err := otcMetrics.ExtractMetrics(metricsResponsePages)
 	if err != nil {
 		return []otcMetrics.MetricInfoList{}, err
@@ -216,6 +222,8 @@ func (c *OtcWrapper) GetMetricData(metric otcMetrics.MetricInfoList) (*otcMetric
 	endTime := time.Now()
 	startTime := endTime.Add(-1 * time.Minute)
 
+	c.Logger.Debug(fmt.Sprintf("Requesting time period %s to %s\n", endTime, startTime))
+
 	dim0Formatted := fmt.Sprintf("%s,%s", metric.Dimensions[0].Name, metric.Dimensions[0].Value)
 	metricData, err := otcMetricData.ShowMetricData(
 		cesClient,
@@ -244,6 +252,8 @@ func (c *OtcWrapper) getMetricDataMiniBatch(metrics []otcMetrics.MetricInfoList,
 
 	endTime := time.Now()
 	startTime := endTime.Add(-2 * time.Minute)
+
+	c.Logger.Debug(fmt.Sprintf("Requesting time period %s to %s\n", endTime, startTime))
 
 	metricData, err := otcMetricData.BatchListMetricData(
 		cesClient,
@@ -289,14 +299,18 @@ func (c *OtcWrapper) GetMetricDataBatched(metrics []otcMetrics.MetricInfoList) (
 	return result, err
 }
 
-func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) []otcMetrics.MetricInfoList {
+func FilterByNamespaces(metrics []otcMetrics.MetricInfoList, namespaces []string) ([]otcMetrics.MetricInfoList, []otcMetrics.MetricInfoList) {
 	var filteredMetrics = []otcMetrics.MetricInfoList{}
+	var removedMetrics = []otcMetrics.MetricInfoList{}
 	for _, m := range metrics {
 		if IsFromNamespace(m, namespaces) {
 			filteredMetrics = append(filteredMetrics, m)
+		} else {
+			removedMetrics = append(removedMetrics, m)
 		}
 	}
-	return filteredMetrics
+
+	return filteredMetrics, removedMetrics
 }
 
 func IsFromNamespace(metric otcMetrics.MetricInfoList, namespaces []string) bool {

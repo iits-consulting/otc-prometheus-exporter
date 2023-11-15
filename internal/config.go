@@ -71,13 +71,20 @@ func (r OtcRegion) IamEndpoint() string {
 }
 
 // ResolveOtcShortHandNamespace maps the short code for the namespaces to the actual namespace name.
-func ResolveOtcShortHandNamespace(namespaces []string) []string {
+func ResolveOtcShortHandNamespace(namespaces []string, logger ILogger) []string {
 	fullNamespaces := make([]string, len(namespaces))
 	for i, v := range namespaces {
 		correctNamespaceName, ok := OtcNamespacesMapping[v]
 		fullNamespaces[i] = v
 		if ok {
 			fullNamespaces[i] = correctNamespaceName
+			if logger != nil {
+				logger.Debug("Mapping shorthand to full namespace", "from", v, "to", correctNamespaceName)
+			}
+		} else {
+			if logger != nil {
+				logger.Debug("Mapping not performed for input namespace", "namespace", v)
+			}
 		}
 	}
 

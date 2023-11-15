@@ -19,7 +19,7 @@ var OtcNamespacesMapping = map[string]string{
 	"SFS":       "SYS.SFS",
 	"EFS":       "SYS.EFS",
 	"CBR":       "SYS.CBR",
-	"VPS":       "SYS.VPS",
+	"VPC":       "SYS.VPC",
 	"ELB":       ElbNamespace,
 	"NAT":       NatNamespace,
 	"WAF":       "SYS.WAF",

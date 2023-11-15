@@ -5,16 +5,17 @@ services:
   otc-prometheus-exporter:
     build: .
     ports:
-      - "39100:39100"
+      - "$PORT:$PORT"
 
     environment:
       NAMESPACES: "$NAMESPACES"
-      PORT: 39100
+      PORT: "$PORT"
       OS_USERNAME: "$OS_USERNAME"
       OS_PASSWORD: "$OS_PASSWORD"
       OS_PROJECT_ID: "$OS_PROJECT_ID"
       OS_DOMAIN_NAME: "$OS_DOMAIN_NAME"
       FETCH_RESOURCE_ID_TO_NAME: "$FETCH_RESOURCE_ID_TO_NAME"
+      LOGGING: "$LOGGING"
 
   prometheus:
     image: "prom/prometheus:latest"

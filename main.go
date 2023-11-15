@@ -19,36 +19,49 @@ import (
 	"github.com/spf13/cobra"
 )
 
-func collectMetricsInBackground(config internal.ConfigStruct) {
+func collectMetricsInBackground(config internal.ConfigStruct, logger internal.ILogger) {
 	go func() {
-		client, err := internal.NewOtcClientFromConfig(config)
+		client, err := internal.NewOtcClientFromConfig(config, logger)
 		if err != nil {
-			panic(err)
+			logger.Panic("Error creating OTC client", "error", err)
 		}
+
+		logger.Info("New OTC Client created!")
 
 		var resourceIdToName map[string]string
 
 		if config.ResourceIdNameMappingFlag {
 			resourceIdToName, err = FetchResourceIdToNameMapping(client, config.Namespaces)
 			if err != nil {
-				panic(err)
+				logger.Panic("Error mapping resource IDs to Names", "error", err)
 			}
+			logger.Info("Resource ID names mapped!", "idmaps", resourceIdToName)
 		}
 
 		metrics, err := client.GetMetrics()
 		if err != nil {
-			panic(err)
+			logger.Panic("Unable to get metrics", "error", err, "context", "Initial get metrics call to get metric baseline.")
 		}
 
-		filteredMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
+		logger.Info("Initial metrics retrieved!")
 
-		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics)
+		filteredMetrics, removedMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
+
+		logger.Info("Metrics filtered.")
+
+		logger.Debug("Metrics removed.", "removed_metrics", removedMetrics)
+
+		internal.PrometheusMetrics = internal.SetupPrometheusMetricsFromOtcMetrics(filteredMetrics, client.Logger)
+
+		logger.Info("Prometheus metrics initiated!")
 
 		for {
 			batchedMetricsResponse, err := client.GetMetricDataBatched(filteredMetrics)
 			if err != nil {
-				panic(err)
+				logger.Panic("Unable to retrieve batched metric data", "error", err)
 			}
+
+			logger.Info("Batch metrics retrieved.")
 
 			for _, metric := range batchedMetricsResponse {
 				if len(metric.Datapoints) == 0 {
@@ -60,6 +73,8 @@ func collectMetricsInBackground(config internal.ConfigStruct) {
 						"resource_id":   metric.Dimensions[0].Value,
 						"resource_name": resourceIdToName[metric.Dimensions[0].Value],
 					}).Set(metric.Datapoints[len(metric.Datapoints)-1].Average)
+
+				logger.Debug("Prometheus metric set", "metric", internal.StandardPrometheusBatchMetricName(metric))
 			}
 
 			time.Sleep(config.WaitDuration)
@@ -73,6 +88,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.EcsNamespace) {
 		result, err := client.GetEcsIdNameMapping()
 		if err != nil {
+			client.Logger.Error("Unable to map namespace!", "context", "ECS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -81,6 +97,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.RdsNamespace) {
 		result, err := client.GetRdsIdNameMapping()
 		if err != nil {
+			client.Logger.Error("Unable to map namespace!", "context", "RDS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -89,6 +106,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.DmsNamespace) {
 		result, err := client.GetDmsIdNameMapping()
 		if err != nil {
+			client.Logger.Error("Unable to map namespace!", "context", "DMS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -97,6 +115,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.NatNamespace) {
 		result, err := client.GetNatIdNameMapping()
 		if err != nil {
+			client.Logger.Error("Unable to map namespace!", "context", "NAT Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -105,6 +124,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.ElbNamespace) {
 		result, err := client.GetElbIdNameMapping()
 		if err != nil {
+			client.Logger.Error("Unable to map namespace!", "context", "ELB Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
@@ -113,13 +133,13 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, namespaces []stri
 	if slices.Contains(namespaces, internal.DdsNamespace) {
 		result, err := client.GetDdsIdNameMapping()
 		if err != nil {
-			fmt.Printf("DDS error! : %s", err)
+			client.Logger.Error("Unable to map namespace!", "context", "DDS Name mapping")
 			return map[string]string{}, err
 		}
 		maps.Copy(resourceIdToName, result)
 	}
 
-	log.Printf("Collected %d resources\n", len(resourceIdToName))
+	client.Logger.Info(fmt.Sprintf("Collected %d resources\n", len(resourceIdToName)))
 	return resourceIdToName, nil
 }
 
@@ -136,6 +156,7 @@ func main() {
 		osDomainName          string
 		fetchResourceIdToname bool
 		waitDuration          uint
+		logging               string
 	)
 
 	var rootCmd = &cobra.Command{
@@ -152,10 +173,25 @@ func main() {
 				"projectId":                 "OS_PROJECT_ID",
 				"os-domain-name":            "OS_DOMAIN_NAME",
 				"wait-duration":             "WAITDURATION",
-				"fetch-resource-it-to-name": "FETCH_RESOURCE_ID_TO_NAME",
+				"fetch-resource-id-to-name": "FETCH_RESOURCE_ID_TO_NAME",
+				"logging":                   "LOGGING",
 			})
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
+			// Add main log system, passed as dependency
+			logger := internal.NewLogger(logging)
+
+			//nolint:errcheck // not relevant
+			defer logger.Sync()
+
+			logger.Info("Env settings",
+				"port", port,
+				"region", region,
+				"namespaces", namespaces,
+				"waitDuration", waitDuration,
+				"fetchResourceIdToName", fetchResourceIdToname,
+				"logging", logging)
+
 			isAkSkAuthentication := false
 			switch {
 			case username != "" && password != "":
@@ -171,7 +207,7 @@ func main() {
 				return err
 			}
 
-			namespaces = internal.ResolveOtcShortHandNamespace(namespaces)
+			namespaces = internal.ResolveOtcShortHandNamespace(namespaces, logger)
 
 			collectMetricsInBackground(internal.ConfigStruct{
 				Port:                      int(port),
@@ -188,7 +224,7 @@ func main() {
 					DomainName:           osDomainName,
 					Region:               otcRegion,
 				},
-			})
+			}, logger)
 
 			http.Handle("/metrics", promhttp.Handler())
 			address := fmt.Sprintf(":%d", port)
@@ -207,6 +243,7 @@ func main() {
 	rootCmd.Flags().StringVarP(&osDomainName, "os-domain-name", "", "", "Domainname/Tenant ID")
 	rootCmd.Flags().BoolVarP(&fetchResourceIdToname, "fetch-resource-id-to-name", "", false, "turns the mapping of resource id to resource name on or off")
 	rootCmd.Flags().UintVarP(&waitDuration, "wait-duration", "", 60, "time in seconds between two API call fetches")
+	rootCmd.Flags().StringVarP(&logging, "logging", "", "", "type of logging to use")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)

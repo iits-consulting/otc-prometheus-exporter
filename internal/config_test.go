@@ -20,7 +20,7 @@ func TestResolveOtcShortHandNamespace(t *testing.T) {
 
 	for _, tc := range test_cases {
 		t.Run(tc.name, func(t *testing.T) {
-			actual := ResolveOtcShortHandNamespace(tc.input)
+			actual := ResolveOtcShortHandNamespace(tc.input, nil)
 			if !slices.Equal(actual, tc.expected) {
 				t.Error("The result differs from the expected value")
 			}
