@@ -12,8 +12,6 @@ require (
 	golang.org/x/exp v0.0.0-20230118134722-a68e582fa157
 )
 
-replace github.com/opentelekomcloud/gophertelekomcloud v0.5.28 => ./gophertelekomcloud
-
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.2.0 // indirect

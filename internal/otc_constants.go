@@ -9,6 +9,8 @@ const (
 	NatNamespace = "SYS.NAT"
 	ElbNamespace = "SYS.ELB"
 	DdsNamespace = "SYS.DDS"
+	DcsNamespace = "SYS.DCS"
+	VpcNamespace = "SYS.DCS"
 )
 
 var OtcNamespacesMapping = map[string]string{
@@ -19,12 +21,12 @@ var OtcNamespacesMapping = map[string]string{
 	"SFS":       "SYS.SFS",
 	"EFS":       "SYS.EFS",
 	"CBR":       "SYS.CBR",
-	"VPC":       "SYS.VPC",
+	"VPC":       VpcNamespace,
 	"ELB":       ElbNamespace,
 	"NAT":       NatNamespace,
 	"WAF":       "SYS.WAF",
 	"DMS":       DmsNamespace,
-	"DCS":       "SYS.DCS",
+	"DCS":       DcsNamespace,
 	"RDS":       RdsNamespace,
 	"DDS":       DdsNamespace,
 	"NoSQL":     "SYS.NoSQL",
