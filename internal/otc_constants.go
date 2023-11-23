@@ -10,7 +10,7 @@ const (
 	ElbNamespace = "SYS.ELB"
 	DdsNamespace = "SYS.DDS"
 	DcsNamespace = "SYS.DCS"
-	VpcNamespace = "SYS.DCS"
+	VpcNamespace = "SYS.VPC"
 )
 
 var OtcNamespacesMapping = map[string]string{
