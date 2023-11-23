@@ -14,7 +14,7 @@ import (
 	dcsLifecycle "github.com/opentelekomcloud/gophertelekomcloud/openstack/dcs/v1/lifecycle"
 	ddsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dds/v3/instances"
 	dmsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dms/v1/instances"
-	elbInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/lbaas_v2/loadbalancers"
+	elbInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/elb/v3/loadbalancers"
 	natgatewayInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/natgateways"
 	rdsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/rds/v3/instances"
 	vpcBandwidths "github.com/opentelekomcloud/gophertelekomcloud/openstack/vpc/v1/bandwidths"
@@ -156,7 +156,7 @@ func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
 
 func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
-	elbClient, err := openstack.NewELBV2(c.providerClient, opts)
+	elbClient, err := openstack.NewELBV3(c.providerClient, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -167,7 +167,7 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 		return nil, err
 	}
 
-	elbResponses, err := elbInstances.ExtractLoadBalancers(elbResponsePages)
+	elbResponses, err := elbInstances.ExtractLoadbalancers(elbResponsePages)
 	if err != nil {
 		return nil, err
 	}
