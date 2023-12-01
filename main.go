@@ -46,9 +46,6 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 		logger.Info("Initial metrics retrieved!")
 
 		filteredMetrics, removedMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
-		logger.Info("Initial metrics retrieved!")
-
-		filteredMetrics, removedMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
 
 		logger.Info("Metrics filtered.")
 
