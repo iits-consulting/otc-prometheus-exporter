@@ -1,15 +1,17 @@
-kind: Service
 apiVersion: v1
+kind: Service
 metadata:
-  name: "{{ .Release.Name }}"
+  name: {{ include "otc-prometheus-exporter.fullname" . }}
   labels:
-    app: "{{ .Release.Name }}"
+    {{- include "otc-prometheus-exporter.labels" . | nindent 4 }}
 spec:
-  type: ClusterIP
-  selector:
-    app: "{{ .Release.Name }}"
+  type: {{ (.Values.service).serviceType | default "ClusterIP"}}
   ports:
-    - port: {{ .Values.metricsPort }}
-      targetPort: {{ .Values.metricsPort }}
-      protocol: TCP
-      name: metrics
+    {{- range $name,$values := .Values.service.ports }}
+    - targetPort: {{ ($values).targetPort | default 80 }}
+      name: {{ ($values).name | default $name }}
+      protocol: {{ ($values).protocol | default "TCP"}}
+      port: {{($values).port | default 80 }}
+    {{- end }}
+  selector:
+    {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 4 }}

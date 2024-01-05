@@ -1,41 +1,115 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Release.Name }}
+  name: {{ include "otc-prometheus-exporter.fullname" . }}
+  labels:
+    {{- include "otc-prometheus-exporter.labels" . | nindent 4 }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.deployment.replicaCount }}
+  revisionHistoryLimit: 3
   selector:
     matchLabels:
-      app: {{ .Release.Name }}
+      {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 6 }}
   template:
     metadata:
-      name: {{ .Release.Name }}
+      {{- with .Values.deployment.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app: {{ .Release.Name }}
+        {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 8 }}
     spec:
+      {{- if .Values.deployment.onePodForEachNode}}
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            - labelSelector:
+                matchExpressions:
+                  - key: "app"
+                    operator: In
+                    values:
+                      - {{ include "otc-prometheus-exporter.fullname" . }}
+              topologyKey: "kubernetes.io/hostname"
+      {{- end}}
+      {{- with .Values.deployment.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "otc-prometheus-exporter.serviceAccountName" . }}
+      {{- if .Values.deployment.podSecurityContext }}
+      securityContext:
+        {{- toYaml .Values.deployment.podSecurityContext | nindent 8 }}
+      {{- end }}
       containers:
         - name: {{ .Release.Name }}
-          image: "{{ .Values.image.imageRepository}}/otc-prometheus-exporter:{{ .Values.image.imageTag }}"
-          ports:
-            - containerPort: {{ .Values.metricsPort }}
+          {{- if .Values.deployment.securityContext }}
+          securityContext:
+            {{- toYaml .Values.deployment.securityContext | nindent 12 }}
+          {{- end }}
+          image: "{{ tpl .Values.deployment.image.repository . }}:{{ .Values.deployment.image.tag }}"
+          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           env:
-            - name: PORT
-              value: "{{ .Values.metricsPort }}"
-            - name: WAITDURATION
-              value: "{{ .Values.waitDuration }}"
-            - name: NAMESPACES
-              value: "{{ .Values.namespaces }}"
-            - name:  FETCH_RESOURCE_ID_TO_NAME
-              value: "{{ .Values.fetchResourceIdToName }}"
-            - name: OS_USERNAME
-              value: "{{ .Values.osUsername }}"
-            - name: OS_PASSWORD
-              value: "{{ .Values.osPassword }}" 
-            - name: OS_ACCESS_KEY
-              value: "{{ .Values.osAccessKey }}" 
-            - name: OS_SECRET_KEY
-              value: "{{ .Values.osSecretKey }}"
-            - name: OS_PROJECT_ID
-              value: "{{ .Values.osProjectId }}"
-            - name: OS_DOMAIN_NAME
-              value: "{{ .Values.osDomainName }}"
+            {{- range $key, $value := .Values.deployment.env }}
+            - name: {{ printf "%s" $key | replace "." "_" | upper | quote }}
+              value: {{ tpl ($value | toString) $ | quote }}
+            {{- end }}
+          {{- if .Values.deployment.envSecretName}}
+          envFrom:
+            - secretRef:
+                name: {{.Values.deployment.envSecretName}}
+          {{- end }}
+          ports:
+            {{- range $name,$values := .Values.deployment.ports }}
+            - name: {{$name }}
+              protocol: {{ ($values).protocol | default "TCP"}}
+              containerPort: {{($values).port | default 80 }}
+            {{- end }}
+          {{- with ((.Values.deployment).health).liveness }}
+          livenessProbe:
+            httpGet:
+              path: {{ tpl .path $ | default "/" }}
+              port: {{ .port | default 80 }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 20 }}
+            periodSeconds: {{ .periodSeconds | default 20 }}
+            failureThreshold: {{ .failureThreshold | default 5 }}
+          {{- end }}
+          {{- with ((.Values.deployment).health).startupProbe }}
+          startupProbe:
+            httpGet:
+              path: {{ tpl .path $ | default "/" }}
+              port: {{ .port | default 80 }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 20 }}
+            periodSeconds: {{ .periodSeconds | default 20 }}
+            failureThreshold: {{ .failureThreshold | default 5 }}
+          {{- end }}
+          {{- with ((.Values.deployment).health).readiness }}
+          readinessProbe:
+            httpGet:
+              path: {{ tpl .path $ | default "/" }}
+              port: {{ .port | default 80 }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 20 }}
+            periodSeconds: {{ .periodSeconds | default 20 }}
+            failureThreshold: {{ .failureThreshold | default 5 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.deployment.resources | nindent 12 }}
+      {{- with .Values.deployment.volumeMounts }}
+          volumeMounts:
+              {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with .Values.deployment.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.deployment.volumes }}
+      volumes:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
