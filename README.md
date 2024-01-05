@@ -42,6 +42,7 @@ The configuration happens via environment variables and one configuration file.
 | `PORT`                      | `39100`       | any valid unused port            | Port on which metrics are served                                                                                                                                                                                                                                           |
 | `WAITDURATION`              | `60`          | any positive integer             | Time in seconds between two API call fetches                                                                                                                                                                                                                               |
 | `FETCH_RESOURCE_ID_TO_NAME` | false         | boolean                          | Turns the mapping of resource id to resource name on or off                                                                                                                                                                                                                |
+| `LOG_LEVEL`                 | `INFO`        | `INFO`, `WARN`, `DEBUG`, `ERROR` | Shows the corresponding logs                                                                                                                                                                                                                                               |
 
 
 Below is a comprehensive list of metrics that this software can gather. 
