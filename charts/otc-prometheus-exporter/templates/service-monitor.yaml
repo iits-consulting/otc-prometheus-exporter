@@ -1,0 +1,22 @@
+{{- if .Values.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "otc-prometheus-exporter.fullname" $ }}
+  {{- with .Values.serviceMonitor.labels }}
+  labels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.serviceMonitor.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 6 }}
+  endpoints:
+    - port: {{ default "http" .Values.serviceMonitor.portName }}
+      interval: {{ default "10s" .Values.serviceMonitor.interval }}
+      path: {{ default "/metrics" .Values.serviceMonitor.path }}
+{{- end }}
