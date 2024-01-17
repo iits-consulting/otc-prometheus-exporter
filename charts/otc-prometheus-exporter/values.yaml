@@ -20,7 +20,7 @@ service:
       # port: 80
 
 deployment:
-  replicaCount: 2
+  replicaCount: 1
 
   image:
     repository: "ghcr.io/iits-consulting/otc-prometheus-exporter"
