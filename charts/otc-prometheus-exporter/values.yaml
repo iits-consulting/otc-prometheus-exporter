@@ -2,7 +2,7 @@ serviceAccount:
   # Specifies whether a service account should be created
   create: true
   # Annotations to add to the service account
-  annotations: {}
+  annotations: { }
   # The name of the service account to use.
   # If not set and create is true, a name is generated using the fullname template
   name: ""
@@ -12,15 +12,15 @@ service:
     metrics:
       port: 39100
       targetPort: 39100
-    #These values are the default values, override them if necessary
-    #targetPort: 80
-    ## port name from above
-    #name: "http"
-    #protocol: TCP
-    #port: 80
+      #These values are the default values, override them if necessary
+      # targetPort: 80
+      ## port name from above
+      # name: "http"
+      # protocol: TCP
+      # port: 80
 
 deployment:
-  replicaCount: "2"
+  replicaCount: 2
 
   image:
     repository: "ghcr.io/iits-consulting/otc-prometheus-exporter"
@@ -34,15 +34,15 @@ deployment:
   podAnnotations: { }
 
   podSecurityContext:
-  # fsGroup: 2000
+    # fsGroup: 2000
 
   securityContext:
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
 
   volumes: { }
   volumeMounts: { }
@@ -54,53 +54,54 @@ deployment:
       targetPort: 39100
       port: 39100
       #These values are the default values, override them if necessary
-      #targetPort: 80
+      # targetPort: 80
       ## port name from above
-      #name: "http"
-      #protocol: TCP
-      #port: 80
+      # name: "http"
+      # protocol: TCP
+      # port: 80
 
   health:
     startupProbe:
       path: "/metrics"
-    # initialDelaySeconds: # defaults to 20
-    # periodSeconds: # defaults to 20
-    # failureThreshold: # defaults to 3
+      # initialDelaySeconds: # defaults to 20
+      # periodSeconds: # defaults to 20
+      # failureThreshold: # defaults to 3
       port: 39100
     liveness:
       path: "/metrics"
-    # initialDelaySeconds: # defaults to 20
+      # initialDelaySeconds: # defaults to 20
       periodSeconds: 180
-    # failureThreshold: # defaults to 3
+      # failureThreshold: # defaults to 3
       port: 39100
     readiness:
      path: "/metrics"
-    # initialDelaySeconds: # defaults to 20
-    # periodSeconds: # defaults to 20
-    # failureThreshold: # defaults to 3
+     # initialDelaySeconds: # defaults to 20
+     # periodSeconds: # defaults to 20
+     # failureThreshold: # defaults to 3
      port: 39100
 
   env:
+    # set the values as required
     FETCH_RESOURCE_ID_TO_NAME: false
     WAITDURATION: 60
     REGION: "eu-de"
     PORT: 39100
-    OS_USERNAME:
-    OS_PASSWORD:
+    OS_USERNAME: "" # Comment this line out or remove if using AK/SK
+    OS_PASSWORD: "" # Comment this line out or remove if using AK/SK
     OS_PROJECT_ID: "f0f45389d6a947d88c8658fb8e1a1053" # Example f0f45389d6a947d88c8658fb8e1aXXX
-    OS_DOMAIN_NAME:  "OTC-EU-DE-00000000001000058635" #Example OTC-EU-DE-000000000010000....
-    #OS_SECRET_KEY: # Currently not supported
-    #OS_ACCESS_KEY: # Currently not supported
-    #NAMESPACES: # If not set will fetch everything
+    OS_DOMAIN_NAME:  "OTC-EU-DE-00000000001000058635" # Example OTC-EU-DE-000000000010000....
+    # OS_SECRET_KEY: "SK" # Currently not supported
+    # OS_ACCESS_KEY: "AK" # Currently not supported
+    # NAMESPACES: # If not set will fetch everything
 
   #set the secret where to take env from
-  envFromSecret:
+  envFromSecret: { }
 
 serviceMonitor:
   enabled: true
   # Default values, override them if necessary
-  #labels: {}
-  #annotations: {}
-  #portName: "http"
-  #interval: "10s"
-  #path: "/metrics"
+  # labels: {}
+  # annotations: {}
+  # portName: "http"
+  # interval: "10s"
+  # path: "/metrics"
