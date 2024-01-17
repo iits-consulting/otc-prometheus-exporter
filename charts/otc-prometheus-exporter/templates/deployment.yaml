@@ -46,7 +46,7 @@ spec:
           securityContext:
             {{- toYaml .Values.deployment.securityContext | nindent 12 }}
           {{- end }}
-          image: "{{ tpl .Values.deployment.image.repository . }}:{{ .Values.deployment.image.tag }}"
+          image: "{{ tpl .Values.deployment.image.repository . }}:{{  default .Chart.AppVersion .Values.deployment.image.tag }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
           env:
             {{- range $key, $value := .Values.deployment.env }}
