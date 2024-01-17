@@ -34,7 +34,6 @@ func (ad AuthenticationData) ToOtcGopherAuthOptionsProvider() golangsdk.AuthOpti
 			IdentityEndpoint: ad.Region.IamEndpoint(),
 			AccessKey:        ad.AccessKey,
 			SecretKey:        ad.SecretKey,
-			Domain:           ad.DomainName,
 			ProjectId:        ad.ProjectId,
 		}
 	} else {
