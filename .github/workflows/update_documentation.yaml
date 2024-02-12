@@ -1,6 +1,6 @@
 on:
   push:
-    branches:
+    branches-ignore:
       - "main"
     paths:
       - 'charts/otc-prometheus-exporter/values.yaml'
