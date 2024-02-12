@@ -104,4 +104,4 @@ serviceMonitor:
   # annotations: {}
   # portName: "http"
   # interval: "10s"
-  # path: "/metrics" 
+  # path: "/metrics"
