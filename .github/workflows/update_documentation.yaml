@@ -18,7 +18,7 @@ jobs:
         uses: gabe565/setup-helm-docs-action@v1
       - name: Update README.md files
         run: |
-          helm-docs -c charts/otc-prometheus-exporter -l debug -t charts/README.md.gotmpl
+          helm-docs -c charts/otc-prometheus-exporter
       - name: Commit files
         shell: "bash {0}"
         run: |
