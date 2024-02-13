@@ -1,7 +1,18 @@
 # otc-prometheus-exporter
 
 ![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
+
 A Helm chart for Kubernetes
+
+## Installing the Chart
+
+To install the chart with the release name otc-prometheus-exporter:
+
+```shell
+    helm repo add iits-charts https://charts.iits.tech
+    helm search repo otc-prometheus-exporter
+    helm install otc-prometheus-exporter iits-charts/otc-prometheus-exporter
+```
 
 ## Values
 
@@ -44,9 +55,11 @@ A Helm chart for Kubernetes
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
 | serviceMonitor.enabled | bool | `true` |  |
-<img src="https://iits-consulting.de/wp-content/uploads/2021/08/iits-logo-2021-red-square-xl.png"
-alt="iits consulting" id="logo" width="200" height="200">
+
+<img src="../../img/iits.svg" alt="iits consulting" id="logo" width="200" height="200">
+
 <br>
+
 *This chart is provided by [iits-consulting](https://iits-consulting.de/) - your Cloud-Native Innovation Teams as a Service!*
 
 ----------------------------------------------
