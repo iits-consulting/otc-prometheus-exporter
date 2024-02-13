@@ -59,6 +59,7 @@ To install the chart with the release name otc-prometheus-exporter:
 <img src="../../img/iits.svg" alt="iits consulting" id="logo" width="200" height="200">
 
 <br>
+
 *This chart is provided by [iits-consulting](https://iits-consulting.de/) - your Cloud-Native Innovation Teams as a Service!*
 
 ----------------------------------------------
