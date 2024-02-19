@@ -20,29 +20,29 @@ func processDocumentationPages(outputPath string) {
 	if os.IsNotExist(err) {
 		err := os.MkdirAll(outputPath, 0700)
 		if err != nil {
-			log.Fatalf("Could not create missing output directory %s because of error: %s", outputPath, err)
+			log.Fatalf("Could not create missing output directory %s because of %s\n", outputPath, err)
 		}
 	}
 
 	for _, ds := range otcdoc.DocumentationSources {
 		resp, err := http.Get(ds.Url)
 		if err != nil {
-			panic(err)
+			log.Fatalf("Could not fetch the OTC documentation page for %s on %s because of %s\n", ds.Namespace, ds.Url, err)
 		}
 		defer resp.Body.Close()
 
 		htmlBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
-			panic(err)
+			log.Fatalf("Could not read the OTC documentation page for %s because of %s\n", ds.Namespace, err)
 		}
 
 		docpage, err := otcdoc.ParseDocumentationPageFromHtmlBytes(htmlBytes, ds.Namespace)
 		if err != nil {
-			panic(err)
+			log.Fatalf("Could not parse the HTML from the OTC documentation page for %s because of %s\n", ds.Namespace, err)
 		}
 
-		dashboadTitle := fmt.Sprintf("OTC Prometheus Exporter - %s Dashboard", strings.ToUpper(docpage.Namespace))
-		dashboardUid := fmt.Sprintf("otc-prometheus-exporter-%s-dashboard", docpage.Namespace)
+		dashboadTitle := fmt.Sprintf("OTC Prometheus Exporter - %s Dashboard", ds.Description)
+		dashboardUid := fmt.Sprintf("otc-prometheus-exporter-%s-dashboard", strings.ToLower(ds.Description))
 		board := grafana.NewDefaultDashboard(dashboadTitle, dashboardUid)
 		numberColumns := 2
 		for i, m := range docpage.Metrics {
@@ -67,14 +67,14 @@ func processDocumentationPages(outputPath string) {
 
 		b, err := json.Marshal(board)
 		if err != nil {
-			panic(err)
+			log.Fatalf("Could not save the generated dashboard for %s because of %s\n", ds.Namespace, err)
 		}
 
 		outputFile := path.Join(outputPath, fmt.Sprintf("%s-metrics.json", ds.Description))
 		fmt.Println(outputFile)
 		err = os.WriteFile(outputFile, b, 0644)
 		if err != nil {
-			log.Fatal(err)
+			log.Fatalf("Could not write the generated dashboard to %s because of %s", ds.Namespace, err)
 		}
 	}
 }
@@ -84,10 +84,7 @@ func main() {
 	var outputPath string
 	var rootCmd = &cobra.Command{
 		Use:   "grafanadashboards",
-		Short: "Hugo is a very fast static site generator",
-		Long: `A Fast and Flexible Static Site Generator built with
-                love by spf13 and friends in Go.
-                Complete documentation is available at https://gohugo.io/documentation/`,
+		Short: "Generates Grafana dashboards for the OTC prometheus exporter.",
 		Run: func(cmd *cobra.Command, args []string) {
 			processDocumentationPages(outputPath)
 		},
