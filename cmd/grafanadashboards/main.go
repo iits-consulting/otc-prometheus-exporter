@@ -4,20 +4,25 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
+	"path"
 	"strings"
 
 	"github.com/iits-consulting/otc-prometheus-exporter/grafana"
 	"github.com/iits-consulting/otc-prometheus-exporter/otcdoc"
+	"github.com/spf13/cobra"
 )
 
-type GrafanaPanel struct {
-	Title string
-	Expr  string
-}
-
-func main() {
+func processDocumentationPages(outputPath string) {
+	_, err := os.Stat(outputPath)
+	if os.IsNotExist(err) {
+		err := os.MkdirAll(outputPath, 0644)
+		if err != nil {
+			log.Fatalf("Could not create missing output directory %s because of error: %s", outputPath, err)
+		}
+	}
 
 	for _, ds := range otcdoc.DocumentationSources {
 		resp, err := http.Get(ds.Url)
@@ -65,7 +70,30 @@ func main() {
 			panic(err)
 		}
 
-		filename := fmt.Sprintf("%s-metrics.json", ds.Description)
-		os.WriteFile(filename, b, 0644)
+		outputFile := path.Join(outputPath, fmt.Sprintf("%s-metrics.json", ds.Description))
+		os.WriteFile(outputFile, b, 0644)
 	}
+}
+
+func main() {
+
+	var outputPath string
+	var rootCmd = &cobra.Command{
+		Use:   "grafanadashboards",
+		Short: "Hugo is a very fast static site generator",
+		Long: `A Fast and Flexible Static Site Generator built with
+                love by spf13 and friends in Go.
+                Complete documentation is available at https://gohugo.io/documentation/`,
+		Run: func(cmd *cobra.Command, args []string) {
+			processDocumentationPages(outputPath)
+		},
+	}
+	rootCmd.Flags().StringVar(&outputPath, "output-path", "", "Directory where all the dashboards will be written to.")
+	rootCmd.MarkFlagRequired("output-path")
+
+	if err := rootCmd.Execute(); err != nil {
+		fmt.Fprintln(os.Stderr, err)
+		os.Exit(1)
+	}
+
 }
