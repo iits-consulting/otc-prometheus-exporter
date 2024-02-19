@@ -38,111 +38,111 @@ type DocumentationSource struct {
 var DocumentationSources = []DocumentationSource{
 	{
 		Namespace:   "ecs",
-		Description: "ecs",
+		Description: "ECS",
 		Url:         "https://docs.otc.t-systems.com/elastic-cloud-server/umn/monitoring/basic_ecs_metrics.html",
 	},
 	{
 		Namespace:   "bms",
-		Description: "bms",
+		Description: "BMS",
 		Url:         "https://docs.otc.t-systems.com/bare-metal-server/umn/server_monitoring/monitored_metrics_with_agent_installed.html"},
 	{
 		Namespace:   "as",
-		Description: "as",
+		Description: "AS",
 		Url:         "https://docs.otc.t-systems.com/usermanual/as/as_06_0105.html",
 	},
 	{
 		Namespace:   "evs",
-		Description: "evs",
+		Description: "EVS",
 		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/evs/evs_01_0044.html",
 	},
 	{
 		Namespace:   "sfs",
-		Description: "sfs",
+		Description: "SFS",
 		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/sfs/sfs_01_0047.html",
 	},
 	{
 		Namespace:   "efs",
-		Description: "efs",
+		Description: "EFS",
 		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/sfs/sfs_01_0048.html",
 	},
 	{
 		Namespace:   "cbr",
-		Description: "cbr",
+		Description: "CBR",
 		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/cbr/cbr_03_0114.html",
 	},
 	{
 		Namespace:   "vpc",
-		Description: "vpc",
+		Description: "VPC",
 		Url:         "https://docs.otc.t-systems.com/usermanual/vpc/vpc010012.html",
 	},
 	{
 		Namespace:   "elb",
-		Description: "elb",
+		Description: "ELB",
 		Url:         "https://docs.otc.t-systems.com/usermanual/elb/elb_ug_jk_0001.html",
 	},
 	{
 		Namespace:   "nat",
-		Description: "nat",
+		Description: "NAT",
 		Url:         "https://docs.otc.t-systems.com/usermanual/nat/nat_ces_0002.html",
 	},
 	{
 		Namespace:   "waf",
-		Description: "waf",
+		Description: "WAF",
 		Url:         "https://docs.otc.t-systems.com/usermanual/waf/waf_01_0092.html",
 	},
 	{
 		Namespace:   "dms",
-		Description: "dms",
+		Description: "DMS",
 		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/dms/dms-ug-180413002.html",
 	},
 	{
 		Namespace:   "dcs",
-		Description: "dcs",
+		Description: "DCS",
 		Url:         "https://docs.otc.t-systems.com/usermanual/dcs/dcs-ug-0326019.html",
 	},
 	{
 		Namespace:   "rds",
-		Description: "rds_mysql",
+		Description: "RDS (MySql)",
 		Url:         "https://docs.otc.t-systems.com/usermanual/rds/rds_06_0001.html",
 	},
 	{
 		Namespace:   "rds",
-		Description: "rds_postgres",
+		Description: "RDS (Postgres)",
 		Url:         "https://docs.otc.t-systems.com/usermanual/rds/rds_pg_06_0001.html",
 	},
 	{
 		Namespace:   "rds",
-		Description: "rds_sqlserver",
+		Description: "RDS (SqlServer)",
 		Url:         "https://docs.otc.t-systems.com/usermanual/rds/rds_sqlserver_06_0001.html",
 	},
 	{
 		Namespace:   "dds",
-		Description: "dds",
+		Description: "DDS",
 		Url:         "https://docs.otc.t-systems.com/usermanual/dds/dds_03_0026.html",
 	},
 	{
 		Namespace:   "nosql",
-		Description: "nosql",
+		Description: "NoSQL",
 		Url:         "https://docs.otc.t-systems.com/usermanual/nosql/nosql_03_0011.html",
 	},
 	{
 		Namespace:   "gaussdb",
-		Description: "gaussdb",
+		Description: "GaussDB",
 		Url:         "https://docs.otc.t-systems.com/usermanual/gaussdb/gaussdb_03_0085.html",
 	},
 	{
 		Namespace:   "gaussdbv5",
-		Description: "gaussdbv5",
+		Description: "GaussDBV5",
 		Url:         "https://docs.otc.t-systems.com/usermanual/opengauss/opengauss_01_0071.html",
 	},
 	{
 		Namespace:   "dws",
-		Description: "dws",
+		Description: "DWS",
 		Url:         "https://docs.otc.t-systems.com/usermanual/dws/dws_01_0022.html",
 	},
 	{
 		Namespace:   "css",
-		Description: "css",
+		Description: "CSS",
 		Url:         "https://docs.otc.t-systems.com/usermanual/css/css_01_0042.html",
 	},
 }
@@ -154,8 +154,10 @@ func ParseDocumentationPageFromHtmlBytes(htmlBytes []byte, namespace string) (Do
 
 	doc, err := goquery.NewDocumentFromReader(reader)
 	if err != nil {
-		panic(err)
+		return DocumentationPage{}, err
 	}
+
+	errs := make([]error, 0)
 
 	doc.Find("table").Each(func(i int, sTable *goquery.Selection) {
 
@@ -166,13 +168,14 @@ func ParseDocumentationPageFromHtmlBytes(htmlBytes []byte, namespace string) (Do
 		sTable.Find("tbody tr").Each(
 			func(i int, sTableRow *goquery.Selection) {
 				rm, err := loadRawDataFromTableRow(sTableRow)
+
 				if err != nil {
-					panic(err)
+					errs = append(errs, err)
+				} else {
+					m := parseDocumentationRow(rm)
+					metricRows = append(metricRows, m)
 				}
 
-				m := parseDocumentationRow(rm)
-
-				metricRows = append(metricRows, m)
 			},
 		)
 	})
@@ -180,7 +183,7 @@ func ParseDocumentationPageFromHtmlBytes(htmlBytes []byte, namespace string) (Do
 	return DocumentationPage{
 		Namespace: namespace,
 		Metrics:   metricRows,
-	}, nil
+	}, errors.Join(errs...)
 }
 
 func parseDocumentationRow(rm RawMetricDocumentationEntry) MetricDocumentationEntry {
