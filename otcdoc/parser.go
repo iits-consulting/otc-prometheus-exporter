@@ -232,7 +232,6 @@ func loadRawDataFromTableRow(sTableRow *goquery.Selection) (RawMetricDocumentati
 func checkIfTableHasIncorrectStructure(sTable *goquery.Selection) bool {
 	columnCounter := 0
 	sTable.Find("thead tr").First().Find("th").Each(func(i int, sTableHeader *goquery.Selection) {
-		// fmt.Println(sTableHeader.Text()) // TODO: remove this
 		columnCounter++
 	},
 	)
