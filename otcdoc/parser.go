@@ -30,120 +30,101 @@ type RawMetricDocumentationEntry struct {
 }
 
 type DocumentationSource struct {
-	Namespace   string
-	Url         string
-	Description string
+	Namespace    string
+	Url          string
+	SubComponent string
 }
 
 var DocumentationSources = []DocumentationSource{
 	{
-		Namespace:   "ecs",
-		Description: "ECS",
-		Url:         "https://docs.otc.t-systems.com/elastic-cloud-server/umn/monitoring/basic_ecs_metrics.html",
+		Namespace: "ecs",
+		Url:       "https://docs.otc.t-systems.com/elastic-cloud-server/umn/monitoring/basic_ecs_metrics.html",
 	},
 	{
-		Namespace:   "bms",
-		Description: "BMS",
-		Url:         "https://docs.otc.t-systems.com/bare-metal-server/umn/server_monitoring/monitored_metrics_with_agent_installed.html"},
+		Namespace: "bms",
+		Url:       "https://docs.otc.t-systems.com/bare-metal-server/umn/server_monitoring/monitored_metrics_with_agent_installed.html"},
 	{
-		Namespace:   "as",
-		Description: "AS",
-		Url:         "https://docs.otc.t-systems.com/usermanual/as/as_06_0105.html",
+		Namespace: "as",
+		Url:       "https://docs.otc.t-systems.com/usermanual/as/as_06_0105.html",
 	},
 	{
-		Namespace:   "evs",
-		Description: "EVS",
-		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/evs/evs_01_0044.html",
+		Namespace: "evs",
+		Url:       "https://docs.otc.t-systems.com/en-us/usermanual/evs/evs_01_0044.html",
 	},
 	{
-		Namespace:   "sfs",
-		Description: "SFS",
-		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/sfs/sfs_01_0047.html",
+		Namespace: "sfs",
+		Url:       "https://docs.otc.t-systems.com/en-us/usermanual/sfs/sfs_01_0047.html",
 	},
 	{
-		Namespace:   "efs",
-		Description: "EFS",
-		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/sfs/sfs_01_0048.html",
+		Namespace: "efs",
+		Url:       "https://docs.otc.t-systems.com/en-us/usermanual/sfs/sfs_01_0048.html",
 	},
 	{
-		Namespace:   "cbr",
-		Description: "CBR",
-		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/cbr/cbr_03_0114.html",
+		Namespace: "cbr",
+		Url:       "https://docs.otc.t-systems.com/en-us/usermanual/cbr/cbr_03_0114.html",
 	},
 	{
-		Namespace:   "vpc",
-		Description: "VPC",
-		Url:         "https://docs.otc.t-systems.com/usermanual/vpc/vpc010012.html",
+		Namespace: "vpc",
+		Url:       "https://docs.otc.t-systems.com/usermanual/vpc/vpc010012.html",
 	},
 	{
-		Namespace:   "elb",
-		Description: "ELB",
-		Url:         "https://docs.otc.t-systems.com/usermanual/elb/elb_ug_jk_0001.html",
+		Namespace: "elb",
+		Url:       "https://docs.otc.t-systems.com/usermanual/elb/elb_ug_jk_0001.html",
 	},
 	{
-		Namespace:   "nat",
-		Description: "NAT",
-		Url:         "https://docs.otc.t-systems.com/usermanual/nat/nat_ces_0002.html",
+		Namespace: "nat",
+		Url:       "https://docs.otc.t-systems.com/usermanual/nat/nat_ces_0002.html",
 	},
 	{
-		Namespace:   "waf",
-		Description: "WAF",
-		Url:         "https://docs.otc.t-systems.com/usermanual/waf/waf_01_0092.html",
+		Namespace: "waf",
+		Url:       "https://docs.otc.t-systems.com/usermanual/waf/waf_01_0092.html",
 	},
 	{
-		Namespace:   "dms",
-		Description: "DMS",
-		Url:         "https://docs.otc.t-systems.com/en-us/usermanual/dms/dms-ug-180413002.html",
+		Namespace: "dms",
+		Url:       "https://docs.otc.t-systems.com/en-us/usermanual/dms/dms-ug-180413002.html",
 	},
 	{
-		Namespace:   "dcs",
-		Description: "DCS",
-		Url:         "https://docs.otc.t-systems.com/usermanual/dcs/dcs-ug-0326019.html",
+		Namespace: "dcs",
+		Url:       "https://docs.otc.t-systems.com/usermanual/dcs/dcs-ug-0326019.html",
 	},
 	{
-		Namespace:   "rds",
-		Description: "RDS (MySql)",
-		Url:         "https://docs.otc.t-systems.com/usermanual/rds/rds_06_0001.html",
+		Namespace:    "rds",
+		SubComponent: "MySql",
+		Url:          "https://docs.otc.t-systems.com/usermanual/rds/rds_06_0001.html",
 	},
 	{
-		Namespace:   "rds",
-		Description: "RDS (Postgres)",
-		Url:         "https://docs.otc.t-systems.com/usermanual/rds/rds_pg_06_0001.html",
+		Namespace:    "rds",
+		SubComponent: "Postgres",
+		Url:          "https://docs.otc.t-systems.com/usermanual/rds/rds_pg_06_0001.html",
 	},
 	{
-		Namespace:   "rds",
-		Description: "RDS (SqlServer)",
-		Url:         "https://docs.otc.t-systems.com/usermanual/rds/rds_sqlserver_06_0001.html",
+		Namespace:    "rds",
+		SubComponent: "SqlServer",
+		Url:          "https://docs.otc.t-systems.com/usermanual/rds/rds_sqlserver_06_0001.html",
 	},
 	{
-		Namespace:   "dds",
-		Description: "DDS",
-		Url:         "https://docs.otc.t-systems.com/usermanual/dds/dds_03_0026.html",
+		Namespace: "dds",
+		Url:       "https://docs.otc.t-systems.com/usermanual/dds/dds_03_0026.html",
 	},
 	{
-		Namespace:   "nosql",
-		Description: "NoSQL",
-		Url:         "https://docs.otc.t-systems.com/usermanual/nosql/nosql_03_0011.html",
+		Namespace: "nosql",
+		Url:       "https://docs.otc.t-systems.com/usermanual/nosql/nosql_03_0011.html",
 	},
 	{
-		Namespace:   "gaussdb",
-		Description: "GaussDB",
-		Url:         "https://docs.otc.t-systems.com/usermanual/gaussdb/gaussdb_03_0085.html",
+		Namespace: "gaussdb",
+		Url:       "https://docs.otc.t-systems.com/usermanual/gaussdb/gaussdb_03_0085.html",
 	},
 	{
-		Namespace:   "gaussdbv5",
-		Description: "GaussDBV5",
-		Url:         "https://docs.otc.t-systems.com/usermanual/opengauss/opengauss_01_0071.html",
+		Namespace: "gaussdbv5",
+		Url:       "https://docs.otc.t-systems.com/usermanual/opengauss/opengauss_01_0071.html",
 	},
 	{
-		Namespace:   "dws",
-		Description: "DWS",
-		Url:         "https://docs.otc.t-systems.com/usermanual/dws/dws_01_0022.html",
+		Namespace: "dws",
+		Url:       "https://docs.otc.t-systems.com/usermanual/dws/dws_01_0022.html",
 	},
 	{
-		Namespace:   "css",
-		Description: "CSS",
-		Url:         "https://docs.otc.t-systems.com/usermanual/css/css_01_0042.html",
+		Namespace: "css",
+		Url:       "https://docs.otc.t-systems.com/usermanual/css/css_01_0042.html",
 	},
 }
 

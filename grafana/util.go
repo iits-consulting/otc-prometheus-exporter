@@ -1,6 +1,10 @@
 package grafana
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/iits-consulting/otc-prometheus-exporter/otcdoc"
+)
 
 var metricMapping = map[string]string{
 	"percent":     "percent",
@@ -47,6 +51,30 @@ func ConvertOtcMetricToGrafana(m string) string {
 		fmt.Println("Could not find metric mapping for ", m)
 	}
 	return grafanaMetric
+}
+
+func OtcSouceDescToGraranaDashboardTitle(ds otcdoc.DocumentationSource) string {
+	title := "OTC Prometheus Exporter - " + ds.Namespace
+	if ds.SubComponent != "" {
+		title += title + " (" + ds.SubComponent + ")"
+	}
+	return title
+}
+
+func OtcSourceDescToGrafanaUID(ds otcdoc.DocumentationSource) string {
+	uid := "otc-" + ds.Namespace
+	if ds.SubComponent != "" {
+		uid += "-" + ds.SubComponent
+	}
+	return uid
+}
+
+func OtcSourceDescToFilename(ds otcdoc.DocumentationSource) string {
+	filename := ds.Namespace + ".json"
+	if ds.SubComponent != "" {
+		filename = ds.Namespace + "-" + ds.SubComponent + ".json"
+	}
+	return filename
 }
 
 type PanelSettings struct {

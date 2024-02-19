@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path"
-	"strings"
 
 	"github.com/iits-consulting/otc-prometheus-exporter/grafana"
 	"github.com/iits-consulting/otc-prometheus-exporter/otcdoc"
@@ -41,8 +40,8 @@ func processDocumentationPages(outputPath string) {
 			log.Fatalf("Could not parse the HTML from the OTC documentation page for %s because of %s\n", ds.Namespace, err)
 		}
 
-		dashboadTitle := fmt.Sprintf("OTC Prometheus Exporter - %s Dashboard", ds.Description)
-		dashboardUid := fmt.Sprintf("otc-prometheus-exporter-%s-dashboard", strings.ToLower(ds.Description))
+		dashboadTitle := grafana.OtcSouceDescToGraranaDashboardTitle(ds)
+		dashboardUid := grafana.OtcSourceDescToGrafanaUID(ds)
 		board := grafana.NewDefaultDashboard(dashboadTitle, dashboardUid)
 		numberColumns := 2
 		for i, m := range docpage.Metrics {
@@ -70,7 +69,7 @@ func processDocumentationPages(outputPath string) {
 			log.Fatalf("Could not save the generated dashboard for %s because of %s\n", ds.Namespace, err)
 		}
 
-		outputFile := path.Join(outputPath, fmt.Sprintf("%s-metrics.json", ds.Description))
+		outputFile := path.Join(outputPath, grafana.OtcSourceDescToFilename(ds))
 		fmt.Println(outputFile)
 		err = os.WriteFile(outputFile, b, 0644)
 		if err != nil {
