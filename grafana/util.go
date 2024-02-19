@@ -1,5 +1,54 @@
 package grafana
 
+import "fmt"
+
+var metricMapping = map[string]string{
+	"percent":     "percent",
+	"Percent":     "percent",
+	"%":           "percent",
+	"percent (%)": "percent",
+
+	"count/s":         "cps",
+	"Count/s":         "cps",
+	"packages/second": "pps",
+	"Packet/s":        "pps",
+	"Packets/s":       "pps",
+	"request/s":       "reqps",
+	"Request/s":       "reqps",
+	"Requests/s":      "reqps",
+	"Query/s":         "ops",
+	"bit/s":           "bps",
+	"byte/s":          "Bps",
+	"Byte/s":          "Bps",
+	"Bytes/s":         "Bps",
+	"kbit/s":          "KBs",
+	"KB/s":            "KBs",
+
+	"KB/op": "none", // TODO: maybe create a metric for this
+	"ms/op": "none", // TODO: maybe create a metric for this
+
+	"ms/count": "ms",
+	"ms":       "ms",
+	"μs":       "μs",
+	"second":   "s",
+
+	"GB":    "decgbytes",
+	"byte":  "bytes",
+	"count": "none", // none is just number
+	"Count": "none", // none is just number
+	"N/A":   "none", // none is just number
+	"":      "none", // none is just number
+
+}
+
+func ConvertOtcMetricToGrafana(m string) string {
+	grafanaMetric, ok := metricMapping[m]
+	if !ok {
+		fmt.Println("Could not find metric mapping for ", m)
+	}
+	return grafanaMetric
+}
+
 type PanelSettings struct {
 	Expr   string
 	Title  string
