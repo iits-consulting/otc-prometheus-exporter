@@ -238,7 +238,7 @@ func NewDefaultDashboard(title, uid string) Dashboad {
 		Panels:               []Panel{},
 		Refresh:              "",
 		SchemaVersion:        39,
-		Tags:                 []string{"test"},
+		Tags:                 []string{"OTC"},
 		Templating: Templating{
 			List: []any{},
 		},
