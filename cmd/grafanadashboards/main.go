@@ -18,7 +18,7 @@ import (
 func processDocumentationPages(outputPath string) {
 	_, err := os.Stat(outputPath)
 	if os.IsNotExist(err) {
-		err := os.MkdirAll(outputPath, 0644)
+		err := os.MkdirAll(outputPath, 0700)
 		if err != nil {
 			log.Fatalf("Could not create missing output directory %s because of error: %s", outputPath, err)
 		}
@@ -71,7 +71,11 @@ func processDocumentationPages(outputPath string) {
 		}
 
 		outputFile := path.Join(outputPath, fmt.Sprintf("%s-metrics.json", ds.Description))
-		os.WriteFile(outputFile, b, 0644)
+		fmt.Println(outputFile)
+		err = os.WriteFile(outputFile, b, 0644)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 
@@ -89,11 +93,10 @@ func main() {
 		},
 	}
 	rootCmd.Flags().StringVar(&outputPath, "output-path", "", "Directory where all the dashboards will be written to.")
-	rootCmd.MarkFlagRequired("output-path")
+	rootCmd.MarkFlagRequired("output-path") //nolint:errcheck // will not err because only this one flag is used
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		log.Fatalln(err)
 	}
 
 }
