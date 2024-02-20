@@ -15,6 +15,9 @@ func TestParseDocumentationPageFromHtmlBytes(t *testing.T) {
 	}
 
 	actual, err := ParseDocumentationPageFromHtmlBytes(inputBytes, "ecs")
+	if err != nil {
+		t.Fatal(err)
+	}
 
 	expectedFile := "testdata/basic_ecs_metrics_expected.json"
 	expectedBytes, err := os.ReadFile(expectedFile)
