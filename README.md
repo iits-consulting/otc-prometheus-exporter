@@ -72,11 +72,7 @@ Note: The "Translatable" column indicates whether the resource ID can be mapped 
 | Data analysis  | Data Warehouse Service                                | SYS.DWS       | Yes          | [DWS metrics](https://docs.otc.t-systems.com/data-warehouse-service/umn/monitoring_and_alarms/monitoring_clusters_using_cloud_eye.html) |
 |                | Cloud Search Service                                  | SYS.ES        | No           | [CSS metrics](https://docs.otc.t-systems.com/cloud-search-service/umn/monitoring_a_cluster/supported_metrics.html) |
 
-
-
-
 [CloudEyeDoc]:https://docs.otc.t-systems.com/cloud-eye/api-ref/appendix/services_interconnected_with_cloud_eye.html#ces-03-0059
-
 
 ### Kubernetes (Helm)
 
@@ -85,10 +81,6 @@ helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prom
 helm search repo otc-prometheus-exporter
 helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter --set your_values.yaml
 ```
-
-
-
-
 
 ### Docker and Docker Compose
 
@@ -126,6 +118,14 @@ If you want to run the application directly as a binary then you can do it by fo
 4. `cp .env.template .env`
 5. Fill out the values in the `.env` file
 6. Run the programm: `env $(cat .env) ./otc-prometheues-exporter`
+
+## Dashboards
+
+Here are pictures of how the dashboards look. Keep in mind that not always all metrics are populated because they are not sent by the Cloud Eye Service.
+
+![overview](./img/overview.png)
+![overview_ecs](./img/overview_ecs.png)
+![overview_rds](./img/overview_rds_postgres.png)
 
 
 ## References
