@@ -163,7 +163,28 @@ type Panel struct {
 	Type        string      `json:"type"`
 }
 type Templating struct {
-	List []any `json:"list"`
+	List []TemplatingVariable `json:"list"`
+}
+type TemplatingVariable struct {
+	Current     Current `json:"current"`
+	Description string  `json:"description"`
+	Hide        int     `json:"hide"`
+	IncludeAll  bool    `json:"includeAll"`
+	Label       string  `json:"label"`
+	Multi       bool    `json:"multi"`
+	Name        string  `json:"name"`
+	Options     []any   `json:"options"`
+	Query       string  `json:"query"`
+	QueryValue  string  `json:"queryValue"`
+	Refresh     int     `json:"refresh"`
+	Regex       string  `json:"regex"`
+	SkipURLSync bool    `json:"skipUrlSync"`
+	Type        string  `json:"type"`
+}
+type Current struct {
+	Selected bool   `json:"selected"`
+	Text     string `json:"text"`
+	Value    string `json:"value"`
 }
 type Time struct {
 	From string `json:"from"`

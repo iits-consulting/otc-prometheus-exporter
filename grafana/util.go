@@ -2,6 +2,7 @@ package grafana
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/iits-consulting/otc-prometheus-exporter/otcdoc"
 )
@@ -54,9 +55,9 @@ func ConvertOtcMetricToGrafana(m string) string {
 }
 
 func OtcSouceDescToGraranaDashboardTitle(ds otcdoc.DocumentationSource) string {
-	title := "OTC Prometheus Exporter - " + ds.Namespace
+	title := "OTC Prometheus Exporter - " + strings.ToUpper(ds.Namespace)
 	if ds.SubComponent != "" {
-		title += title + " (" + ds.SubComponent + ")"
+		title += " (" + ds.SubComponent + ")"
 	}
 	return title
 }
@@ -64,7 +65,7 @@ func OtcSouceDescToGraranaDashboardTitle(ds otcdoc.DocumentationSource) string {
 func OtcSourceDescToGrafanaUID(ds otcdoc.DocumentationSource) string {
 	uid := "otc-" + ds.Namespace
 	if ds.SubComponent != "" {
-		uid += "-" + ds.SubComponent
+		uid += "-" + strings.ToLower(ds.SubComponent)
 	}
 	return uid
 }
@@ -72,7 +73,7 @@ func OtcSourceDescToGrafanaUID(ds otcdoc.DocumentationSource) string {
 func OtcSourceDescToFilename(ds otcdoc.DocumentationSource) string {
 	filename := ds.Namespace + ".json"
 	if ds.SubComponent != "" {
-		filename = ds.Namespace + "-" + ds.SubComponent + ".json"
+		filename = ds.Namespace + "-" + strings.ToLower(ds.SubComponent) + ".json"
 	}
 	return filename
 }
@@ -92,7 +93,7 @@ func NewPanelWithSettings(s PanelSettings) Panel {
 	return Panel{
 		Datasource: Datasource{
 			Type: "prometheus",
-			UID:  "${DS_PROMETHEUS}",
+			UID:  "${datasource}",
 		},
 		FieldConfig: FieldConfig{
 			Defaults: Defaults{
@@ -161,7 +162,7 @@ func NewPanelWithSettings(s PanelSettings) Panel {
 			{
 				Datasource: Datasource{
 					Type: "prometheus",
-					UID:  "${DS_PROMETHEUS}",
+					UID:  "${prometheus}",
 				},
 				DisableTextWrap:     false,
 				EditorMode:          "builder",
@@ -240,7 +241,28 @@ func NewDefaultDashboard(title, uid string) Dashboad {
 		SchemaVersion:        39,
 		Tags:                 []string{"OTC"},
 		Templating: Templating{
-			List: []any{},
+			List: []TemplatingVariable{
+				{
+					Current: Current{
+						Selected: true,
+						Text:     "Prometheus",
+						Value:    "prometheus",
+					},
+					Description: "Datasource where the OTC Prometheus Exporter data is stored",
+					Hide:        0,
+					IncludeAll:  false,
+					Label:       "Datasource",
+					Multi:       false,
+					Name:        "datasource",
+					Options:     []any{},
+					Query:       "prometheus",
+					QueryValue:  "",
+					Refresh:     1,
+					Regex:       "",
+					SkipURLSync: false,
+					Type:        "datasource",
+				},
+			},
 		},
 		Time: Time{
 			From: "now-30m",

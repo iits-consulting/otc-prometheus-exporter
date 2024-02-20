@@ -16,7 +16,7 @@ spec:
     matchLabels:
       {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 6 }}
   endpoints:
-    - port: {{ default "http" .Values.serviceMonitor.portName }}
+    - port: {{ default "metrics" .Values.serviceMonitor.portName }}
       interval: {{ default "10s" .Values.serviceMonitor.interval }}
       path: {{ default "/metrics" .Values.serviceMonitor.path }}
 {{- end }}
