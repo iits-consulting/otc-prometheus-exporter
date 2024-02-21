@@ -53,12 +53,6 @@ deployment:
     metrics:
       targetPort: 39100
       port: 39100
-      #These values are the default values, override them if necessary
-      # targetPort: 80
-      ## port name from above
-      # name: "http"
-      # protocol: TCP
-      # port: 80
 
   health:
     startupProbe:
@@ -101,7 +95,61 @@ serviceMonitor:
   enabled: true
   # Default values, override them if necessary
   # labels: {}
+  #
+  # If you are using kube-prometheus-stack and did not configure the prometheus operator
+  # the you will want to use this label:
+  #
+  # labels:
+  #   release: kube-prom-stack
+  #
+  #
   # annotations: {}
-  # portName: "http"
+  # portName: "metrics"
   # interval: "10s"
   # path: "/metrics" 
+
+dashboards:
+  as:
+    enabled: true
+  bms:
+    enabled: true
+  cbr:
+    enabled: true
+  css:
+    enabled: true
+  dcs:
+    enabled: true
+  dds:
+    enabled: true
+  dms:
+    enabled: true
+  dws:
+    enabled: true
+  ecs:
+    enabled: true
+  efs:
+    enabled: true
+  elb:
+    enabled: true
+  evs:
+    enabled: true
+  gaussdb:
+    enabled: true
+  gaussdbv5:
+    enabled: true
+  nat:
+    enabled: true
+  nosql:
+    enabled: true
+  rds-mysql:
+    enabled: true
+  rds-postgres:
+    enabled: true
+  rds-sqlserver:
+    enabled: true
+  sfs:
+    enabled: true
+  vpc:
+    enabled: true
+  waf:
+    enabled: true

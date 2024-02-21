@@ -1,6 +1,6 @@
 # otc-prometheus-exporter
 
-![Version: 1.0.0](https://img.shields.io/badge/Version-1.0.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.4.1](https://img.shields.io/badge/AppVersion-0.4.1-informational?style=flat-square)
+![Version: 1.1.0](https://img.shields.io/badge/Version-1.1.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.0](https://img.shields.io/badge/AppVersion-0.5.0-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -18,6 +18,28 @@ To install the chart with the release name otc-prometheus-exporter:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| dashboards.as.enabled | bool | `true` |  |
+| dashboards.bms.enabled | bool | `true` |  |
+| dashboards.cbr.enabled | bool | `true` |  |
+| dashboards.css.enabled | bool | `true` |  |
+| dashboards.dcs.enabled | bool | `true` |  |
+| dashboards.dds.enabled | bool | `true` |  |
+| dashboards.dms.enabled | bool | `true` |  |
+| dashboards.dws.enabled | bool | `true` |  |
+| dashboards.ecs.enabled | bool | `true` |  |
+| dashboards.efs.enabled | bool | `true` |  |
+| dashboards.elb.enabled | bool | `true` |  |
+| dashboards.evs.enabled | bool | `true` |  |
+| dashboards.gaussdb.enabled | bool | `true` |  |
+| dashboards.gaussdbv5.enabled | bool | `true` |  |
+| dashboards.nat.enabled | bool | `true` |  |
+| dashboards.nosql.enabled | bool | `true` |  |
+| dashboards.rds-mysql.enabled | bool | `true` |  |
+| dashboards.rds-postgres.enabled | bool | `true` |  |
+| dashboards.rds-sqlserver.enabled | bool | `true` |  |
+| dashboards.sfs.enabled | bool | `true` |  |
+| dashboards.vpc.enabled | bool | `true` |  |
+| dashboards.waf.enabled | bool | `true` |  |
 | deployment.affinity | object | `{}` |  |
 | deployment.env.FETCH_RESOURCE_ID_TO_NAME | bool | `false` |  |
 | deployment.env.OS_DOMAIN_NAME | string | `"OTC-EU-DE-00000000001000058635"` |  |
