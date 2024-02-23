@@ -181,7 +181,7 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	ddsClient, err := openstack.NewDDSServiceV3(c.providerClient, opts)
 
 	if err != nil {
@@ -215,7 +215,7 @@ func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetDcsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	dcsClient, err := openstack.NewDCSServiceV1(c.providerClient, opts)
 
 	if err != nil {
@@ -239,7 +239,7 @@ func (c *OtcWrapper) GetDcsIdNameMapping() (map[string]string, error) {
 }
 
 func (c *OtcWrapper) GetVpcIdNameMapping(projectId string) (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	vpcClient, err := openstack.NewVpcEpV1(c.providerClient, opts)
 	vpcClient.Endpoint = strings.Replace(vpcClient.Endpoint, "vpcep", "vpc", 1)
 	vpcClient.Endpoint = strings.Replace(vpcClient.Endpoint, fmt.Sprintf("%s/", projectId), "", 1)
