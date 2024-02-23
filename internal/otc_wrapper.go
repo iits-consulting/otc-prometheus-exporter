@@ -26,6 +26,7 @@ type OtcWrapper struct {
 	providerClient *golangsdk.ProviderClient
 	Region         string
 	Logger         ILogger
+	Config         ConfigStruct
 }
 
 func NewOtcClientFromConfig(config ConfigStruct, logger ILogger) (*OtcWrapper, error) {
@@ -35,7 +36,7 @@ func NewOtcClientFromConfig(config ConfigStruct, logger ILogger) (*OtcWrapper, e
 		return nil, err
 	}
 
-	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region), Logger: logger}, nil
+	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region), Logger: logger, Config: config}, nil
 }
 
 func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {

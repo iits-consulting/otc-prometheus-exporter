@@ -31,7 +31,7 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 		var resourceIdToName map[string]string
 
 		if config.ResourceIdNameMappingFlag {
-			resourceIdToName, err = FetchResourceIdToNameMapping(client, config)
+			resourceIdToName, err = FetchResourceIdToNameMapping(client)
 			if err != nil {
 				logger.Panic("Error mapping resource IDs to Names", "error", err)
 			}
@@ -45,7 +45,7 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 
 		logger.Info("Initial metrics retrieved!")
 
-		filteredMetrics, removedMetrics := internal.FilterByNamespaces(metrics, config.Namespaces)
+		filteredMetrics, removedMetrics := internal.FilterByNamespaces(metrics, client.Config.Namespaces)
 
 		logger.Info("Metrics filtered.")
 
@@ -82,10 +82,10 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 	}()
 }
 
-func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.ConfigStruct) (map[string]string, error) {
+func FetchResourceIdToNameMapping(client *internal.OtcWrapper) (map[string]string, error) {
 	resourceIdToName := make(map[string]string)
 
-	if slices.Contains(config.Namespaces, internal.EcsNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.EcsNamespace) {
 		result, err := client.GetEcsIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "ECS Name mapping")
@@ -94,7 +94,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.RdsNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.RdsNamespace) {
 		result, err := client.GetRdsIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "RDS Name mapping")
@@ -103,7 +103,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.DmsNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.DmsNamespace) {
 		result, err := client.GetDmsIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "DMS Name mapping")
@@ -112,7 +112,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.NatNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.NatNamespace) {
 		result, err := client.GetNatIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "NAT Name mapping")
@@ -121,7 +121,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.ElbNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.ElbNamespace) {
 		result, err := client.GetElbIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "ELB Name mapping")
@@ -130,7 +130,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.DdsNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.DdsNamespace) {
 		result, err := client.GetDdsIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "DDS Name mapping")
@@ -139,7 +139,7 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.DcsNamespace) {
+	if slices.Contains(client.Config.Namespaces, internal.DcsNamespace) {
 		result, err := client.GetDcsIdNameMapping()
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "DCS Name mapping")
@@ -148,8 +148,8 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper, config internal.C
 		maps.Copy(resourceIdToName, result)
 	}
 
-	if slices.Contains(config.Namespaces, internal.VpcNamespace) {
-		result, err := client.GetVpcIdNameMapping(config.AuthenticationData.ProjectId)
+	if slices.Contains(client.Config.Namespaces, internal.VpcNamespace) {
+		result, err := client.GetVpcIdNameMapping(client.Config.AuthenticationData.ProjectId)
 		if err != nil {
 			client.Logger.Error("Unable to map namespace!", "context", "VPC Name mapping")
 			return map[string]string{}, err
