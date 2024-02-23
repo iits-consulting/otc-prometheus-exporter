@@ -241,10 +241,7 @@ func (c *OtcWrapper) GetDcsIdNameMapping() (map[string]string, error) {
 
 func (c *OtcWrapper) GetVpcIdNameMapping(projectId string) (map[string]string, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
-	vpcClient, err := openstack.NewVpcEpV1(c.providerClient, opts)
-	vpcClient.Endpoint = strings.Replace(vpcClient.Endpoint, "vpcep", "vpc", 1)
-	vpcClient.Endpoint = strings.Replace(vpcClient.Endpoint, fmt.Sprintf("%s/", projectId), "", 1)
-	vpcClient.ResourceBase = vpcClient.Endpoint
+	vpcClient, err := openstack.NewNetworkV1(c.providerClient, opts)
 
 	if err != nil {
 		return nil, err
