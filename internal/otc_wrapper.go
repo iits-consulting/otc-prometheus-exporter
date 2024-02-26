@@ -11,11 +11,14 @@ import (
 	otcMetricData "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metricdata"
 	otcMetrics "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metrics"
 	otcCompute "github.com/opentelekomcloud/gophertelekomcloud/openstack/compute/v2/servers"
+	dcsLifecycle "github.com/opentelekomcloud/gophertelekomcloud/openstack/dcs/v1/lifecycle"
 	ddsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dds/v3/instances"
 	dmsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dms/v1/instances"
-	elbInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/lbaas_v2/loadbalancers"
+	elbInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/elb/v3/loadbalancers"
 	natgatewayInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/networking/v2/extensions/natgateways"
 	rdsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/rds/v3/instances"
+	vpcBandwidths "github.com/opentelekomcloud/gophertelekomcloud/openstack/vpc/v1/bandwidths"
+	vpcPublicIps "github.com/opentelekomcloud/gophertelekomcloud/openstack/vpc/v1/publicips"
 	"golang.org/x/exp/slices"
 )
 
@@ -23,6 +26,7 @@ type OtcWrapper struct {
 	providerClient *golangsdk.ProviderClient
 	Region         string
 	Logger         ILogger
+	Config         ConfigStruct
 }
 
 func NewOtcClientFromConfig(config ConfigStruct, logger ILogger) (*OtcWrapper, error) {
@@ -32,7 +36,7 @@ func NewOtcClientFromConfig(config ConfigStruct, logger ILogger) (*OtcWrapper, e
 		return nil, err
 	}
 
-	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region), Logger: logger}, nil
+	return &OtcWrapper{providerClient: provider, Region: string(config.AuthenticationData.Region), Logger: logger, Config: config}, nil
 }
 
 func (c *OtcWrapper) GetMetrics() ([]otcMetrics.MetricInfoList, error) {
@@ -153,7 +157,7 @@ func (c *OtcWrapper) GetNatIdNameMapping() (map[string]string, error) {
 
 func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
-	elbClient, err := openstack.NewELBV2(c.providerClient, opts)
+	elbClient, err := openstack.NewELBV3(c.providerClient, opts)
 	if err != nil {
 		return nil, err
 	}
@@ -164,7 +168,7 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 		return nil, err
 	}
 
-	elbResponses, err := elbInstances.ExtractLoadBalancers(elbResponsePages)
+	elbResponses, err := elbInstances.ExtractLoadbalancers(elbResponsePages)
 	if err != nil {
 		return nil, err
 	}
@@ -177,9 +181,8 @@ func (c *OtcWrapper) GetElbIdNameMapping() (map[string]string, error) {
 	return result, nil
 }
 
-// Add in the DDS Service client here (openstack client.go line 719) - David
 func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
-	opts := golangsdk.EndpointOpts{Region: "eu-de"}
+	opts := golangsdk.EndpointOpts{Region: c.Region}
 	ddsClient, err := openstack.NewDDSServiceV3(c.providerClient, opts)
 
 	if err != nil {
@@ -206,6 +209,107 @@ func (c *OtcWrapper) GetDdsIdNameMapping() (map[string]string, error) {
 					result[node.Id] = node.Name
 				}
 			}
+		}
+	}
+
+	return result, nil
+}
+
+func (c *OtcWrapper) GetDcsIdNameMapping() (map[string]string, error) {
+	opts := golangsdk.EndpointOpts{Region: c.Region}
+	dcsClient, err := openstack.NewDCSServiceV1(c.providerClient, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dcsListResponse, err := dcsLifecycle.List(dcsClient, dcsLifecycle.ListDcsInstanceOpts{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+	for _, instance := range dcsListResponse.Instances {
+		if instance.Name != "" {
+			result[instance.InstanceID] = instance.Name
+		}
+	}
+
+	return result, nil
+}
+
+func (c *OtcWrapper) GetVpcIdNameMapping(projectId string) (map[string]string, error) {
+	opts := golangsdk.EndpointOpts{Region: c.Region}
+	vpcClient, err := openstack.NewNetworkV1(c.providerClient, opts)
+
+	if err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+
+	bandwidthMap, err := getBandwidthIdNameMapping(vpcClient)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range bandwidthMap {
+		result[key] = value
+	}
+
+	publicIpMap, err := getPublicIpIdNameMapping(vpcClient, projectId)
+	if err != nil {
+		return nil, err
+	}
+
+	for key, value := range publicIpMap {
+		result[key] = value
+	}
+
+	return result, nil
+}
+
+func getBandwidthIdNameMapping(vpcClient *golangsdk.ServiceClient) (map[string]string, error) {
+	vpcPageResponse := vpcBandwidths.List(vpcClient, vpcBandwidths.ListOpts{})
+	allPages, err := vpcPageResponse.AllPages()
+	if err != nil {
+		return nil, err
+	}
+
+	vpcListResponse, err := vpcBandwidths.ExtractBandWidths(allPages)
+	if err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+	for _, BandWidth := range vpcListResponse {
+		if BandWidth.Name != "" {
+			result[BandWidth.ID] = BandWidth.Name
+		}
+	}
+
+	return result, nil
+}
+
+func getPublicIpIdNameMapping(vpcClient *golangsdk.ServiceClient, projectId string) (map[string]string, error) {
+	vpcClient.Endpoint = vpcClient.Endpoint + projectId + "/"
+	vpcClient.ResourceBase = vpcClient.Endpoint
+	vpcPageResponse := vpcPublicIps.List(vpcClient, vpcPublicIps.ListOpts{})
+	allPages, err := vpcPageResponse.AllPages()
+	if err != nil {
+		return nil, err
+	}
+
+	vpcListResponse, err := vpcPublicIps.ExtractPublicIPs(allPages)
+	if err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+	for _, PublicIp := range vpcListResponse {
+		if PublicIp.PublicIpAddress != "" {
+			result[PublicIp.ID] = PublicIp.PublicIpAddress
 		}
 	}
 
