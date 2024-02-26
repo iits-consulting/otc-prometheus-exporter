@@ -1,0 +1,32 @@
+on:
+  push:
+    branches-ignore:
+      - "main"
+    paths:
+      - 'charts/otc-prometheus-exporter/values.yaml'
+      - 'charts/otc-prometheus-exporter/README.md.gotmpl'
+      - '.github/workflows/update_documentation.yaml'
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - name: Setup helm-docs
+        uses: gabe565/setup-helm-docs-action@v1
+      - name: Update README.md files
+        run: |
+          helm-docs -c charts/otc-prometheus-exporter -l debug -t charts/otc-prometheus-exporter/README.md.gotmpl
+      - name: Commit files
+        shell: "bash {0}"
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git commit -a -m "Auto update of README.md files" || echo "Nothing changed apparently"
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }} 

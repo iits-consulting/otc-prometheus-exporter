@@ -49,12 +49,11 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker images
-        uses: docker/build-push-action@v3
+        uses: docker/build-push-action@v5
         with:
           push: true
           build-args: |
             VERSION=${{ env.RELEASE_VERSION }}
-            GITHUB_REPOSITORY=${{ github.repository }}
           tags: |
             ghcr.io/iits-consulting/otc-prometheus-exporter:latest
             ghcr.io/iits-consulting/otc-prometheus-exporter:${{ env.RELEASE_VERSION }}

@@ -1,0 +1,14 @@
+{{ range $namespace, $v := .Values.dashboards}}
+{{- if $v.enabled }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ $.Release.Name }}-dashboard-{{ $namespace }}
+  labels:
+      grafana_dashboard: "1"
+data:
+  {{ printf "%s.json" $namespace }}: |-
+  {{- $.Files.Get (printf "dashboards/%s.json" $namespace ) | nindent 4 }}
+  {{- end }}
+{{- end }}

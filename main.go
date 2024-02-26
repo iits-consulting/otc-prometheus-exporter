@@ -174,7 +174,7 @@ func main() {
 		osDomainName          string
 		fetchResourceIdToname bool
 		waitDuration          uint
-		logging               string
+		logLevel              string
 	)
 
 	var rootCmd = &cobra.Command{
@@ -192,12 +192,12 @@ func main() {
 				"os-domain-name":            "OS_DOMAIN_NAME",
 				"wait-duration":             "WAITDURATION",
 				"fetch-resource-id-to-name": "FETCH_RESOURCE_ID_TO_NAME",
-				"logging":                   "LOGGING",
+				"log-level":                 "LOG_LEVEL",
 			})
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Add main log system, passed as dependency
-			logger := internal.NewLogger(logging)
+			logger := internal.NewLogger(logLevel)
 
 			//nolint:errcheck // not relevant
 			defer logger.Sync()
@@ -208,7 +208,7 @@ func main() {
 				"namespaces", namespaces,
 				"waitDuration", waitDuration,
 				"fetchResourceIdToName", fetchResourceIdToname,
-				"logging", logging)
+				"logging", logLevel)
 
 			isAkSkAuthentication := false
 			switch {
@@ -261,7 +261,7 @@ func main() {
 	rootCmd.Flags().StringVarP(&osDomainName, "os-domain-name", "", "", "Domainname/Tenant ID")
 	rootCmd.Flags().BoolVarP(&fetchResourceIdToname, "fetch-resource-id-to-name", "", false, "turns the mapping of resource id to resource name on or off")
 	rootCmd.Flags().UintVarP(&waitDuration, "wait-duration", "", 60, "time in seconds between two API call fetches")
-	rootCmd.Flags().StringVarP(&logging, "logging", "", "", "type of logging to use")
+	rootCmd.Flags().StringVarP(&logLevel, "log-level", "", "", "type of logging to use")
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatal(err)

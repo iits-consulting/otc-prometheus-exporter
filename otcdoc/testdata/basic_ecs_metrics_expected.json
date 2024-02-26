@@ -1,0 +1,65 @@
+{
+	"Namespace": "ecs",
+	"Metrics": [
+		{
+			"MetricId": "cpu_util",
+			"MetricName": "CPU Usage",
+			"Unit": "Percent"
+		},
+		{
+			"MetricId": "mem_util",
+			"MetricName": "Memory Usage",
+			"Unit": "Percent"
+		},
+		{
+			"MetricId": "disk_util_inband",
+			"MetricName": "Disk Usage",
+			"Unit": "Percent"
+		},
+		{
+			"MetricId": "disk_read_bytes_rate",
+			"MetricName": "Disk Read Bandwidth",
+			"Unit": "byte/s"
+		},
+		{
+			"MetricId": "disk_write_bytes_rate",
+			"MetricName": "Disk Write Bandwidth",
+			"Unit": "byte/s"
+		},
+		{
+			"MetricId": "disk_read_requests_rate",
+			"MetricName": "Disk Read IOPS",
+			"Unit": "request/s"
+		},
+		{
+			"MetricId": "disk_write_requests_rate",
+			"MetricName": "Disk Write IOPS",
+			"Unit": "request/s"
+		},
+		{
+			"MetricId": "network_incoming_bytes_rate_inband",
+			"MetricName": "Inband Incoming Rate",
+			"Unit": "byte/s"
+		},
+		{
+			"MetricId": "network_outgoing_bytes_rate_inband",
+			"MetricName": "Inband Outgoing Rate",
+			"Unit": "byte/s"
+		},
+		{
+			"MetricId": "network_incoming_bytes_aggregate_rate",
+			"MetricName": "Outband Incoming Rate",
+			"Unit": "byte/s"
+		},
+		{
+			"MetricId": "network_outgoing_bytes_aggregate_rate",
+			"MetricName": "Outband Outgoing Rate",
+			"Unit": "byte/s"
+		},
+		{
+			"MetricId": "ib_card_state",
+			"MetricName": "InfiniBand NIC status",
+			"Unit": ""
+		}
+	]
+	}
