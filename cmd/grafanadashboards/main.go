@@ -4,10 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
+	"strings"
 
 	"github.com/iits-consulting/otc-prometheus-exporter/grafana"
 	"github.com/iits-consulting/otc-prometheus-exporter/otcdoc"
@@ -77,6 +80,38 @@ func processDocumentationPages(outputPath string) {
 		}
 	}
 }
+func modifyDashboardFiles(directoryPath string) error {
+	// List all files in the directory
+	files, err := ioutil.ReadDir(directoryPath)
+	if err != nil {
+		return fmt.Errorf("failed to read directory: %v", err)
+	}
+
+	for _, file := range files {
+		// Check if the file is a JSON file
+		if filepath.Ext(file.Name()) == ".json" {
+			// Construct the full path to the JSON file
+			filePath := filepath.Join(directoryPath, file.Name())
+
+			// Read the content of the JSON file
+			data, err := ioutil.ReadFile(filePath)
+			if err != nil {
+				return fmt.Errorf("failed to read file %s: %v", filePath, err)
+			}
+
+			// Modify the JSON content to set legendFormat to {{ resource_id }}
+			modifiedData := strings.ReplaceAll(string(data), `"legendFormat":"__auto"`, `"legendFormat":"{{ resource_id }}"`)
+
+			// Write the modified content back to the JSON file
+			err = ioutil.WriteFile(filePath, []byte(modifiedData), 0644)
+			if err != nil {
+				return fmt.Errorf("failed to write file %s: %v", filePath, err)
+			}
+		}
+	}
+
+	return nil
+}
 
 func main() {
 
@@ -93,6 +128,14 @@ func main() {
 
 	if err := rootCmd.Execute(); err != nil {
 		log.Fatalln(err)
+	}
+
+	directoryPath := "otc-prometheus-exporter/charts/otc-prometheus-exporter/dashboards" // set generic path or path in project, correct path?
+	err := modifyDashboardFiles(directoryPath)
+	if err != nil {
+		fmt.Println("Error:", err)
+	} else {
+		fmt.Println("Dashboard files modified successfully.")
 	}
 
 }
