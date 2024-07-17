@@ -34,4 +34,5 @@ var OtcNamespacesMapping = map[string]string{
 	"GAUSSDBV5": "SYS.GAUSSDBV5",
 	"DWS":       "SYS.DWS",
 	"ES":        "SYS.ES",
+	"OBS":       "SYS.OBS",
 }
