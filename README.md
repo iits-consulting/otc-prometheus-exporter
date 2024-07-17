@@ -21,6 +21,8 @@ The Object Storage Service (OBS) metrics have some unique considerations:
 
 1. **Global Project ID Requirement**: Unlike other services OBS is a global service. This means you need a global project ID to gather OBS metrics. 
    The supported projects are `eu_de` and `eu_nl`. 
+2. **Limitation on Project Scoped Metrics**: OBS metrics cannot be collected with project scoped metrics since a global project ID is needed, which transcends individual project scopes.
+
 
 ## Requirements
 
