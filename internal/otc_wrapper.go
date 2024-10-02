@@ -293,8 +293,7 @@ func getBandwidthIdNameMapping(vpcClient *golangsdk.ServiceClient) (map[string]s
 }
 
 func getPublicIpIdNameMapping(vpcClient *golangsdk.ServiceClient, projectId string) (map[string]string, error) {
-	vpcClient.Endpoint = vpcClient.Endpoint + projectId + "/"
-	vpcClient.ResourceBase = vpcClient.Endpoint
+	vpcClient.ResourceBase = vpcClient.ResourceBase + projectId + "/"
 	vpcPageResponse := vpcPublicIps.List(vpcClient, vpcPublicIps.ListOpts{})
 	allPages, err := vpcPageResponse.AllPages()
 	if err != nil {
