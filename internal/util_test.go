@@ -30,7 +30,7 @@ func TestSliceWindow(t *testing.T) {
 
 	sw, err := NewSliceWindow(input, windowSize)
 	if err != nil {
-		t.Fatalf("No SliceWindow has been returned because of error:" + err.Error())
+		t.Fatalf("No SliceWindow has been returned because of error: %s", err.Error())
 	}
 
 	sw.currentWindowNumber = 0
