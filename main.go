@@ -56,9 +56,11 @@ func collectMetricsInBackground(config internal.ConfigStruct, logger internal.IL
 		logger.Info("Prometheus metrics initiated!")
 
 		for {
-			batchedMetricsResponse, err := client.GetMetricDataBatched(filteredMetrics)
-			if err != nil {
-				logger.Panic("Unable to retrieve batched metric data", "error", err)
+			batchedMetricsResponse, getMetricErr := client.GetMetricDataBatched(filteredMetrics)
+			if getMetricErr != nil {
+				logger.Error("Unable to retrieve batched metric data", "error", getMetricErr)
+				time.Sleep(config.WaitDuration)
+				continue
 			}
 
 			logger.Info("Batch metrics retrieved.")
