@@ -18,6 +18,8 @@ To install the chart with the release name otc-prometheus-exporter:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| fullnameOverride | string | `""` |  |
+| nameOverride | string | `""` |  |
 | dashboards.as.enabled | bool | `true` |  |
 | dashboards.bms.enabled | bool | `true` |  |
 | dashboards.cbr.enabled | bool | `true` |  |
@@ -50,7 +52,6 @@ To install the chart with the release name otc-prometheus-exporter:
 | deployment.env.REGION | string | `"eu-de"` |  |
 | deployment.env.WAITDURATION | int | `60` |  |
 | deployment.envFromSecret | object | `{}` |  |
-| deployment.fullnameOverride | string | `""` |  |
 | deployment.health.liveness.path | string | `"/metrics"` |  |
 | deployment.health.liveness.periodSeconds | int | `180` |  |
 | deployment.health.liveness.port | int | `39100` |  |
@@ -62,7 +63,6 @@ To install the chart with the release name otc-prometheus-exporter:
 | deployment.image.repository | string | `"ghcr.io/iits-consulting/otc-prometheus-exporter"` |  |
 | deployment.image.tag | string | `""` |  |
 | deployment.imagePullSecrets | list | `[]` |  |
-| deployment.nameOverride | string | `""` |  |
 | deployment.podAnnotations | object | `{}` |  |
 | deployment.podSecurityContext | string | `nil` |  |
 | deployment.ports.metrics.port | int | `39100` |  |
