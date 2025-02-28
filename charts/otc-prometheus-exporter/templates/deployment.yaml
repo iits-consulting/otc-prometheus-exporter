@@ -53,10 +53,10 @@ spec:
             - name: {{ printf "%s" $key | replace "." "_" | upper | quote }}
               value: {{ tpl ($value | toString) $ | quote }}
             {{- end }}
-          {{- if .Values.deployment.envSecretName}}
+          {{- if .Values.deployment.envFromSecret}}
           envFrom:
             - secretRef:
-                name: {{.Values.deployment.envSecretName}}
+                name: {{.Values.deployment.envFromSecret}}
           {{- end }}
           ports:
             {{- range $name,$values := .Values.deployment.ports }}
