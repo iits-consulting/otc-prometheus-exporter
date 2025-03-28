@@ -45,16 +45,13 @@ spec:
           {{- end }}
           image: "{{ tpl .Values.deployment.image.repository . }}:{{  default .Chart.AppVersion .Values.deployment.image.tag }}"
           imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
-          env:
-            {{- range $key, $value := .Values.deployment.env }}
-            - name: {{ printf "%s" $key | replace "." "_" | upper | quote }}
-              value: {{ tpl ($value | toString) $ | quote }}
-            {{- end }}
-          {{- if .Values.deployment.envFromSecret}}
           envFrom:
+            {{- if .Values.deployment.envFromSecret}}
             - secretRef:
                 name: {{.Values.deployment.envFromSecret}}
-          {{- end }}
+            {{- end }}
+            - secretRef:
+                name: {{ include "otc-prometheus-exporter.fullname" . }}-env-secrets
           ports:
             {{- range $name,$values := .Values.deployment.ports }}
             - name: {{$name }}
