@@ -59,3 +59,15 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
+
+{{/*
+Implement the ImagePullSecret for PODs
+*/}}
+{{- define "images.pullSecrets" -}}
+{{- if .Values.deployment.imagePullSecrets }}
+imagePullSecrets:
+  {{- range .Values.deployment.imagePullSecrets | uniq }}
+  - name: {{ . }}
+  {{- end }}
+{{- end }}
+{{- end }}

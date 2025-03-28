@@ -31,10 +31,7 @@ spec:
                       - {{ include "otc-prometheus-exporter.fullname" . }}
               topologyKey: "kubernetes.io/hostname"
       {{- end}}
-      {{- with .Values.deployment.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-      {{- end }}
+      {{- include "images.pullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "otc-prometheus-exporter.serviceAccountName" . }}
       {{- if .Values.deployment.podSecurityContext }}
       securityContext:
