@@ -23,7 +23,6 @@ jobs:
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v7
         with:
-          version: 2.1.2
           github-token: ${{ secrets.GITHUB_TOKEN }}
       
       - name: Get dependencies
