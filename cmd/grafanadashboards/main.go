@@ -28,7 +28,10 @@ func processDocumentationPages(outputPath string) {
 		if err != nil {
 			log.Fatalf("Could not fetch the OTC documentation page for %s on %s because of %s\n", ds.Namespace, ds.Url, err)
 		}
-		defer resp.Body.Close()
+		defer func() {
+			err := resp.Body.Close()
+			log.Fatalf("Could not close the response body of %s because of %s\n", ds.Url, err)
+		}()
 
 		htmlBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
