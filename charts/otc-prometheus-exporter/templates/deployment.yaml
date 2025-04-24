@@ -18,7 +18,7 @@ spec:
       {{- end }}
       labels:
         {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 8 }}
-        env-file.sha: {{ .Values.deployment.env | toYaml | sha256sum }}
+        env-file.sha: {{ .Values.deployment.env | toYaml | sha256sum | trunc 63 }}
     spec:
       {{- if .Values.deployment.onePodForEachNode}}
       affinity:
