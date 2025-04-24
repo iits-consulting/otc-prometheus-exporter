@@ -4,13 +4,15 @@ permissions:
   contents: read
 
 on:
-  - pull_request
-  - push
+  pull_request:
+  push:
+    branches:
+      - main
 
 jobs:
   lint:
     name: Lint Test Build
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
