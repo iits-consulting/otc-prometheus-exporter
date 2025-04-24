@@ -58,18 +58,3 @@ jobs:
           tags: |
             ghcr.io/iits-consulting/otc-prometheus-exporter:latest
             ghcr.io/iits-consulting/otc-prometheus-exporter:${{ env.RELEASE_VERSION }}
-
-
-
-  helmrelease:
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Publish Helm charts
-        uses: stefanprodan/helm-gh-pages@v1.7.0
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
