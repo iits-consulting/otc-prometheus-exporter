@@ -30,7 +30,7 @@ type OtcWrapper struct {
 }
 
 func NewOtcClientFromConfig(config ConfigStruct, logger ILogger) (*OtcWrapper, error) {
-	var opts golangsdk.AuthOptionsProvider = config.AuthenticationData.ToOtcGopherAuthOptionsProvider()
+	opts := config.AuthenticationData.ToOtcGopherAuthOptionsProvider()
 	provider, err := openstack.AuthenticatedClient(opts)
 	if err != nil {
 		return nil, err
