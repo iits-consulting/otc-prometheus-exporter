@@ -50,9 +50,10 @@ spec:
             {{- if .Values.deployment.envFromSecret}}
             - secretRef:
                 name: {{.Values.deployment.envFromSecret}}
-            {{- end }}
+            {{- else }}
             - secretRef:
                 name: {{ include "otc-prometheus-exporter.fullname" . }}-env-secrets
+            {{- end }}
           ports:
             {{- range $name,$values := .Values.deployment.ports }}
             - name: {{$name }}
