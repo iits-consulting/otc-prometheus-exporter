@@ -1,6 +1,6 @@
 # otc-prometheus-exporter
 
-![Version: 1.2.0](https://img.shields.io/badge/Version-1.2.0-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.5.1](https://img.shields.io/badge/AppVersion-0.5.1-informational?style=flat-square)
+![Version: 1.2.9](https://img.shields.io/badge/Version-1.2.9-informational?style=flat-square) ![Type: application](https://img.shields.io/badge/Type-application-informational?style=flat-square) ![AppVersion: 0.6.6](https://img.shields.io/badge/AppVersion-0.6.6-informational?style=flat-square)
 
 A Helm chart for Kubernetes
 
@@ -9,17 +9,16 @@ A Helm chart for Kubernetes
 To install the chart with the release name otc-prometheus-exporter:
 
 ```shell
-    helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter
+    helm repo add iits-charts https://charts.iits.tech
     helm search repo otc-prometheus-exporter
-    helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter
+    helm install otc-prometheus-exporter iits-charts/otc-prometheus-exporter
 ```
 
 ## Values
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
-| fullnameOverride | string | `""` |  |
-| nameOverride | string | `""` |  |
+| additionalPrometheusRulesMap | object | `{}` | Additional Prometheus Rules that should be deployed to the Kubernetes cluster |
 | dashboards.as.enabled | bool | `true` |  |
 | dashboards.bms.enabled | bool | `true` |  |
 | dashboards.cbr.enabled | bool | `true` |  |
@@ -42,15 +41,14 @@ To install the chart with the release name otc-prometheus-exporter:
 | dashboards.sfs.enabled | bool | `true` |  |
 | dashboards.vpc.enabled | bool | `true` |  |
 | dashboards.waf.enabled | bool | `true` |  |
+| defaultPrometheusRules | object | `{"enabled":false,"rules":{"elb":true,"obs":true,"rds":true}}` | Default Prometheus Rules that should be deployed to the Kubernetes cluster |
+| defaultPrometheusRules.enabled | bool | `false` | Enable default Prometheus Rules |
+| defaultPrometheusRules.rules | object | `{"elb":true,"obs":true,"rds":true}` | Specify which Prometheus Rules should be enabled |
+| defaultPrometheusRules.rules.elb | bool | `true` | Enable Elastic Load Balancing rules |
+| defaultPrometheusRules.rules.obs | bool | `true` | Enable Object Storage Service rules |
+| defaultPrometheusRules.rules.rds | bool | `true` | Enable Relational Database Service rules (only PostgreSQL supported) |
 | deployment.affinity | object | `{}` |  |
-| deployment.env.FETCH_RESOURCE_ID_TO_NAME | bool | `false` |  |
-| deployment.env.OS_DOMAIN_NAME | string | `"OTC-EU-DE-00000000001000058635"` |  |
-| deployment.env.OS_PASSWORD | string | `""` |  |
-| deployment.env.OS_PROJECT_ID | string | `"f0f45389d6a947d88c8658fb8e1a1053"` |  |
-| deployment.env.OS_USERNAME | string | `""` |  |
-| deployment.env.PORT | int | `39100` |  |
-| deployment.env.REGION | string | `"eu-de"` |  |
-| deployment.env.WAITDURATION | int | `60` |  |
+| deployment.env | object | `{}` |  |
 | deployment.envFromSecret | object | `{}` |  |
 | deployment.health.liveness.path | string | `"/metrics"` |  |
 | deployment.health.liveness.periodSeconds | int | `180` |  |
@@ -71,34 +69,15 @@ To install the chart with the release name otc-prometheus-exporter:
 | deployment.securityContext | string | `nil` |  |
 | deployment.volumeMounts | object | `{}` |  |
 | deployment.volumes | object | `{}` |  |
+| fullnameOverride | string | `""` |  |
+| nameOverride | string | `""` |  |
+| namespaceOverride | string | `""` |  |
 | service.ports.metrics.port | int | `39100` |  |
 | service.ports.metrics.targetPort | int | `39100` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
 | serviceMonitor.enabled | bool | `true` |  |
-
-## Additional Prometheus Rules
-
-This chart can be used to create default `PrometheusRule` definitions for core services (e.g., RDS, OBS, ELB).  
-If you need to monitor additional metrics, use the `additionalPrometheusRulesMap` field in your `values.yaml`:
-
-```yaml
-additionalPrometheusRulesMap:
-  # Prometheus rules for RDS PostgreSQL
-  rds-postgresql-alerts:
-    groups:
-      - name: postgresql-system
-        rules:
-          - alert: PostgreSQLHighCPUUtilization
-            annotations:
-              summary: '{{ $labels.instance }} CPU > 80%'
-              description: 'CPU utilization for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current value: {{ $value }}%'
-            expr: >
-              rds_rds001_cpu_util > 0.8
-            labels:
-              severity: warning
-```
 
 <img src="../../img/iits.svg" alt="iits consulting" id="logo" width="200" height="200">
 
@@ -107,4 +86,4 @@ additionalPrometheusRulesMap:
 *This chart is provided by [iits-consulting](https://iits-consulting.de/) - your Cloud-Native Innovation Teams as a Service!*
 
 ----------------------------------------------
-Autogenerated from chart metadata using [helm-docs v1.13.0](https://github.com/norwoodj/helm-docs/releases/v1.13.0)
+Autogenerated from chart metadata using [helm-docs v1.14.2](https://github.com/norwoodj/helm-docs/releases/v1.14.2)
