@@ -1,6 +1,9 @@
 nameOverride: ""
 fullnameOverride: ""
 
+# Override the deployment namespace
+namespaceOverride: ""
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: true
@@ -164,3 +167,31 @@ dashboards:
   waf:
     enabled: true
 
+# -- Default Prometheus Rules that should be deployed to the Kubernetes cluster
+defaultPrometheusRules:
+  # -- Enable default Prometheus Rules
+  enabled: false
+  # -- Specify which Prometheus Rules should be enabled
+  rules:
+    # -- Enable Relational Database Service rules (only PostgreSQL supported)
+    rds: true
+    # -- Enable Object Storage Service rules
+    obs: true
+    # -- Enable Elastic Load Balancing rules
+    elb: true
+
+# -- Additional Prometheus Rules that should be deployed to the Kubernetes cluster
+additionalPrometheusRulesMap: {}
+  # # Prometheus rules for RDS PostgreSQL
+  # rds-postgresql-alerts:
+  #   groups:
+  #     - name: postgresql-system
+  #       rules:
+  #         - alert: PostgreSQLHighCPUUtilization
+  #           annotations:
+  #             summary: '{{ $labels.instance }} CPU > 80%'
+  #             description: 'CPU utilization for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current value: {{ $value }}%'
+  #           expr: >
+  #             rds_rds001_cpu_util > 0.8
+  #           labels:
+  #             severity: warning

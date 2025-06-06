@@ -1,0 +1,291 @@
+{{- if and .Values.defaultPrometheusRules.enabled (or .Values.defaultPrometheusRules.rules.rds .Values.defaultPrometheusRules.rules.obs .Values.defaultPrometheusRules.rules.elb) }}
+apiVersion: v1
+kind: List
+metadata:
+  name: {{ include "otc-prometheus-exporter.fullname" . }}-default-prometheus-rules
+  namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+items:
+  {{- if .Values.defaultPrometheusRules.rules.rds }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-rds-postgresql-alerts
+      namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+      labels:
+{{ include "otc-prometheus-exporter.labels" . | indent 8 }}
+    spec:
+      groups:
+      - name: postgresql-system
+        rules:
+        - alert: PostgreSQLHighCPUUtilization
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} CPU > 80%'
+            description: 'CPU utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            rds_rds001_cpu_util > 0.8
+          labels:
+            severity: warning
+        - alert: PostgreSQLVeryHighCPUUtilization
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} CPU > 90%'
+            description: 'CPU utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 90%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            rds_rds001_cpu_util > 0.9
+          labels:
+            severity: critical
+        - alert: PostgreSQLHighMemoryUtilization
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Memory > 80%'
+            description: 'Memory utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            rds_rds002_mem_util > 0.8
+          labels:
+            severity: warning
+        - alert: PostgreSQLVeryHighMemoryUtilization
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Memory > 90%'
+            description: 'Memory utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 90%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            rds_rds002_mem_util > 0.9
+          labels:
+            severity: critical
+        - alert: PostgreSQLHighDiskUtilization
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Disk > 80%'
+            description: 'Disk usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            rds_rds039_disk_util > 0.8
+          labels:
+            severity: warning
+        - alert: PostgreSQLVeryHighDiskUtilization
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Disk > 90%'
+            description: 'Disk usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 90%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            rds_rds039_disk_util > 0.9
+          labels:
+            severity: critical
+
+      - name: postgresql-storage-conditions
+        rules:
+        - alert: PostgreSQLDiskSpaceAlmostFull
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Disk > 90% of total'
+            description: 'Disk used ({{ "{{ $value | humanizePercentage }}" }}) of total capacity for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 90%.'
+          expr: |
+            (rds_rds048_disk_used_size / rds_rds047_disk_total_size) > 0.9
+          labels:
+            severity: warning
+        - alert: PostgreSQLDiskSpaceCriticallyLow
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Disk > 95% of total'
+            description: 'Disk used ({{ "{{ $value | humanizePercentage }}" }}) of total capacity for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 95%.'
+          expr: |
+            (rds_rds048_disk_used_size / rds_rds047_disk_total_size) > 0.95
+          labels:
+            severity: critical
+
+      - name: postgresql-db-connection-usage
+        rules:
+        - alert: PostgreSQLHighConnectionUsage
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Connections > 80%'
+            description: 'Connection usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 80%. Current: {{ "{{ $value }}" }}% of max connections'
+          expr: |
+            rds_rds083_conn_usage > 0.8
+          labels:
+            severity: warning
+        - alert: PostgreSQLVeryHighConnectionUsage
+          annotations:
+            summary: '{{ "{{ $labels.instance }}" }} Connections > 90%'
+            description: 'Connection usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 90%. Current: {{ "{{ $value }}" }}% of max connections'
+          expr: |
+            rds_rds083_conn_usage > 0.9
+          labels:
+            severity: critical
+  {{- end }}
+
+  {{- if .Values.defaultPrometheusRules.rules.obs }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-obs-alerts
+      namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+      labels:
+{{ include "otc-prometheus-exporter.labels" . | indent 8 }}
+    spec:
+      groups:
+      - name: obs-system
+        rules:
+        - alert: OBSHighRequestSuccessRateDrop
+          annotations:
+            summary: '{{ "{{ $labels.bucket }}" }} OBS request success rate < 95%'
+            description: 'The request success rate for OBS bucket {{ "{{ $labels.bucket }}" }} has dropped below 95%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            obs_request_success_rate < 0.9
+          labels:
+            severity: warning
+        - alert: OBSCriticalRequestSuccessRateDrop
+          annotations:
+            summary: '{{ "{{ $labels.bucket }}" }} OBS request success rate < 90%'
+            description: 'The request success rate for OBS bucket {{ "{{ $labels.bucket }}" }} has dropped below 90%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            obs_request_success_rate < 0.9
+          labels:
+            severity: critical
+
+      - name: obs-latency
+        rules:
+        - alert: OBSHighAverageRequestLatency
+          annotations:
+            summary: '{{ "{{ $labels.bucket }}" }} OBS average request latency high'
+            description: 'Average request latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 500 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            obs_total_request_latency > 500
+          labels:
+            severity: warning
+        - alert: OBSVeryHighAverageRequestLatency
+          annotations:
+            summary: '{{ "{{ $labels.bucket }} " }} OBS average request latency very high'
+            description: 'Average request latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 1000 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            obs_total_request_latency > 1000
+          labels:
+            severity: critical
+        - alert: OBSHighFirstByteLatency
+          annotations:
+            summary: '{{ "{{ $labels.bucket }}" }} OBS first-byte latency high'
+            description: 'First byte latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 200 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            obs_first_byte_latency > 200
+          labels:
+            severity: warning
+        - alert: OBSCriticalFirstByteLatency
+          annotations:
+            summary: '{{ "{{ $labels.bucket }}" }} OBS first-byte latency critical'
+            description: 'First byte latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 500 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            obs_first_byte_latency > 500
+          labels:
+            severity: critical
+  {{- end }}
+
+  {{- if .Values.defaultPrometheusRules.rules.elb }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-elb-alerts
+      namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+      labels:
+{{ include "otc-prometheus-exporter.labels" . | indent 8 }}
+    spec:
+      groups:
+      - name: elb-http
+        rules:
+        - alert: ELBHighHTTPResponseTime
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} HTTP response time > 500 ms'
+            description: 'Average Layer 7 response time (m14_l7_rt) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 500 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            elb_m14_l7_rt > 500
+          labels:
+            severity: warning
+        - alert: ELBVeryHighHTTPResponseTime
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} HTTP response time > 1000 ms'
+            description: 'Average Layer 7 response time (m14_l7_rt) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 1000 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            elb_m14_l7_rt > 1000
+          labels:
+            severity: critical
+
+      - name: elb-usage
+        rules:
+        - alert: ELBHighLayer4ConnectionUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 4 connection usage > 80%'
+            description: 'Layer 4 concurrent connections (l4_con_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l4_con_usage > 0.8
+          labels:
+            severity: warning
+        - alert: ELBHighLayer4InboundBandwidthUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 4 inbound bandwidth usage > 80%'
+            description: 'Layer 4 inbound bandwidth (l4_in_bps_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l4_in_bps_usage > 0.8
+          labels:
+            severity: warning
+        - alert: ELBHighLayer4OutboundBandwidthUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 4 outbound bandwidth usage > 80%'
+            description: 'Layer 4 outbound bandwidth (l4_out_bps_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l4_out_bps_usage > 0.8
+          labels:
+            severity: warning
+        - alert: ELBHighLayer7ConnectionUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 7 connection usage > 80%'
+            description: 'Layer 7 concurrent connections (l7_con_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l7_con_usage > 0.8
+          labels:
+            severity: warning
+        - alert: ELBHighLayer7InboundBandwidthUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 7 inbound bandwidth usage > 80%'
+            description: 'Layer 7 inbound bandwidth (l7_in_bps_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l7_in_bps_usage > 0.8
+          labels:
+            severity: warning
+        - alert: ELBHighLayer7OutboundBandwidthUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 7 outbound bandwidth usage > 80%'
+            description: 'Layer 7 outbound bandwidth (l7_out_bps_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l7_out_bps_usage > 0.8
+          labels:
+            severity: warning
+        - alert: ELBHighLayer7NewConnectionUsage
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} layer 7 new connection usage > 80%'
+            description: 'Layer 7 new connection usage (l7_ncps_usage) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+          expr: |
+            elb_l7_ncps_usage > 0.8
+          labels:
+            severity: warning
+
+      - name: elb-backend-server-health
+        rules:
+        - alert: ELBUnhealthyBackendServers
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} unhealthy backend servers > 0'
+            description: 'Number of unhealthy backend servers (m9_abnormal_servers) for ELB {{ "{{ $labels.loadbalancer }}" }} is > 0. Current: {{ "{{ $value }}" }}'
+          expr: |
+            elb_m9_abnormal_servers > 0
+          labels:
+            severity: warning
+        - alert: ELBAllBackendServersUnhealthy
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} all backend servers unhealthy'
+            description: 'All backend servers for ELB {{ "{{ $labels.loadbalancer }}" }} are unhealthy if m9_abnormal_servers == (m9_abnormal_servers + ma_normal_servers).'
+          expr: |
+            elb_m9_abnormal_servers == (elb_m9_abnormal_servers + elb_ma_normal_servers)
+          labels:
+            severity: critical
+
+      - name: elb-server-latency
+        rules:
+        - alert: ELBHighBackendResponseTime
+          annotations:
+            summary: '{{ "{{ $labels.loadbalancer }}" }} backend response time > 1000 ms'
+            description: 'Average backend response time (m17_l7_upstream_rt) for ELB {{ "{{ $labels.loadbalancer }}" }} has exceeded 1000 ms. Current: {{ "{{ $value }}" }} ms'
+          expr: |
+            elb_m17_l7_upstream_rt > 1000
+          labels:
+            severity: warning
+  {{- end }}
+{{- end }}
