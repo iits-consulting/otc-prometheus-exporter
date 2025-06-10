@@ -23,6 +23,8 @@ service:
       # port: 80
 
 deployment:
+
+  # You shouldn't really increase this, since prometheus scrapes all pod's you will get duplicate data entries in prometheus, which in turn can break dashboards quite badly.
   replicaCount: 1
 
   image:
@@ -58,19 +60,19 @@ deployment:
   health:
     startupProbe:
       path: "/metrics"
-      # initialDelaySeconds: # defaults to 20
+      # initialDelaySeconds: # defaults to 5
       # periodSeconds: # defaults to 20
       # failureThreshold: # defaults to 3
       port: 39100
     liveness:
       path: "/metrics"
-      # initialDelaySeconds: # defaults to 20
-      periodSeconds: 180
+      # initialDelaySeconds: # defaults to 5
+      # periodSeconds: # defaults to 20
       # failureThreshold: # defaults to 3
       port: 39100
     readiness:
      path: "/metrics"
-     # initialDelaySeconds: # defaults to 20
+     # initialDelaySeconds: # defaults to 5
      # periodSeconds: # defaults to 20
      # failureThreshold: # defaults to 3
      port: 39100
@@ -89,8 +91,15 @@ deployment:
     # OS_ACCESS_KEY: "AK" 
     # NAMESPACES: # If not set will fetch everything
 
-  # set the secret where to take env from as long as "env" is not used
-  envFromSecret: { }
+  # set the secret-name for additionally sourced environment variables.
+  envFromSecret: ""
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 128Mi
 
 serviceMonitor:
   enabled: true
@@ -98,7 +107,7 @@ serviceMonitor:
   # labels: {}
   #
   # If you are using kube-prometheus-stack and did not configure the prometheus operator
-  # the you will want to use this label:
+  # then you will want to use this label:
   #
   # labels:
   #   release: kube-prom-stack

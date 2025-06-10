@@ -1,26 +1,31 @@
+{{ with $deployment := .Values.deployment }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "otc-prometheus-exporter.fullname" . }}
+  name: {{ include "otc-prometheus-exporter.fullname" $ }}
   labels:
-    {{- include "otc-prometheus-exporter.labels" . | nindent 4 }}
+    {{- include "otc-prometheus-exporter.labels" $ | nindent 4 }}
 spec:
-  replicas: {{ .Values.deployment.replicaCount }}
+  replicas: {{ $deployment.replicaCount | int }}
+  strategy:
+    type: Recreate
   revisionHistoryLimit: 3
   selector:
     matchLabels:
-      {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 6 }}
+      {{- include "otc-prometheus-exporter.selectorLabels" $ | nindent 6 }}
   template:
     metadata:
-      {{- with .Values.deployment.podAnnotations }}
+      {{- with $deployment.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "otc-prometheus-exporter.selectorLabels" . | nindent 8 }}
-        env-file.sha: {{ .Values.deployment.env | toYaml | sha256sum | trunc 63 }}
+        {{- include "otc-prometheus-exporter.selectorLabels" $ | nindent 8 }}
+        {{- if $deployment.env }}
+        env-file.sha: {{ $deployment.env | toYaml | sha256sum | trunc 63 }}
+        {{ end }}
     spec:
-      {{- if .Values.deployment.onePodForEachNode}}
+      {{- if $deployment.onePodForEachNode }}
       affinity:
         podAntiAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -29,82 +34,85 @@ spec:
                   - key: "app"
                     operator: In
                     values:
-                      - {{ include "otc-prometheus-exporter.fullname" . }}
+                      - {{ include "otc-prometheus-exporter.fullname" $ }}
               topologyKey: "kubernetes.io/hostname"
       {{- end}}
-      {{- include "images.pullSecrets" . | nindent 6 }}
-      serviceAccountName: {{ include "otc-prometheus-exporter.serviceAccountName" . }}
-      {{- if .Values.deployment.podSecurityContext }}
+      {{- include "images.pullSecrets" $ | nindent 6 }}
+      serviceAccountName: {{ include "otc-prometheus-exporter.serviceAccountName" $ }}
+      {{- if $deployment.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.deployment.podSecurityContext | nindent 8 }}
+        {{- toYaml $deployment.podSecurityContext | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ .Release.Name }}
-          {{- if .Values.deployment.securityContext }}
+        - name: {{ $.Release.Name }}
+          {{- if $deployment.securityContext }}
           securityContext:
-            {{- toYaml .Values.deployment.securityContext | nindent 12 }}
+            {{- toYaml $deployment.securityContext | nindent 12 }}
           {{- end }}
-          image: "{{ tpl .Values.deployment.image.repository . }}:{{  default .Chart.AppVersion .Values.deployment.image.tag }}"
-          imagePullPolicy: {{ .Values.deployment.image.pullPolicy }}
+          image: "{{ tpl $deployment.image.repository $ }}:{{ $deployment.image.tag | default $.Chart.AppVersion  }}"
+          imagePullPolicy: {{ $deployment.image.pullPolicy }}
           envFrom:
-            {{- if .Values.deployment.envFromSecret}}
+            {{- if $deployment.env }}
             - secretRef:
-                name: {{.Values.deployment.envFromSecret}}
+                name: {{ include "otc-prometheus-exporter.fullname" $ }}-env-secrets
             {{- end }}
+            {{- if $deployment.envFromSecret }}
             - secretRef:
-                name: {{ include "otc-prometheus-exporter.fullname" . }}-env-secrets
+                name: {{ $deployment.envFromSecret }}
+            {{- end }}
           ports:
-            {{- range $name,$values := .Values.deployment.ports }}
+            {{- range $name,$values := $deployment.ports }}
             - name: {{$name }}
               protocol: {{ ($values).protocol | default "TCP"}}
               containerPort: {{($values).port | default 80 }}
             {{- end }}
-          {{- with ((.Values.deployment).health).liveness }}
+          {{- with ($deployment.health).liveness }}
           livenessProbe:
             httpGet:
               path: {{ tpl .path $ | default "/" }}
               port: {{ .port | default 80 }}
-            initialDelaySeconds: {{ .initialDelaySeconds | default 20 }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 3 }}
             periodSeconds: {{ .periodSeconds | default 20 }}
             failureThreshold: {{ .failureThreshold | default 5 }}
           {{- end }}
-          {{- with ((.Values.deployment).health).startupProbe }}
+          {{- with ($deployment.health).startupProbe }}
           startupProbe:
             httpGet:
               path: {{ tpl .path $ | default "/" }}
               port: {{ .port | default 80 }}
-            initialDelaySeconds: {{ .initialDelaySeconds | default 20 }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 3 }}
             periodSeconds: {{ .periodSeconds | default 20 }}
             failureThreshold: {{ .failureThreshold | default 5 }}
           {{- end }}
-          {{- with ((.Values.deployment).health).readiness }}
+          {{- with ($deployment.health).readiness }}
           readinessProbe:
             httpGet:
               path: {{ tpl .path $ | default "/" }}
               port: {{ .port | default 80 }}
-            initialDelaySeconds: {{ .initialDelaySeconds | default 20 }}
+            initialDelaySeconds: {{ .initialDelaySeconds | default 3 }}
             periodSeconds: {{ .periodSeconds | default 20 }}
             failureThreshold: {{ .failureThreshold | default 5 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.deployment.resources | nindent 12 }}
-      {{- with .Values.deployment.volumeMounts }}
+            {{- toYaml $deployment.resources | nindent 12 }}
+      {{- with $deployment.volumeMounts }}
           volumeMounts:
               {{- toYaml . | nindent 12 }}
       {{- end }}
-      {{- with .Values.deployment.nodeSelector }}
+      {{- with $deployment.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.deployment.affinity }}
+      {{- with $deployment.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.deployment.tolerations }}
+      {{- with $deployment.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.deployment.volumes }}
+      {{- with $deployment.volumes }}
       volumes:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
