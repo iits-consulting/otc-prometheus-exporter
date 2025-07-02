@@ -1,0 +1,89 @@
+groups:
+  - name: postgresql-system
+    rules:
+    - alert: PostgreSQLHighCPUUtilization
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} CPU > 80%'
+        description: 'CPU utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 80%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        rds_rds001_cpu_util > 0.8
+      labels:
+        severity: warning
+    - alert: PostgreSQLVeryHighCPUUtilization
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} CPU > 90%'
+        description: 'CPU utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 90%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        rds_rds001_cpu_util > 0.9
+      labels:
+        severity: critical
+    - alert: PostgreSQLHighMemoryUtilization
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Memory > 80%'
+        description: 'Memory utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 80%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        rds_rds002_mem_util > 0.8
+      labels:
+        severity: warning
+    - alert: PostgreSQLVeryHighMemoryUtilization
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Memory > 90%'
+        description: 'Memory utilization for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 90%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        rds_rds002_mem_util > 0.9
+      labels:
+        severity: critical
+    - alert: PostgreSQLHighDiskUtilization
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Disk > 80%'
+        description: 'Disk usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 80%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        rds_rds039_disk_util > 0.8
+      labels:
+        severity: warning
+    - alert: PostgreSQLVeryHighDiskUtilization
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Disk > 90%'
+        description: 'Disk usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 90%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        rds_rds039_disk_util > 0.9
+      labels:
+        severity: critical
+
+  - name: postgresql-storage-conditions
+    rules:
+    - alert: PostgreSQLDiskSpaceAlmostFull
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Disk > 90% of total'
+        description: 'Disk used ({{ "{{ $value | humanizePercentage }}" }}) of total capacity for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 90%.'
+      expr: |
+        (rds_rds048_disk_used_size / rds_rds047_disk_total_size) > 0.9
+      labels:
+        severity: warning
+    - alert: PostgreSQLDiskSpaceCriticallyLow
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Disk > 95% of total'
+        description: 'Disk used ({{ "{{ $value | humanizePercentage }}" }}) of total capacity for PostgreSQL instance {{ "{{ $labels.instance }}" }} has exceeded 95%.'
+      expr: |
+        (rds_rds048_disk_used_size / rds_rds047_disk_total_size) > 0.95
+      labels:
+        severity: critical
+
+  - name: postgresql-db-connection-usage
+    rules:
+    - alert: PostgreSQLHighConnectionUsage
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Connections > 80%'
+        description: 'Connection usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 80%. Current: {{ "{{ $value }}" }}% of max connections'
+      expr: |
+        rds_rds083_conn_usage > 0.8
+      labels:
+        severity: warning
+    - alert: PostgreSQLVeryHighConnectionUsage
+      annotations:
+        summary: '{{ "{{ $labels.instance }}" }} Connections > 90%'
+        description: 'Connection usage for PostgreSQL instance {{ "{{ $labels.instance }}" }} has been above 90%. Current: {{ "{{ $value }}" }}% of max connections'
+      expr: |
+        rds_rds083_conn_usage > 0.9
+      labels:
+        severity: critical

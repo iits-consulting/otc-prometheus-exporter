@@ -1,0 +1,149 @@
+rule_files:
+  - /tmp/postgresql.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - input_series:
+      - series: 'rds_rds001_cpu_util{instance="db1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLHighCPUUtilization
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.instance }} CPU > 80%"
+              description: "CPU utilization for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'rds_rds001_cpu_util{instance="db1"}'
+        values: '0.95'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLVeryHighCPUUtilization
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.instance }} CPU > 90%"
+              description: "CPU utilization for PostgreSQL instance {{ $labels.instance }} has been above 90%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'rds_rds002_mem_util{instance="db1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLHighMemoryUtilization
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.instance }} Memory > 80%"
+              description: "Memory utilization for PostgreSQL instance {{ $labels.instance }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'rds_rds002_mem_util{instance="db1"}'
+        values: '0.95'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLVeryHighMemoryUtilization
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.instance }} Memory > 90%"
+              description: "Memory utilization for PostgreSQL instance {{ $labels.instance }} has exceeded 90%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'rds_rds039_disk_util{instance="db1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLHighDiskUtilization
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.instance }} Disk > 80%"
+              description: "Disk usage for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'rds_rds039_disk_util{instance="db1"}'
+        values: '0.95'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLVeryHighDiskUtilization
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.instance }} Disk > 90%"
+              description: "Disk usage for PostgreSQL instance {{ $labels.instance }} has been above 90%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'rds_rds048_disk_used_size{instance="db1"}'
+        values: '91'
+      - series: 'rds_rds047_disk_total_size{instance="db1"}'
+        values: '100'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLDiskSpaceAlmostFull
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.instance }} Disk > 90% of total"
+              description: "Disk used ({{ $value | humanizePercentage }}) of total capacity for PostgreSQL instance {{ $labels.instance }} has exceeded 90%."
+
+  - input_series:
+      - series: 'rds_rds048_disk_used_size{instance="db1"}'
+        values: '96'
+      - series: 'rds_rds047_disk_total_size{instance="db1"}'
+        values: '100'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLDiskSpaceCriticallyLow
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.instance }} Disk > 95% of total"
+              description: "Disk used ({{ $value | humanizePercentage }}) of total capacity for PostgreSQL instance {{ $labels.instance }} has exceeded 95%."
+
+  - input_series:
+      - series: 'rds_rds083_conn_usage{instance="db1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLHighConnectionUsage
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.instance }} Connections > 80%"
+              description: "Connection usage for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current: {{ $value }}% of max connections"
+
+  - input_series:
+      - series: 'rds_rds083_conn_usage{instance="db1"}'
+        values: '0.95'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: PostgreSQLVeryHighConnectionUsage
+        exp_alerts:
+          - exp_labels:
+              instance: db1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.instance }} Connections > 90%"
+              description: "Connection usage for PostgreSQL instance {{ $labels.instance }} has been above 90%. Current: {{ $value }}% of max connections"
