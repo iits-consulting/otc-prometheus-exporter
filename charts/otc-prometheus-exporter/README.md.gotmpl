@@ -31,8 +31,8 @@
 To install the chart with the release name {{ template "chart.name" . }}:
 
 ```shell
-    helm repo add iits-charts https://charts.iits.tech
+    helm repo add otc-prometheus-exporter https://iits-consulting.github.io/otc-prometheus-exporter
     helm search repo {{ template "chart.name" . }}
-    helm install {{ template "chart.name" . }} iits-charts/{{ template "chart.name" . }}
+    helm install {{ template "chart.name" . }} otc-prometheus-exporter/{{ template "chart.name" . }}
 ```
 {{- end}}
