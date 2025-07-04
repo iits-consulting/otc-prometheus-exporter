@@ -6,7 +6,7 @@ groups:
         summary: '{{ "{{ $labels.bucket }}" }} OBS request success rate < 95%'
         description: 'The request success rate for OBS bucket {{ "{{ $labels.bucket }}" }} has dropped below 95%. Current: {{ "{{ $value }}" }}%'
       expr: |
-        obs_request_success_rate < 0.9
+        obs_request_success_rate < 0.95
       labels:
         severity: warning
     - alert: OBSCriticalRequestSuccessRateDrop
