@@ -14,6 +14,28 @@ To install the chart with the release name otc-prometheus-exporter:
     helm install otc-prometheus-exporter otc-prometheus-exporter/otc-prometheus-exporter
 ```
 
+## Additional Prometheus Rules
+
+This chart can be used to create default `PrometheusRule` definitions for core services (e.g., RDS, OBS, ELB). 
+If you need to monitor additional metrics, use the `additionalPrometheusRulesMap` field in your `values.yaml`:
+
+```yaml
+additionalPrometheusRulesMap:
+  # Prometheus rules for RDS PostgreSQL
+  rds-postgresql-alerts:
+    groups:
+      - name: postgresql-system
+        rules:
+          - alert: PostgreSQLHighCPUUtilization
+            annotations:
+              summary: '{{ $labels.instance }} CPU > 80%'
+              description: 'CPU utilization for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current value: {{ $value }}%'
+            expr: >
+              rds_rds001_cpu_util > 0.8
+            labels:
+              severity: warning
+```
+
 ## Values
 
 | Key | Type | Default | Description |
