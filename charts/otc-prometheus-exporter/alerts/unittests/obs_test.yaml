@@ -1,0 +1,89 @@
+rule_files:
+  - /tmp/obs.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - input_series:
+      - series: 'obs_request_success_rate{bucket="bucket1"}'
+        values: '0.94'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: OBSHighRequestSuccessRateDrop
+        exp_alerts:
+          - exp_labels:
+              bucket: bucket1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.bucket }} OBS request success rate < 95%"
+              description: "The request success rate for OBS bucket {{ $labels.bucket }} has dropped below 95%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'obs_request_success_rate{bucket="bucket1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: OBSCriticalRequestSuccessRateDrop
+        exp_alerts:
+          - exp_labels:
+              bucket: bucket1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.bucket }} OBS request success rate < 90%"
+              description: "The request success rate for OBS bucket {{ $labels.bucket }} has dropped below 90%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'obs_total_request_latency{bucket="bucket1"}'
+        values: '600'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: OBSHighAverageRequestLatency
+        exp_alerts:
+          - exp_labels:
+              bucket: bucket1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.bucket }} OBS average request latency high"
+              description: "Average request latency for OBS bucket {{ $labels.bucket }} has exceeded 500 ms. Current: {{ $value }} ms"
+
+  - input_series:
+      - series: 'obs_total_request_latency{bucket="bucket1"}'
+        values: '1200'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: OBSVeryHighAverageRequestLatency
+        exp_alerts:
+          - exp_labels:
+              bucket: bucket1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.bucket }} OBS average request latency very high"
+              description: "Average request latency for OBS bucket {{ $labels.bucket }} has exceeded 1000 ms. Current: {{ $value }} ms"
+
+  - input_series:
+      - series: 'obs_first_byte_latency{bucket="bucket1"}'
+        values: '250'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: OBSHighFirstByteLatency
+        exp_alerts:
+          - exp_labels:
+              bucket: bucket1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.bucket }} OBS first-byte latency high"
+              description: "First byte latency for OBS bucket {{ $labels.bucket }} has exceeded 200 ms. Current: {{ $value }} ms"
+
+  - input_series:
+      - series: 'obs_first_byte_latency{bucket="bucket1"}'
+        values: '600'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: OBSCriticalFirstByteLatency
+        exp_alerts:
+          - exp_labels:
+              bucket: bucket1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.bucket }} OBS first-byte latency critical"
+              description: "First byte latency for OBS bucket {{ $labels.bucket }} has exceeded 500 ms. Current: {{ $value }} ms"

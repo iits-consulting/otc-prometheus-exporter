@@ -1,0 +1,54 @@
+groups:
+  - name: obs-system
+    rules:
+    - alert: OBSHighRequestSuccessRateDrop
+      annotations:
+        summary: '{{ "{{ $labels.bucket }}" }} OBS request success rate < 95%'
+        description: 'The request success rate for OBS bucket {{ "{{ $labels.bucket }}" }} has dropped below 95%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        obs_request_success_rate < 0.95
+      labels:
+        severity: warning
+    - alert: OBSCriticalRequestSuccessRateDrop
+      annotations:
+        summary: '{{ "{{ $labels.bucket }}" }} OBS request success rate < 90%'
+        description: 'The request success rate for OBS bucket {{ "{{ $labels.bucket }}" }} has dropped below 90%. Current: {{ "{{ $value }}" }}%'
+      expr: |
+        obs_request_success_rate < 0.9
+      labels:
+        severity: critical
+
+  - name: obs-latency
+    rules:
+    - alert: OBSHighAverageRequestLatency
+      annotations:
+        summary: '{{ "{{ $labels.bucket }}" }} OBS average request latency high'
+        description: 'Average request latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 500 ms. Current: {{ "{{ $value }}" }} ms'
+      expr: |
+        obs_total_request_latency > 500
+      labels:
+        severity: warning
+    - alert: OBSVeryHighAverageRequestLatency
+      annotations:
+        summary: '{{ "{{ $labels.bucket }}" }} OBS average request latency very high'
+        description: 'Average request latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 1000 ms. Current: {{ "{{ $value }}" }} ms'
+      expr: |
+        obs_total_request_latency > 1000
+      labels:
+        severity: critical
+    - alert: OBSHighFirstByteLatency
+      annotations:
+        summary: '{{ "{{ $labels.bucket }}" }} OBS first-byte latency high'
+        description: 'First byte latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 200 ms. Current: {{ "{{ $value }}" }} ms'
+      expr: |
+        obs_first_byte_latency > 200
+      labels:
+        severity: warning
+    - alert: OBSCriticalFirstByteLatency
+      annotations:
+        summary: '{{ "{{ $labels.bucket }}" }} OBS first-byte latency critical'
+        description: 'First byte latency for OBS bucket {{ "{{ $labels.bucket }}" }} has exceeded 500 ms. Current: {{ "{{ $value }}" }} ms'
+      expr: |
+        obs_first_byte_latency > 500
+      labels:
+        severity: critical

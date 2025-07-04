@@ -1,0 +1,175 @@
+rule_files:
+  - /tmp/elb.yaml
+
+evaluation_interval: 1m
+
+tests:
+  - input_series:
+      - series: 'elb_m14_l7_rt{loadbalancer="elb1"}'
+        values: '600'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighHTTPResponseTime
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} HTTP response time > 500 ms"
+              description: "Average Layer 7 response time (m14_l7_rt) for ELB {{ $labels.loadbalancer }} has exceeded 500 ms. Current: {{ $value }} ms"
+
+  - input_series:
+      - series: 'elb_m14_l7_rt{loadbalancer="elb1"}'
+        values: '1200'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBVeryHighHTTPResponseTime
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} HTTP response time > 1000 ms"
+              description: "Average Layer 7 response time (m14_l7_rt) for ELB {{ $labels.loadbalancer }} has exceeded 1000 ms. Current: {{ $value }} ms"
+
+  - input_series:
+      - series: 'elb_l4_con_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer4ConnectionUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 4 connection usage > 80%"
+              description: "Layer 4 concurrent connections (l4_con_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_l4_in_bps_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer4InboundBandwidthUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 4 inbound bandwidth usage > 80%"
+              description: "Layer 4 inbound bandwidth (l4_in_bps_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_l4_out_bps_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer4OutboundBandwidthUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 4 outbound bandwidth usage > 80%"
+              description: "Layer 4 outbound bandwidth (l4_out_bps_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_l7_con_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer7ConnectionUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 7 connection usage > 80%"
+              description: "Layer 7 concurrent connections (l7_con_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_l7_in_bps_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer7InboundBandwidthUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 7 inbound bandwidth usage > 80%"
+              description: "Layer 7 inbound bandwidth (l7_in_bps_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_l7_out_bps_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer7OutboundBandwidthUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 7 outbound bandwidth usage > 80%"
+              description: "Layer 7 outbound bandwidth (l7_out_bps_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_l7_ncps_usage{loadbalancer="elb1"}'
+        values: '0.85'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighLayer7NewConnectionUsage
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} layer 7 new connection usage > 80%"
+              description: "Layer 7 new connection usage (l7_ncps_usage) for ELB {{ $labels.loadbalancer }} has exceeded 80%. Current: {{ $value }}%"
+
+  - input_series:
+      - series: 'elb_m9_abnormal_servers{loadbalancer="elb1"}'
+        values: '1'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBUnhealthyBackendServers
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} unhealthy backend servers > 0"
+              description: "Number of unhealthy backend servers (m9_abnormal_servers) for ELB {{ $labels.loadbalancer }} is > 0. Current: {{ $value }}"
+
+  - input_series:
+      - series: 'elb_m9_abnormal_servers{loadbalancer="elb1"}'
+        values: '3'
+      - series: 'elb_ma_normal_servers{loadbalancer="elb1"}'
+        values: '0'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBAllBackendServersUnhealthy
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: critical
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} all backend servers unhealthy"
+              description: "All backend servers for ELB {{ $labels.loadbalancer }} are unhealthy if m9_abnormal_servers == (m9_abnormal_servers + ma_normal_servers)."
+
+  - input_series:
+      - series: 'elb_m17_l7_upstream_rt{loadbalancer="elb1"}'
+        values: '1100'
+    alert_rule_test:
+      - eval_time: 1m
+        alertname: ELBHighBackendResponseTime
+        exp_alerts:
+          - exp_labels:
+              loadbalancer: elb1
+              severity: warning
+            exp_annotations:
+              summary: "{{ $labels.loadbalancer }} backend response time > 1000 ms"
+              description: "Average backend response time (m17_l7_upstream_rt) for ELB {{ $labels.loadbalancer }} has exceeded 1000 ms. Current: {{ $value }} ms"

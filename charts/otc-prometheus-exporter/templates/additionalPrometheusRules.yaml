@@ -1,0 +1,24 @@
+{{- if .Values.additionalPrometheusRulesMap }}
+apiVersion: v1
+kind: List
+metadata:
+  name: {{ include "otc-prometheus-exporter.fullname" $ }}-additional-prometheus-rules
+  namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+items:
+{{- range $prometheusRuleName, $prometheusRule := .Values.additionalPrometheusRulesMap }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-{{ $prometheusRuleName }}
+      namespace: {{ template "otc-prometheus-exporter.namespace" $ }}
+      labels:
+        app: {{ template "otc-prometheus-exporter.name" $ }}
+{{ include "otc-prometheus-exporter.labels" $ | indent 8 }}
+    {{- if $prometheusRule.additionalLabels }}
+{{ toYaml $prometheusRule.additionalLabels | indent 8 }}
+    {{- end }}
+    spec:
+      groups:
+{{ toYaml $prometheusRule.groups| indent 8 }}
+{{- end }}
+{{- end }}

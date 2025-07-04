@@ -1,0 +1,43 @@
+{{- if and .Values.defaultPrometheusRules.enabled (or .Values.defaultPrometheusRules.rules.rds .Values.defaultPrometheusRules.rules.obs .Values.defaultPrometheusRules.rules.elb) }}
+apiVersion: v1
+kind: List
+metadata:
+  name: {{ include "otc-prometheus-exporter.fullname" . }}-default-prometheus-rules
+  namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+items:
+  {{- if .Values.defaultPrometheusRules.rules.rds }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-rds-postgresql-alerts
+      namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+      labels:
+{{ include "otc-prometheus-exporter.labels" . | indent 8 }}
+    spec:
+      {{- .Files.Get "alerts/postgresql.yaml" | nindent 6 }}
+  {{- end }}
+
+  {{- if .Values.defaultPrometheusRules.rules.obs }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-obs-alerts
+      namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+      labels:
+{{ include "otc-prometheus-exporter.labels" . | indent 8 }}
+    spec:
+      {{- .Files.Get "alerts/obs.yaml" | nindent 6 }}
+  {{- end }}
+
+  {{- if .Values.defaultPrometheusRules.rules.elb }}
+  - apiVersion: monitoring.coreos.com/v1
+    kind: PrometheusRule
+    metadata:
+      name: {{ template "otc-prometheus-exporter.name" $ }}-elb-alerts
+      namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+      labels:
+{{ include "otc-prometheus-exporter.labels" . | indent 8 }}
+    spec:
+      {{- .Files.Get "alerts/elb.yaml" | nindent 6 }}
+  {{- end }}
+{{- end }}
