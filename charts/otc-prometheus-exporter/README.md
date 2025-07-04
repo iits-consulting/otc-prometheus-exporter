@@ -40,6 +40,7 @@ additionalPrometheusRulesMap:
 
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
+| additionalPrometheusRulesMap | object | `{}` | Additional Prometheus Rules that should be deployed to the Kubernetes cluster |
 | dashboards.as.enabled | bool | `true` |  |
 | dashboards.bms.enabled | bool | `true` |  |
 | dashboards.cbr.enabled | bool | `true` |  |
@@ -62,6 +63,12 @@ additionalPrometheusRulesMap:
 | dashboards.sfs.enabled | bool | `true` |  |
 | dashboards.vpc.enabled | bool | `true` |  |
 | dashboards.waf.enabled | bool | `true` |  |
+| defaultPrometheusRules | object | `{"enabled":false,"rules":{"elb":true,"obs":true,"rds":true}}` | Default Prometheus Rules that should be deployed to the Kubernetes cluster |
+| defaultPrometheusRules.enabled | bool | `false` | Enable default Prometheus Rules |
+| defaultPrometheusRules.rules | object | `{"elb":true,"obs":true,"rds":true}` | Specify which Prometheus Rules should be enabled |
+| defaultPrometheusRules.rules.elb | bool | `true` | Enable Elastic Load Balancing rules |
+| defaultPrometheusRules.rules.obs | bool | `true` | Enable Object Storage Service rules |
+| defaultPrometheusRules.rules.rds | bool | `true` | Enable Relational Database Service rules (only PostgreSQL supported) |
 | deployment.affinity | object | `{}` |  |
 | deployment.env | object | `{}` |  |
 | deployment.envFromSecret | string | `""` |  |
@@ -88,34 +95,13 @@ additionalPrometheusRulesMap:
 | deployment.volumes | object | `{}` |  |
 | fullnameOverride | string | `""` |  |
 | nameOverride | string | `""` |  |
+| namespaceOverride | string | `""` |  |
 | service.ports.metrics.port | int | `39100` |  |
 | service.ports.metrics.targetPort | int | `39100` |  |
 | serviceAccount.annotations | object | `{}` |  |
 | serviceAccount.create | bool | `true` |  |
 | serviceAccount.name | string | `""` |  |
 | serviceMonitor.enabled | bool | `true` |  |
-
-## Additional Prometheus Rules
-
-This chart can be used to create default `PrometheusRule` definitions for core services (e.g., RDS, OBS, ELB).  
-If you need to monitor additional metrics, use the `additionalPrometheusRulesMap` field in your `values.yaml`:
-
-```yaml
-additionalPrometheusRulesMap:
-  # Prometheus rules for RDS PostgreSQL
-  rds-postgresql-alerts:
-    groups:
-      - name: postgresql-system
-        rules:
-          - alert: PostgreSQLHighCPUUtilization
-            annotations:
-              summary: '{{ $labels.instance }} CPU > 80%'
-              description: 'CPU utilization for PostgreSQL instance {{ $labels.instance }} has been above 80%. Current value: {{ $value }}%'
-            expr: >
-              rds_rds001_cpu_util > 0.8
-            labels:
-              severity: warning
-```
 
 <img src="../../img/iits.svg" alt="iits consulting" id="logo" width="200" height="200">
 
