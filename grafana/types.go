@@ -161,6 +161,7 @@ type Panel struct {
 	Targets     []Target    `json:"targets"`
 	Title       string      `json:"title"`
 	Type        string      `json:"type"`
+	ResourceID  string      `json:"resource_id"`
 }
 type Templating struct {
 	List []TemplatingVariable `json:"list"`
