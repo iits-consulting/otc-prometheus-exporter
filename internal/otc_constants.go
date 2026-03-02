@@ -11,6 +11,7 @@ const (
 	DdsNamespace = "SYS.DDS"
 	DcsNamespace = "SYS.DCS"
 	VpcNamespace = "SYS.VPC"
+	CbrNamespace = "SYS.CBR"
 )
 
 var OtcNamespacesMapping = map[string]string{

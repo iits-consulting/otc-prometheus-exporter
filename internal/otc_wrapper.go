@@ -87,6 +87,28 @@ func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
 	return result, nil
 }
 
+func (c *OtcWrapper) GetCbrIdNameMapping() (map[string]string, error) {
+    opts := golangsdk.EndpointOpts{Region: c.Region}
+    cbrClient, err := openstack.NewCBRService(c.providerClient, opts)
+    if err != nil {
+        return nil, err
+    }
+
+    cbrListResponse, err := cbrVaults.List(cbrClient, cbrVaults.ListOpts{})
+    if err != nil {
+        return nil, err
+    }
+
+    result := map[string]string{}
+    for _, vault := range cbrListResponse {
+        if vault.Name != "" {
+            result[vault.ID] = vault.Name
+        }
+    }
+
+    return result, nil
+}
+
 func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
 	rdsClient, err := openstack.NewRDSV3(c.providerClient, opts)
