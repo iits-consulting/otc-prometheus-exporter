@@ -11,6 +11,7 @@ import (
 	otcMetricData "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metricdata"
 	otcMetrics "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metrics"
 	otcCompute "github.com/opentelekomcloud/gophertelekomcloud/openstack/compute/v2/servers"
+	cbrVaults "github.com/opentelekomcloud/gophertelekomcloud/openstack/cbr/v3/vaults"
 	dcsLifecycle "github.com/opentelekomcloud/gophertelekomcloud/openstack/dcs/v1/lifecycle"
 	ddsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dds/v3/instances"
 	dmsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dms/v1/instances"
@@ -89,24 +90,31 @@ func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
 
 func (c *OtcWrapper) GetCbrIdNameMapping() (map[string]string, error) {
     opts := golangsdk.EndpointOpts{Region: c.Region}
-    cbrClient, err := openstack.NewCBRService(c.providerClient, opts)
-    if err != nil {
-        return nil, err
-    }
+	cbrClient, err := openstack.NewCBRService(c.providerClient, opts)
+	if err != nil {
+		return nil, err
+	}
 
-    cbrListResponse, err := cbrVaults.List(cbrClient, cbrVaults.ListOpts{})
-    if err != nil {
-        return nil, err
-    }
+	raw, err := cbrClient.Get(cbrClient.ServiceURL("vaults"), nil, nil)
+	if err != nil {
+		return nil, err
+	}
 
-    result := map[string]string{}
-    for _, vault := range cbrListResponse {
-        if vault.Name != "" {
-            result[vault.ID] = vault.Name
-        }
-    }
+	var response struct {
+		Vaults []cbrVaults.Vault `json:"vaults"`
+	}
+	if err = json.NewDecoder(raw.Body).Decode(&response); err != nil {
+		return nil, err
+	}
 
-    return result, nil
+	result := map[string]string{}
+	for _, vault := range response.Vaults {
+		if vault.Name != "" {
+			result[vault.ID] = vault.Name
+		}
+	}
+
+	return result, nil
 }
 
 func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
