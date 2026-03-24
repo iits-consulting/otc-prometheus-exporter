@@ -11,6 +11,8 @@ import (
 	otcMetricData "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metricdata"
 	otcMetrics "github.com/opentelekomcloud/gophertelekomcloud/openstack/ces/v1/metrics"
 	otcCompute "github.com/opentelekomcloud/gophertelekomcloud/openstack/compute/v2/servers"
+	cbrVaults "github.com/opentelekomcloud/gophertelekomcloud/openstack/cbr/v3/vaults"
+	volumes "github.com/opentelekomcloud/gophertelekomcloud/openstack/blockstorage/v3/volumes"
 	dcsLifecycle "github.com/opentelekomcloud/gophertelekomcloud/openstack/dcs/v1/lifecycle"
 	ddsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dds/v3/instances"
 	dmsInstances "github.com/opentelekomcloud/gophertelekomcloud/openstack/dms/v1/instances"
@@ -86,6 +88,71 @@ func (c *OtcWrapper) GetEcsIdNameMapping() (map[string]string, error) {
 
 	return result, nil
 }
+
+func (c *OtcWrapper) GetCbrIdNameMapping() (map[string]string, error) {
+    opts := golangsdk.EndpointOpts{Region: c.Region}
+	cbrClient, err := openstack.NewCBRService(c.providerClient, opts)
+	if err != nil {
+		return nil, err
+	}
+
+	raw, err := cbrClient.Get(cbrClient.ServiceURL("vaults"), nil, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	var response struct {
+		Vaults []cbrVaults.Vault `json:"vaults"`
+	}
+	if err = json.NewDecoder(raw.Body).Decode(&response); err != nil {
+		return nil, err
+	}
+
+	result := map[string]string{}
+	for _, vault := range response.Vaults {
+		if vault.Name != "" {
+			result[vault.ID] = vault.Name
+		}
+	}
+
+	return result, nil
+}
+
+func (c *OtcWrapper) GetEvsIdNameMapping() (map[string]string, error) {
+    opts := golangsdk.EndpointOpts{Region: c.Region}
+    blockStorageClient, err := openstack.NewBlockStorageV3(c.providerClient, opts)
+    if err != nil {
+        return nil, err
+    }
+
+    allPages, err := volumes.List(blockStorageClient, volumes.ListOpts{}).AllPages()
+    if err != nil {
+        return nil, err
+    }
+
+    allVolumes, err := volumes.ExtractVolumes(allPages)
+    if err != nil {
+        return nil, err
+    }
+
+    result := map[string]string{}
+    for _, volume := range allVolumes {
+        if volume.Name != "" {
+            // CES Dimension hat Format "{uuid}-{device}" z.B. "deaa374d-...-vda"
+            // Daher sowohl reine UUID als auch alle device-Varianten mappen
+            result[volume.ID] = volume.Name
+            for _, attachment := range volume.Attachments {
+                // device z.B. "/dev/vda" → nur "vda" extrahieren
+                device := strings.TrimPrefix(attachment.Device, "/dev/")
+                compositeKey := fmt.Sprintf("%s-%s", volume.ID, device)
+                result[compositeKey] = fmt.Sprintf("%s-%s", volume.Name, device)
+            }
+        }
+    }
+
+    return result, nil
+}
+
 
 func (c *OtcWrapper) GetRdsIdNameMapping() (map[string]string, error) {
 	opts := golangsdk.EndpointOpts{Region: c.Region}
