@@ -123,6 +123,15 @@ func FetchResourceIdToNameMapping(client *internal.OtcWrapper) (map[string]strin
     	maps.Copy(resourceIdToName, result)
 	}
 
+	if slices.Contains(client.Config.Namespaces, internal.EvsNamespace) {
+		result, err := client.GetEvsIdNameMapping()
+		if err != nil {
+			client.Logger.Error("Unable to map namespace!", "context", "EVS Name mapping")
+			return map[string]string{}, err
+		}
+		maps.Copy(resourceIdToName, result)
+	}
+
 	if slices.Contains(client.Config.Namespaces, internal.NatNamespace) {
 		result, err := client.GetNatIdNameMapping()
 		if err != nil {
