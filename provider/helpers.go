@@ -122,6 +122,20 @@ func FillResourceNameFromLabel(families []*dto.MetricFamily, sourceLabel string)
 	}
 }
 
+// EnrichWithHelp fills the Help field on any MetricFamily whose Help is currently
+// empty, using the generated MetricHelpStrings map. Called once per scrape after
+// Collect returns, so no individual provider needs to know about the help strings.
+func EnrichWithHelp(families []*dto.MetricFamily) {
+	for _, fam := range families {
+		if fam.Help != nil && *fam.Help != "" {
+			continue
+		}
+		if help, ok := MetricHelpStrings[fam.GetName()]; ok && help != "" {
+			fam.Help = &help
+		}
+	}
+}
+
 // PrometheusMetricName converts an OTC CES namespace and metric name into a
 // Prometheus-style metric name. It strips "SYS." or "SERVICE." prefixes from the
 // namespace, lowercases everything, and joins with an underscore.
