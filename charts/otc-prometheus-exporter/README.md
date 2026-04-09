@@ -41,9 +41,10 @@ additionalPrometheusRulesMap:
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | additionalPrometheusRulesMap | object | `{}` | Additional custom PrometheusRules (not tied to namespace files). Each key becomes a separate PrometheusRule resource. |
-| dashboards | object | `{"enabled":true,"selfMonitoring":true}` | Grafana dashboard ConfigMap generation. Creates one ConfigMap per enabled namespace with grafana_dashboard: "1" label. |
+| dashboards | object | `{"enabled":true,"selfMonitoring":true,"serviceHealth":true}` | Grafana dashboard ConfigMap generation. Creates one ConfigMap per enabled namespace with grafana_dashboard: "1" label. |
 | dashboards.enabled | bool | `true` | Deploy dashboard ConfigMaps |
 | dashboards.selfMonitoring | bool | `true` | Deploy the exporter self-monitoring dashboard (HTTP traces, scrape durations) |
+| dashboards.serviceHealth | bool | `true` | Deploy the Service Health Overview dashboard (aggregates all *_status metrics) |
 | deployment | object | `{"affinity":{},"env":{"AOM_BATCH_SIZE":"20","AOM_CONCURRENCY":"5","CES_BATCH_SIZE":"500","CES_LOOKBACK":"10","IDLE_CONN_TIMEOUT":"90","REQUEST_TIMEOUT":"10"},"envFromSecret":"","health":{"liveness":{"path":"/healthz","port":39100},"readiness":{"path":"/healthz","port":39100},"startupProbe":{"path":"/healthz","port":39100}},"image":{"pullPolicy":"IfNotPresent","repository":"ghcr.io/iits-consulting/otc-prometheus-exporter","tag":""},"imagePullSecrets":[],"podAnnotations":{},"podSecurityContext":{"runAsGroup":65534,"runAsNonRoot":true,"runAsUser":65534,"seccompProfile":{"type":"RuntimeDefault"}},"ports":{"metrics":{"port":39100,"targetPort":39100}},"replicaCount":1,"resources":{"limits":{"memory":"128Mi"},"requests":{"cpu":"200m","memory":"128Mi"}},"securityContext":{"allowPrivilegeEscalation":false,"capabilities":{"drop":["ALL"]},"readOnlyRootFilesystem":true},"volumeMounts":{},"volumes":{}}` | Deployment configuration |
 | deployment.affinity | object | `{}` | Pod affinity/anti-affinity rules |
 | deployment.env | object | `{"AOM_BATCH_SIZE":"20","AOM_CONCURRENCY":"5","CES_BATCH_SIZE":"500","CES_LOOKBACK":"10","IDLE_CONN_TIMEOUT":"90","REQUEST_TIMEOUT":"10"}` | Environment variables for authentication and tuning. Credentials should be set via envFromSecret in production. |
