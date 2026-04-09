@@ -11,6 +11,7 @@ func TestConvertDMSInstancesToMetrics(t *testing.T) {
 		{
 			InstanceID:        "dms-001",
 			Name:              "kafka-prod",
+			Status:            "RUNNING",
 			UsedStorageSpace:  50,
 			TotalStorageSpace: 200,
 			PartitionNum:      "300",
@@ -18,6 +19,7 @@ func TestConvertDMSInstancesToMetrics(t *testing.T) {
 		{
 			InstanceID:        "dms-002",
 			Name:              "kafka-dev",
+			Status:            "FAULTY",
 			UsedStorageSpace:  10,
 			TotalStorageSpace: 100,
 			PartitionNum:      "100",
@@ -26,12 +28,12 @@ func TestConvertDMSInstancesToMetrics(t *testing.T) {
 
 	families := convertDMSInstancesToMetrics(instances)
 
-	if len(families) != 3 {
-		t.Fatalf("expected 3 families, got %d", len(families))
+	if len(families) != 4 {
+		t.Fatalf("expected 4 families, got %d", len(families))
 	}
 
 	// Verify family names.
-	expectedNames := []string{"dms_instance_storage_used_gb", "dms_instance_storage_total_gb", "dms_instance_partitions"}
+	expectedNames := []string{"dms_instance_status", "dms_instance_storage_used_gb", "dms_instance_storage_total_gb", "dms_instance_partitions"}
 	for i, name := range expectedNames {
 		if families[i].GetName() != name {
 			t.Errorf("expected family[%d] name %q, got %q", i, name, families[i].GetName())
@@ -45,15 +47,24 @@ func TestConvertDMSInstancesToMetrics(t *testing.T) {
 		}
 	}
 
-	// Verify values for first instance in each family.
-	if families[0].Metric[0].Gauge.GetValue() != 50.0 {
-		t.Errorf("expected used storage 50.0, got %f", families[0].Metric[0].Gauge.GetValue())
+	// RUNNING -> 0.0, FAULTY -> 1.0
+	statusFam := families[0]
+	if statusFam.Metric[0].Gauge.GetValue() != 0.0 {
+		t.Errorf("expected RUNNING status 0.0, got %f", statusFam.Metric[0].Gauge.GetValue())
 	}
-	if families[1].Metric[0].Gauge.GetValue() != 200.0 {
-		t.Errorf("expected total storage 200.0, got %f", families[1].Metric[0].Gauge.GetValue())
+	if statusFam.Metric[1].Gauge.GetValue() != 1.0 {
+		t.Errorf("expected FAULTY status 1.0, got %f", statusFam.Metric[1].Gauge.GetValue())
 	}
-	if families[2].Metric[0].Gauge.GetValue() != 300.0 {
-		t.Errorf("expected partitions 300.0, got %f", families[2].Metric[0].Gauge.GetValue())
+
+	// Verify values for first instance in storage/partition families.
+	if families[1].Metric[0].Gauge.GetValue() != 50.0 {
+		t.Errorf("expected used storage 50.0, got %f", families[1].Metric[0].Gauge.GetValue())
+	}
+	if families[2].Metric[0].Gauge.GetValue() != 200.0 {
+		t.Errorf("expected total storage 200.0, got %f", families[2].Metric[0].Gauge.GetValue())
+	}
+	if families[3].Metric[0].Gauge.GetValue() != 300.0 {
+		t.Errorf("expected partitions 300.0, got %f", families[3].Metric[0].Gauge.GetValue())
 	}
 }
 

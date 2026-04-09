@@ -43,10 +43,12 @@ func buildDMSNameMap(instances []dmsInstances.Instance) map[string]string {
 }
 
 // convertDMSInstancesToMetrics creates MetricFamily objects for DMS-specific metrics:
+// - dms_instance_status: 0.0 if RUNNING, 1.0 otherwise (OTC convention: 0=normal, 1=abnormal)
 // - dms_instance_storage_used_gb: used storage space in GB
 // - dms_instance_storage_total_gb: total storage space in GB
 // - dms_instance_partitions: number of partitions
 func convertDMSInstancesToMetrics(instances []dmsInstances.Instance) []*dto.MetricFamily {
+	statusMetrics := make([]*dto.Metric, 0, len(instances))
 	usedMetrics := make([]*dto.Metric, 0, len(instances))
 	totalMetrics := make([]*dto.Metric, 0, len(instances))
 	partitionMetrics := make([]*dto.Metric, 0, len(instances))
@@ -56,6 +58,16 @@ func convertDMSInstancesToMetrics(instances []dmsInstances.Instance) []*dto.Metr
 			"resource_id":   inst.InstanceID,
 			"resource_name": inst.Name,
 		}
+
+		statusValue := 1.0
+		if inst.Status == "RUNNING" {
+			statusValue = 0.0
+		}
+		statusMetrics = append(statusMetrics, NewGaugeMetric(statusValue, map[string]string{
+			"resource_id":   inst.InstanceID,
+			"resource_name": inst.Name,
+			"status":        inst.Status,
+		}))
 
 		usedMetrics = append(usedMetrics, NewGaugeMetric(float64(inst.UsedStorageSpace), labels))
 		totalMetrics = append(totalMetrics, NewGaugeMetric(float64(inst.TotalStorageSpace), labels))
@@ -70,6 +82,7 @@ func convertDMSInstancesToMetrics(instances []dmsInstances.Instance) []*dto.Metr
 	}
 
 	return []*dto.MetricFamily{
+		NewGaugeMetricFamily("dms_instance_status", statusMetrics),
 		NewGaugeMetricFamily("dms_instance_storage_used_gb", usedMetrics),
 		NewGaugeMetricFamily("dms_instance_storage_total_gb", totalMetrics),
 		NewGaugeMetricFamily("dms_instance_partitions", partitionMetrics),

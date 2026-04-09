@@ -153,6 +153,12 @@ func (c *Client) SFSTurboV1() (*golangsdk.ServiceClient, error) {
 	})
 }
 
+func (c *Client) DCaaSV2() (*golangsdk.ServiceClient, error) {
+	return c.cache.getOrCreate("dcaas", func() (*golangsdk.ServiceClient, error) {
+		return openstack.NewDCaaSV2(c.provider, c.endpointOpts())
+	})
+}
+
 func (c *Client) OBS() (*golangsdk.ServiceClient, error) {
 	return c.cache.getOrCreate("obs", func() (*golangsdk.ServiceClient, error) {
 		return openstack.NewOBSService(c.provider, c.endpointOpts())
