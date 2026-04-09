@@ -34,7 +34,7 @@ func ShouldEnrich(ctx context.Context) bool {
 func NewGaugeMetricFamily(name string, metrics []*dto.Metric) *dto.MetricFamily {
 	return &dto.MetricFamily{
 		Name:   &name,
-		Type:   new(dto.MetricType_GAUGE),
+		Type:   dto.MetricType_GAUGE.Enum(),
 		Metric: metrics,
 	}
 }
@@ -50,9 +50,10 @@ func NewGaugeMetric(value float64, labels map[string]string) *dto.Metric {
 
 	pairs := make([]*dto.LabelPair, 0, len(labels))
 	for _, k := range keys {
+		name, labelValue := k, labels[k]
 		pairs = append(pairs, &dto.LabelPair{
-			Name:  new(k),
-			Value: new(labels[k]),
+			Name:  &name,
+			Value: &labelValue,
 		})
 	}
 

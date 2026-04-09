@@ -58,7 +58,7 @@ func TestMetricsHandlerNoNamespaceReturnsExporterMetrics(t *testing.T) {
 	}
 }
 
-func TestMetricsHandlerUnknownNamespace(t *testing.T) {
+func TestMetricsHandlerUnknownNamespaceReturnsOK(t *testing.T) {
 	registry := provider.NewRegistry()
 	handler := metricsHandler(registry, nil, &nopLogger{}, prometheus.NewRegistry())
 
@@ -76,13 +76,14 @@ func TestMetricsHandlerSuccess(t *testing.T) {
 	registry := provider.NewRegistry()
 
 	metricName := "sys_ecs_cpu_util"
+	gaugeValue := 42.5
 	families := []*dto.MetricFamily{
 		{
-			Name: new(metricName),
-			Type: new(dto.MetricType_GAUGE),
+			Name: &metricName,
+			Type: dto.MetricType_GAUGE.Enum(),
 			Metric: []*dto.Metric{
 				{
-					Gauge: &dto.Gauge{Value: new(42.5)},
+					Gauge: &dto.Gauge{Value: &gaugeValue},
 				},
 			},
 		},

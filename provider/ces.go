@@ -54,9 +54,10 @@ func collectCESMetricsWithClient(ctx context.Context, cesClient *golangsdk.Servi
 
 // listMetricsByNamespace returns all CES metric definitions for the given namespace.
 func listMetricsByNamespace(cesClient *golangsdk.ServiceClient, namespace string) ([]otcMetrics.MetricInfoList, error) {
+	limit := 1000
 	pages, err := otcMetrics.ListMetrics(cesClient, otcMetrics.ListMetricsRequest{
 		Namespace: namespace,
-		Limit:     new(1000),
+		Limit:     &limit,
 	}).AllPages()
 	if err != nil {
 		return nil, err

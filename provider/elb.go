@@ -105,7 +105,8 @@ func enrichELBNames(families []*dto.MetricFamily, lbNames, listenerNames map[str
 						listenerName = listenerID
 					}
 				}
-				nameLabel.Value = new(lbName + "/" + listenerName)
+				composite := lbName + "/" + listenerName
+				nameLabel.Value = &composite
 			} else {
 				nameLabel.Value = &lbName
 			}

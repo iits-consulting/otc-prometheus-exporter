@@ -43,6 +43,9 @@ func TestEnrichELBNames(t *testing.T) {
 	ridKey := "resource_id"
 	rnKey := "resource_name"
 	empty := ""
+	listenerKey := "lbaas_listener_id"
+	listenerVal := "listener-001"
+	v100, v50 := float64(100), float64(50)
 
 	families := []*dto.MetricFamily{
 		NewGaugeMetricFamily("elb_m1_cps", []*dto.Metric{
@@ -51,14 +54,14 @@ func TestEnrichELBNames(t *testing.T) {
 				{Name: &lbID, Value: &lbVal},
 				{Name: &ridKey, Value: &lbVal},
 				{Name: &rnKey, Value: &empty},
-			}, Gauge: &dto.Gauge{Value: new(float64(100))}},
+			}, Gauge: &dto.Gauge{Value: &v100}},
 			// Listener-level
 			{Label: []*dto.LabelPair{
 				{Name: &lbID, Value: &lbVal},
-				{Name: new("lbaas_listener_id"), Value: new("listener-001")},
+				{Name: &listenerKey, Value: &listenerVal},
 				{Name: &ridKey, Value: &lbVal},
 				{Name: &rnKey, Value: &empty},
-			}, Gauge: &dto.Gauge{Value: new(float64(50))}},
+			}, Gauge: &dto.Gauge{Value: &v50}},
 		}),
 	}
 
