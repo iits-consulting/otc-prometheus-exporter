@@ -208,6 +208,9 @@ dashboards:
   # -- Deploy the exporter self-monitoring dashboard (HTTP traces, scrape durations)
   selfMonitoring: true
 
+  # -- Deploy the Service Health Overview dashboard (aggregates all *_status metrics)
+  serviceHealth: true
+
 # -- PrometheusRule generation.
 # Creates one PrometheusRule per namespace that has rules enabled and a matching alerts/ file.
 prometheusRules:

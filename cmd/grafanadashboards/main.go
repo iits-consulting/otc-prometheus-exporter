@@ -200,7 +200,7 @@ func main() {
 			// Auto-generated dashboards from OTC documentation.
 			configs := buildAutoConfigs()
 			// Hand-crafted dashboards for metrics that aren't CES-sourced.
-			configs = append(configs, exporterDashboard(), alarmDashboard())
+			configs = append(configs, exporterDashboard(), alarmDashboard(), statusDashboard())
 
 			for _, cfg := range configs {
 				board := grafana.GenerateDashboard(cfg)

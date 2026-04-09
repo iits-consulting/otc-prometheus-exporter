@@ -34,4 +34,17 @@ data:
   exporter.json: |-
   {{- .Files.Get "dashboards/exporter.json" | nindent 4 }}
 {{- end }}
+{{- if .Values.dashboards.serviceHealth }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Release.Name }}-dashboard-status
+  namespace: {{ template "otc-prometheus-exporter.namespace" . }}
+  labels:
+      grafana_dashboard: "1"
+data:
+  status.json: |-
+  {{- .Files.Get "dashboards/status.json" | nindent 4 }}
+{{- end }}
 {{- end }}
