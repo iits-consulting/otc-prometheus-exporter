@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes read from the monitored disk per second\n\nUnit: Bytes/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes written to the monitored disk per second\n\nUnit: Bytes/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of read requests sent to the monitored disk per second\n\nUnit: Requests/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write requests sent to the monitored disk per second\n\nUnit: Requests/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of read or write requests waiting for processing in the monitoring period for the monitored disk\n\nUnit: Count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time the monitored disk was performing read or write operations in the monitoring period\n\nUnit: Percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of bytes transmitted per I/O write for the monitored disk in the monitoring period\n\nUnit: Kbyte/operation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of bytes transmitted per I/O read for the monitored disk in the monitoring period\n\nUnit: Kbyte/operation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average await time per I/O write for the monitored disk in the monitoring period\n\nUnit: ms/operation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average await time per I/O read for the monitored disk in the monitoring period\n\nUnit: ms/operation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average service time per I/O read or write for the monitored disk in the monitoring period\n\nUnit: ms/operation",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that the IOPS of the monitored disk has reached the upper limit\n\nUnit: Count/5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that the bandwidth of the monitored disk has reached the upper limit\n\nUnit: Count/5 minutes",
       "fieldConfig": {
         "defaults": {
           "color": {

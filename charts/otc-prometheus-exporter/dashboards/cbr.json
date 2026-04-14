@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used capacity of the vault",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Capacity usage of the vault",
       "fieldConfig": {
         "defaults": {
           "color": {

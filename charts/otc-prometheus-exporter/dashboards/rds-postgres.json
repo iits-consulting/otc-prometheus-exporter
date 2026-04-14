@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of I/O requests processed by the system in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of read I/O requests processed by the system in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of write I/O requests processed by the system in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Incoming traffic in bytes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Outgoing traffic in bytes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Storage space usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Storage space usage of transaction logs",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Storage space usage of replication slot files",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of database connections in use",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of transaction IDs that have been used",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of transaction logs generated per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Lagging size of the most lagging replica in terms of WAL data received",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Replication lag",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total storage space of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used storage space of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes read from the disk per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes written into the disk per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of processes to be written into the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Query times of SQL statements (including stored procedures) per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Execution times of submitted and rollback transactions per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percent of used PostgreSQL connections to the total number of connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of rows that are being inserted, deleted, updated, or queried",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of active database connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of idle transaction connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Length of time since the start of the transaction that has been active longer than any other current transaction",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Length of time since the start of the transaction that has been prepared for two-phase commit longer than any other current transaction",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "I/O usage of disks",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of blocked sessions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Volume of data written from the swap partition to the memory per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Volume of data written from the memory to the swap partition per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the swap partition",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Usage of the swap partition",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum age of the current database, which is the value of **max(age(datfrozenxid))** in the **pg_database** table",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is in user mode",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is in kernel mode",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is waiting for disk I/O operations to complete",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average latency (in milliseconds) of disks responding to read requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average latency (in milliseconds) of disks responding to write requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of inactive logical replication slots",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4128,6 +4169,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of WAL logs that have not been flushed to the disk by the standby node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4225,6 +4267,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of slow SQL statements whose execution time is longer than 1s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4322,6 +4365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of slow SQL statements whose execution time is longer than 3s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4419,6 +4463,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of slow SQL statements whose execution time is longer than 5s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4516,6 +4561,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of slow SQL statements whose execution time is longer than the value of log_min_duration_statement. You can change the value of this metric as required.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4613,6 +4659,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Replication status between the primary DB instance and DR instance. The value ranges from 0 to 5.\n\n-  0: abnormal -  1: startup -  2: catchup -  3: streaming -  4: backup -  5: stopping",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4710,6 +4757,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Latency between the LSN of the primary DB instance and the replay LSN of the DR instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4807,6 +4855,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "RTT between the primary DB instance and DR instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4904,6 +4953,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Packet loss rate between the primary DB instance and DR instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5001,6 +5051,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of WAL logs that have not been replayed by the standby node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5098,6 +5149,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of WAL logs that have not been sent from the primary node to the standby node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5195,6 +5247,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of WAL logs that have not been written to the disk by the standby node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5292,6 +5345,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of audit logs",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5389,6 +5443,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Stream replication status of the standby node. The value **0** indicates abnormal stream replication; **1** indicates normal stream replication; and **2** means that this node is the primary node.\n\nFor this metric, the standby node also includes read replicas.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5486,6 +5541,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Time during which synchronous replication between the primary and standby nodes is blocked",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5583,6 +5639,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of temporary files generated within 1 minute",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5680,6 +5737,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of temporary files generated within 1 minute",
       "fieldConfig": {
         "defaults": {
           "color": {

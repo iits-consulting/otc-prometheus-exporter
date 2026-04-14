@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of used partitions in the instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of created topics in the instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of accumulated messages in all consumer groups of the instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of messages in the broker",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -489,7 +493,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "bytes",
           "unitScale": true
         },
         "overrides": null
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages created per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes retrieved per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -683,7 +689,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes created per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -780,7 +787,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Inbound traffic over public networks per second\n\nYou can view this metric if public access has been enabled for the instance.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -877,7 +885,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Outbound traffic over public networks per second\n\nYou can view this metric if public access has been enabled for the instance.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -974,7 +983,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time that the broker spends processing message retrieval requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time that the broker spends processing message creation requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average load of each CPU core of the Kafka VM",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1265,7 +1277,7 @@
               }
             ]
           },
-          "unit": "percent",
+          "unit": "short",
           "unitScale": true
         },
         "overrides": null
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk usage of the Kafka VM",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the Kafka VM",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Heap memory usage of the Kafka JVM",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1598,7 +1613,7 @@
           "useBackend": false
         }
       ],
-      "title": "JVM Heap Memory Usage of Kafka",
+      "title": "JVM Heap Memory Usage of JVM",
       "type": "timeseries"
     },
     {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Whether the Kafka broker is alive",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of TCP connections on the Kafka broker",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the Kafka VM",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time for each disk I/O read in the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time for each disk I/O write in the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Inbound traffic per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Outbound traffic per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Read traffic on the disk",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2332,7 +2355,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Write traffic on the disk",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2429,7 +2453,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes created per second\n\nThis metric is available only when **Monitoring Type** is set to **Basic monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2526,7 +2551,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes retrieved per second\n\nThis metric is available only when **Monitoring Type** is set to **Basic monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2623,7 +2649,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "Bps",
           "unitScale": true
         },
         "overrides": null
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of messages in the queue\n\nThis metric is available only when **Monitoring Type** is set to **Basic monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2720,7 +2747,7 @@
               }
             ]
           },
-          "unit": "short",
+          "unit": "bytes",
           "unitScale": true
         },
         "overrides": null
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of messages in the queue\n\nThis metric is available only when **Monitoring Type** is set to **Basic monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages created per second\n\nThis metric is available only when **Monitoring Type** is set to **Basic monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of messages in the partition\n\nThis metric is available only when **Monitoring Type** is set to **Partition monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages that have been created\n\nThis metric is available only when **Monitoring Type** is set to **Partition monitoring** on the **By Topic** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages that have been retrieved in the consumer group\n\nThis metric is available only when **Topic** is set to a specific topic name and **Monitoring Type** is set to **Partition monitoring** on the **By Consumer Group** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages that can be retrieved in the consumer group\n\nThis metric is available only when **Topic** is set to a specific topic name and **Monitoring Type** is set to **Partition monitoring** on the **By Consumer Group** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of remaining messages that can be retrieved from the specified topic in the consumer group\n\nThis metric is available only when **Topic** is set to a specific topic name and **Monitoring Type** is set to **Basic monitoring** on the **By Consumer Group** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages that have been retrieved from the specified topic in the consumer group\n\nThis metric is available only when **Topic** is set to a specific topic name and **Monitoring Type** is set to **Basic monitoring** on the **By Consumer Group** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of remaining messages that can be retrieved in the consumer group\n\nThis metric is available only when **Topic** is set to **All topics** on the **By Consumer Group** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of messages that have been retrieved in the consumer group\n\nThis metric is available only when **Topic** is set to **All topics** on the **By Consumer Group** tab page.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data to synchronize in the Kafka migration task",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data synchronized per minute in the Kafka migration task",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Status of the current task",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Time elapsed between when a message is sent from the source and received by the target",
       "fieldConfig": {
         "defaults": {
           "color": {

@@ -195,10 +195,6 @@
               {
                 "color": "green",
                 "value": null
-              },
-              {
-                "color": "red",
-                "value": 1
               }
             ]
           },
@@ -238,7 +234,7 @@
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": true,
-          "legendFormat": "firing",
+          "legendFormat": "Firing",
           "range": false,
           "refId": "A",
           "useBackend": false

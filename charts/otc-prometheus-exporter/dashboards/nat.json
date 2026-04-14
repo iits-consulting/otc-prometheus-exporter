@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of SNAT connections of the NAT gateway\n\nUnit: count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total bandwidth sent out through the public NAT gateway from the public network\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total bandwidth sent out through the public NAT gateway from the VPC\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Packets received by the public NAT gateway from the public network per second\n\nUnit: count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Packets received by the public NAT gateway from the VPC per second\n\nUnit: count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Traffic sent through the public NAT gateway from the public network\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Traffic sent through the public NAT gateway from the VPC\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Usage rate of SNAT connections\n\nThe maximum number of connections is the number of connections allowed by NAT gateway specifications.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of the bandwidth used by the public NAT gateway to route traffic from the public network\n\nThe maximum bandwidth supported by a public NAT gateway is 20 Gbit/s. Inbound bandwidth usage = Used bandwidth/Maximum bandwidth of the public NAT gateway x 100%.\n\nUnit: percent\n\n\n\n**Note:**\n\nThis metric is used to monitor the performance of public NAT gateways instead of the EIP bandwidth.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of the bandwidth used by the public NAT gateway to route traffic from the VPC\n\nThe maximum bandwidth supported by a public NAT gateway is 20 Gbit/s. Outbound bandwidth usage = Used bandwidth/Maximum bandwidth of the public NAT gateway x 100%.\n\nUnit: percent\n\n\n\n**Note:**\n\nThis metric is used to monitor the performance of public NAT gateways instead of the EIP bandwidth.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total bandwidth sent out through the public NAT gateway over UDP from the public network\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total bandwidth sent out through the public NAT gateway over UDP from the VPC\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total bandwidth sent out through the public NAT gateway over TCP from the public network\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total bandwidth sent out through the public NAT gateway over TCP from the VPC\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets dropped by the public NAT gateway due to excessive SNAT connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets dropped by the public NAT gateway due to excessive PPS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets dropped by the public NAT gateway when all EIP ports have been allocated",
       "fieldConfig": {
         "defaults": {
           "color": {

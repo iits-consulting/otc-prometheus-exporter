@@ -47,6 +47,13 @@ var serviceTitle = map[string]string{
 	"ddm":            "DDM - Distributed Database Middleware",
 }
 
+// formatDescription converts remaining RST artifacts in description strings
+// to markdown equivalents for display in Grafana panel descriptions.
+func formatDescription(s string) string {
+	s = strings.ReplaceAll(s, ".. note::", "\n\n**Note:**")
+	return strings.TrimSpace(s)
+}
+
 // grafanaUnit converts OTC documentation unit strings to Grafana unit identifiers.
 func grafanaUnit(otcUnit string) string {
 	switch strings.ToLower(strings.TrimSpace(otcUnit)) {
@@ -131,10 +138,11 @@ func buildAutoConfigs() []grafana.DashboardConfig {
 				panelTitle = m.MetricId
 			}
 			panels = append(panels, grafana.PanelConfig{
-				Metric: prefix + "_" + id,
-				Title:  panelTitle,
-				Unit:   grafanaUnit(m.Unit),
-				Type:   grafana.TimeSeries,
+				Metric:      prefix + "_" + id,
+				Title:       panelTitle,
+				Description: formatDescription(m.Description),
+				Unit:        grafanaUnit(m.Unit),
+				Type:        grafana.TimeSeries,
 			})
 		}
 		fmt.Printf("  → %s: %d panels from RST\n", key, len(panels))
@@ -158,10 +166,11 @@ func buildAutoConfigs() []grafana.DashboardConfig {
 						panelTitle = m.MetricId
 					}
 					extra = append(extra, grafana.PanelConfig{
-						Metric: prefix + "_" + id,
-						Title:  panelTitle,
-						Unit:   grafanaUnit(m.Unit),
-						Type:   grafana.TimeSeries,
+						Metric:      prefix + "_" + id,
+						Title:       panelTitle,
+						Description: formatDescription(m.Description),
+						Unit:        grafanaUnit(m.Unit),
+						Type:        grafana.TimeSeries,
 					})
 				}
 				sort.Slice(extra, func(i, j int) bool { return extra[i].Metric < extra[j].Metric })

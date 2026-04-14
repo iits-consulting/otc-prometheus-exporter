@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of an ECS\n\nFormula: CPU usage of an ECS/Number of vCPUs in the ECS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of an ECS\n\nThis metric is unavailable if the image has no OTC Tools installed.\n\nFormula: Used memory of an ECS/Total memory of the ECS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk usage of an ECS\n\nThis metric is unavailable if the image has no OTC Tools installed.\n\nFormula: Used capacity of an ECS-attached disk/Total capacity of the ECS-attached disk",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes read from an ECS-attached disk per second\n\nFormula: Total number of bytes read from an ECS-attached disk/Monitoring interval\n\nbyte_out = (rd_bytes - last_rd_bytes)/Time difference",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes written to an ECS-attached disk per second\n\nFormula: Total number of bytes written to an ECS-attached disk/Monitoring interval",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of read requests sent to an ECS-attached disk per second\n\nFormula: Total number of read requests sent to an ECS-attached disk/Monitoring interval\n\nreq_out = (rd_req - last_rd_req)/Time difference",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write requests sent to an ECS-attached disk per second\n\nFormula: Total number of write requests sent to an ECS-attached disk/Monitoring interval\n\nreq_in = (wr_req - last_wr_req)/Time difference",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of incoming bytes on an ECS per second\n\nFormula: Total number of inband incoming bytes on an ECS/Monitoring interval",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of outgoing bytes on an ECS per second\n\nFormula: Total number of inband outgoing bytes on an ECS/Monitoring interval",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of incoming bytes on an ECS per second on the hypervisor\n\nFormula: Total number of outband incoming bytes on an ECS/Monitoring interval\n\nThis metric is unavailable if SR-IOV is enabled.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of outgoing bytes on an ECS per second on the hypervisor\n\nFormula: Total number of outband outgoing bytes on an ECS/Monitoring interval\n\nThis metric is unavailable if SR-IOV is enabled.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Status of an InfiniBand NIC on an H2 ECS\n\nThe system periodically checks the status and returns check results using value **0** or **1**.\n\n-  **0**: The system is running properly. That is, the InfiniBand NIC is functional. -  **1**: The system is not running properly. That is, the InfiniBand NIC malfunctions. When the physical NIC corresponding to a virtual NIC becomes faulty, for example, the network cable is not securely connected to the NIC, the switch or adapter is incompatible with the InfiniBand NIC, or the NIC is disabled, the returned value is **1**.\n\n\n\n**Note:**\n\nOnly Mellanox EDR 100 GB single-port InfiniBand NICs are supported.",
       "fieldConfig": {
         "defaults": {
           "color": {

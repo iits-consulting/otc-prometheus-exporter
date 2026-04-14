@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the DDM instance node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the DDM instance node.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Incoming traffic per second of the DDM instance node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Outgoing traffic per second of the DDM instance node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Requests per second of the DDM instance node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Read operations of the DDM instance node within each monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Write operations of the DDM instance node within a monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Slow SQL logs of DDM-Core",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average response latency of DDM-Core",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Connections of DDM-Core",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of active connections (from a DDM node to the target RDS instance)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Active connections of each DDM instance node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of active connections to each DDM instance node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Full GC times of each DDM node per minute",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Whether each DDM instance node is unavailable. The value can be **0** and **1**. **0** indicates that the node is available, and **1** indicates that the node is unavailable.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of global sequences whose usage exceeds 75%. Usage = Current value/Maximum value. The default threshold is 75%. The maximum value of a global sequence depends on the global sequence type. For example, the maximum value of BIGINT is 2^63-1.",
       "fieldConfig": {
         "defaults": {
           "color": {

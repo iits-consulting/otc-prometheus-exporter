@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Health status of the monitored object\n\n-  **0**: The cluster is 100% available. -  **1**: All primary shards are allocated, but some replicas are missing. No data is missing, so search results will still be complete. However, high availability is compromised to some degree. If more shards disappear, you might lose data. Think of this status as a warning that should prompt investigation. -  **2**: Data is missing and the cluster cannot work properly. -  **3**: Failed to obtain the cluster status.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum disk usage of nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum JVM heap usage of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum accumulated JVM Young GC duration of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum accumulated JVM Young GC count of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum accumulated JVM Old GC duration of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum accumulated JVM Old GC count of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of file systems in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Available size of file systems in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum node CPU usage in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum accumulated CPU usage duration of node JVM processes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum virtual memory size of node JVM processes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of HTTP connections that are currently open for nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of HTTP connections that were open for nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of indexes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of shards in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of primary shards in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of documents in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of documents deleted in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of data nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of coordinator nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of master nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of client nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of average queued tasks per minute on nodes in a cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average node CPU usage in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of queued tasks per minute on nodes in a CSS cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average node JVM heap usage in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of node file descriptors that are currently open in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of node file descriptors that are currently open in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of allowed node file descriptors in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of node file descriptors that are currently open in a cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the write thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the search thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the force merge thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the write thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the search thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the force merge thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the search thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the force merge thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the write thread pools on nodes in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4128,6 +4169,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the search thread pools on nodes in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4225,6 +4267,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the force merge thread pools on nodes in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4322,6 +4365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the write thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4419,6 +4463,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the search thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4516,6 +4561,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the force merge thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4613,6 +4659,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average size of the search thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4710,6 +4757,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average size of the write thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4807,6 +4855,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average size of the force merge thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4904,6 +4953,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks rejected by the write thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5001,6 +5051,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the flush thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5098,6 +5149,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the flush thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5195,6 +5247,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the flush thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5292,6 +5345,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the flush thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5389,6 +5443,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the flush thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5486,6 +5541,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the flush thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5583,6 +5639,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the generic thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5680,6 +5737,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the generic thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5777,6 +5835,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the generic thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5874,6 +5933,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the generic thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5971,6 +6031,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the generic thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6068,6 +6129,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the generic thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6165,6 +6227,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the management thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6262,6 +6325,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the management thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6359,6 +6423,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the management thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6456,6 +6521,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the management thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6553,6 +6619,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the management thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6650,6 +6717,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the management thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6747,6 +6815,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the refresh thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6844,6 +6913,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the refresh thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6941,6 +7011,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the refresh thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7038,6 +7109,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the refresh thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7135,6 +7207,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the refresh thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7232,6 +7305,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the refresh thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7329,6 +7403,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the OBS Searcher thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7426,6 +7501,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the OBS Searcher thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7523,6 +7599,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the OBS Searcher thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7620,6 +7697,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the OBS Searcher thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7717,6 +7795,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS Searcher thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7814,6 +7893,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS Searcher thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7911,6 +7991,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the OBS thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8008,6 +8089,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the OBS thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8105,6 +8187,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the OBS thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8202,6 +8285,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the OBS thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8299,6 +8383,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8396,6 +8481,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8493,6 +8579,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the OBS Upload thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8590,6 +8677,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the OBS Upload thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8687,6 +8775,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the OBS Upload thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8784,6 +8873,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the OBS Upload thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8881,6 +8971,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS Upload thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -8978,6 +9069,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS Upload thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9075,6 +9167,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks in queue for the OBS Download thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9172,6 +9265,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of tasks rejected by the OBS Download thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9269,6 +9363,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of tasks in queue for the OBS Download thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9366,6 +9461,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of the OBS Download thread pools on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9463,6 +9559,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS Download thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9560,6 +9657,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of tasks in queue for the OBS Download thread pool on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9657,6 +9755,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Minimum available storage space of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9754,6 +9853,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of old-generation garbage collections of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9851,6 +9951,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average old-generation garbage collection duration of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -9948,6 +10049,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of young-generation garbage collections of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10045,6 +10147,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average young-generation garbage collection duration of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10142,6 +10245,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average value of the maximum number of allowed file descriptors on each node in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10239,6 +10343,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average unused memory capacity of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10336,6 +10441,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average percentage of unused memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10433,6 +10539,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average used memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10530,6 +10637,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average percentage of used memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10627,6 +10735,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum unused memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10724,6 +10833,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum percentage of unused memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10821,6 +10931,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum used memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -10918,6 +11029,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum percentage of used memory of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11015,6 +11127,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of old-generation garbage collections of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11112,6 +11225,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total old-generation garbage collection duration of nodes in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11209,6 +11323,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of young-generation garbage collections of nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11306,6 +11421,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total young-generation garbage collection duration of nodes in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11403,6 +11519,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of HTTP connections that are open on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11500,6 +11617,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of HTTP connections that were open on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11597,6 +11715,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time required for a shard to complete an indexing operation.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11694,6 +11813,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of index operations per second in a cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11791,6 +11911,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time required for a shard to complete a search operation.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11888,6 +12009,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average queries per second (QPS) in a cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -11985,6 +12107,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Duration of the most time-consuming search or write task in the cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12082,6 +12205,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of pending tasks to be processed by the master node in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12179,6 +12303,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of disk read requests to all nodes in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12276,6 +12401,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of disk write requests to all nodes in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12373,6 +12499,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes of data read from the disks of all nodes in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12470,6 +12597,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes of data written into the disks of all nodes in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12567,6 +12695,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average off-heap memory (bytes) used for querying vector indexes on each node in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12664,6 +12793,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average off-heap memory (in %) used for querying vector indexes on each node in a CSS cluster.\n\nThis metric is calculated only when vector index queries occur.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12761,6 +12891,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum off-heap memory (bytes) used for querying vector indexes on each node in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12858,6 +12989,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum off-heap memory (in %) used for querying vector indexes on each node in a CSS cluster.\n\nThis metric is calculated only when vector index queries occur.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -12955,6 +13087,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Circuit breaker status for vector indexes.\n\n-  0: Not enabled. -  1: Enabled. Check whether the cluster's off-heap memory usage exceeds the threshold.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13052,6 +13185,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of requests sent to all nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13149,6 +13283,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of requests successfully handled by all nodes in a CSS cluster.\n\nStatus code: 200.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13246,6 +13381,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of failed requests for all nodes in a CSS cluster.\n\nStatus code: non-200.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13343,6 +13479,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of throttled requests for all nodes in a CSS cluster.\n\nStatus code: 429.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13440,6 +13577,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "The total size of cold data stored in a CSS cluster, which is the total size of the data of frozen indexes stored in an OBS bucket. This metric is measured hourly. Users cannot check this OBS bucket on the OBS console.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13537,6 +13675,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of index creation failures in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13634,6 +13773,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of shards where the number of documents exceeds the threshold in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13731,6 +13871,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write failures caused by abnormal index aliases in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13828,6 +13969,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write failures caused by too many index documents in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -13925,6 +14067,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write failures caused by too many index fields in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14022,6 +14165,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write failures caused by too many index shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14119,6 +14263,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write failures caused by the setting of write prohibition in index configuration in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14216,6 +14361,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write failures caused by incorrect index field types in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14313,6 +14459,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of primary/secondary synchronization jobs for a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14410,6 +14557,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of failed primary/secondary synchronization jobs for a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14507,6 +14655,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of data to be synchronized via primary/secondary synchronization jobs for all primary shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14604,6 +14753,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of data already synchronized via primary/secondary synchronization jobs for all primary shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14701,6 +14851,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of documents to be synchronized via primary/secondary synchronization jobs for all primary shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14798,6 +14949,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of data to be synchronized via primary/secondary synchronization jobs for all shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14895,6 +15047,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total size of data already synchronized via primary/secondary synchronization jobs for all shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -14992,6 +15145,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of documents to be synchronized via primary/secondary synchronization jobs for all shards in a CSS cluster.\n\nOnly Elasticsearch 7.6.2 and 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15089,6 +15243,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total data size of all indexes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15186,6 +15341,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of failed snapshot backup tasks in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15283,6 +15439,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of failed index lifecycle tasks in a CSS cluster.\n\nOnly Elasticsearch 7.10.2 clusters support this metric.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15380,6 +15537,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total data disk capacity of all nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15477,6 +15635,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of unallocated shards in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15574,6 +15733,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of times the disk IOPS exceeds the predefined threshold.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15671,6 +15831,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of times the disk I/O bandwidth usage exceeds the predefined threshold.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15768,6 +15929,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum disk I/O usage among all disks.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15865,6 +16027,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average disk I/O usage among all disks.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -15962,6 +16125,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of allocated shards to the upper limit of the shard quantity.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16059,6 +16223,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "JVM heap memory usage of a node.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16156,6 +16321,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16253,6 +16419,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of queued tasks per minute on a node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16350,6 +16517,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of opened file descriptors on a node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16447,6 +16615,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum number of allowed file descriptors",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16544,6 +16713,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the write thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16641,6 +16811,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the search thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16738,6 +16909,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the force merge thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16835,6 +17007,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the write thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -16932,6 +17105,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the search thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17029,6 +17203,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the force merge thread pool",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17126,6 +17301,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of a write thread pool",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17223,6 +17399,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of a search thread pool",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17320,6 +17497,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of a force merge thread pool",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17417,6 +17595,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the flush thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17514,6 +17693,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the flush thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17611,6 +17791,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the flush thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17708,6 +17889,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the generic thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17805,6 +17987,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the generic thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17902,6 +18085,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the generic thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -17999,6 +18183,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the management thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18096,6 +18281,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the management thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18193,6 +18379,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the management thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18290,6 +18477,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the refresh thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18387,6 +18575,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the refresh thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18484,6 +18673,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the refresh thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18581,6 +18771,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the OBS Searcher thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18678,6 +18869,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the OBS Searcher thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18775,6 +18967,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the OBS Searcher thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18872,6 +19065,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the OBS thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -18969,6 +19163,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the OBS thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19066,6 +19261,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the OBS thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19163,6 +19359,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the OBS Upload thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19260,6 +19457,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the OBS Upload thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19357,6 +19555,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the OBS Upload thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19454,6 +19653,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks in queue for the OBS Download thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19551,6 +19751,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of tasks rejected by the OBS Upload thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19648,6 +19849,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the OBS Download thread pool.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19745,6 +19947,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of old-generation garbage collection times",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19842,6 +20045,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Time spent on old-generation garbage collection",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -19939,6 +20143,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of young-generation garbage collection times",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20036,6 +20241,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Time spent on young-generation garbage collection",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20133,6 +20339,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Unused memory space of a node.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20230,6 +20437,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of unused memory space on a node.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20327,6 +20535,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used memory space of a node.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20424,6 +20633,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of HTTP connections currently open on a node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20521,6 +20731,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of HTTP connections on a node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20618,6 +20829,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of disk read requests to a node in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20715,6 +20927,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of disk write requests to a node in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20812,6 +21025,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes of data read from the disks of a node in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -20909,6 +21123,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes of data written into the disks of a node in the CSS cluster per second.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -21006,6 +21221,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of shards per node in the CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -21103,6 +21319,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Off-heap memory (bytes) used for querying vector indexes on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -21200,6 +21417,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Off-heap memory (in %) used for querying vector indexes on nodes in a CSS cluster.",
       "fieldConfig": {
         "defaults": {
           "color": {

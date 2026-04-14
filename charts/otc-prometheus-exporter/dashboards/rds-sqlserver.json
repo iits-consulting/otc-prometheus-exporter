@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of I/O requests processed by the system in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Incoming traffic in bytes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Outgoing traffic in bytes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Storage space usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total storage space of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used storage space of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes read from the disk per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes written into the disk per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of processes to be written into the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of database connections in use",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of lazy writes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of processes waiting for a workspace memory grant",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of seconds a page will stay in the buffer pool without references",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of page reads per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk space occupied by the current temporary tablespace.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of transactions started for the database per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of Transact-SQL command batches received per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of logins started per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of logouts started per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of pages found in the buffer cache without having to read from the disk to total pages",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of SQL compilations per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of SQL recompilations per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of unrestricted full scans per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of errors per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of latch requests that have not been granted immediately",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of lock wait requests per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of new locks and lock conversions per second requested from the lock manager",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of lock timeouts per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average wait time (ms) of lock requests",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of deadlocks per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of pages flushed to the disk per second by a checkpoint or other operations that require all dirty pages to be flushed",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Delay for replication between primary and standby DB instances. The replication delay of RDS for SQL Server DB instances is at the database level because data is synchronized on each database. The instance-level replication delay refers to the maximum replication delay of the databases (the delay 0s for single DB instances).",
       "fieldConfig": {
         "defaults": {
           "color": {

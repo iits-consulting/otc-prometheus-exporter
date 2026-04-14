@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of requested data that already exists in the cache. It is the ratio of the amount of data that already exists in the cache to the total amount of requested data. A higher cache hit ratio means higher cache usage of the system, fewer times that data needs to be read from the disk or network, and faster system response speed.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of the extra memory space used by the sorting algorithm to the memory space occupied by the sorted data. In a merge sort, for example, the size of the merge buffer is often proportional to the size of the sorted data, so the in-memory ratio is usually between 10% and 50%.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of database file reads",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of database file writes",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of database file reads per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of database file writes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total data volume of the database",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of active SQLs in the database",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of sessions that access the database",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of each node in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of each node in a cluster, in percentage\n\n\n\n**Note:**\n\nAfter the console is upgraded to 8.3.0.202, the memory usage includes the memory occupied by the cache. Therefore, the value of this metric increases compared with that before the upgrade.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of I/O requests processed by each node in the cluster per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data input to each node in the cluster per second over the network",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data sent to the network per second from each node in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk usage of each node in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total disk space of each node in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used disk space of each node in the cluster",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data volume read from each disk in the cluster per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data volume written to each disk in the cluster per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time used each time when a disk reads data",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time used each time when data is written to a disk",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average I/O queue length of a disk",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average disk I/O usage of DNs in a cluster",
       "fieldConfig": {
         "defaults": {
           "color": {

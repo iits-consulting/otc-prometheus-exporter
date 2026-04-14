@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "The monitored object's maximum CPU usage among multiple sampling values in a monitoring period\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum latency of commands\n\nUnit: ms",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of connections received during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Existence of slow query logs in the instance\n\n\n\n**Note:**\n\nSlow queries caused by the **MIGRATE**, **SLAVEOF**, **CONFIG**, **BGSAVE**, and **BGREWRITEAOF** commands are not counted.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory consumed by the monitored object\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of keys with an expiration in Redis",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of the number of Redis cache hits to the number of lookups. Calculation: keyspace_hits/(keyspace_hits + keyspace_misses)\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes used by the Redis server\n\nUnit: KB, MB, or byte (configurable on the console)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Dataset memory that the Redis server has used\n\nUnit: KB, MB, or byte (configurable on the console)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of dataset memory that server has used\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Resident set size (RSS) memory that the Redis server has used, which is the memory that actually resides in the memory, including all stack and heap memory but not swapped-out memory\n\nUnit: KB, MB, or byte (configurable on the console)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of commands processed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of failed lookups of keys in the main dictionary during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of keys in Redis",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of flow control times during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of the maximum bandwidth limit used (the average value of the sum of input and output flows)\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of the current number of connections to the maximum allowed number of connections\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Status of instance nodes. If the status is normal, the value is **0**. If the status is abnormal, the value is **1**.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum delay from when the node receives commands to when it responds\n\nUnit: μs",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average delay from when the node receives commands to when it responds\n\nUnit: μs",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Current average usage of CPU resources\n\nUnit: %",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of clients suspended by block operations",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of connected clients (excluding those from slave nodes)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **DEL** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of keys that have been evicted and deleted during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **EXPIRE** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of keys that have expired and been deleted during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **GET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **HDEL** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **HGET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **HMGET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **HMSET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **HSET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Instantaneous input traffic\n\nUnit: KB/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Instantaneous output traffic\n\nUnit: KB/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio between Used Memory RSS and Used Memory",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **MGET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **MSET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of Pub/Sub channels",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of Pub/Sub patterns",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **SET** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4128,6 +4169,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes used by the Lua engine\n\nUnit: KB, MB, or byte (configurable on the console)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4225,6 +4267,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Peak memory consumed by Redis since the Redis server last started\n\nUnit: KB, MB, or byte (configurable on the console)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4322,6 +4365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **SADD** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4419,6 +4463,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of **SMEMBERS** commands processed per second\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4516,6 +4561,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Longest output list among current client connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4613,6 +4659,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum input data length among current client connections\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4710,6 +4757,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of commands processed during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4807,6 +4855,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes received during the monitoring period\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4904,6 +4953,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes sent during the monitoring period\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5001,6 +5051,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of connections that have exceeded maxclients and been rejected during the monitoring period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5098,6 +5149,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data synchronization gap between the master and the replica",
       "fieldConfig": {
         "defaults": {
           "color": {

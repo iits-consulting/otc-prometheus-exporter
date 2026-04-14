@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of bytes sent by the VM of the monitored object in a measurement period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of bytes received by the VM of the monitored object in a measurement period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time value of data disk reads and writes per second of the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time write throughput per second of the data disk on the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time read throughput per second of the data disk on the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time required for a data disk write on the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time required for a data disk read on the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of current disk I/O bandwidth",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of used IOPS in the total IOPS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time used data disk size of the monitored instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time total data disk size of the monitored instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time data disk usage of the monitored instance",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Buffer hit rate of the database",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Incremental number of database transaction deadlocks",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time response time of 80% of database SQL statements",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time response time of 95% of database SQL statements",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time used data disk size of the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time total data disk size of the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time data disk usage of the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time host flow control duration on the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time Recovery Time Objective (RTO) of the primary/standby replication of the monitored node",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of logins per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of logouts per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time redo progress of the standby node in a shard. It indicates the difference of the redo progress between the primary and standby nodes.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time rate of lock waiting sessions to active sessions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time rate of active sessions to all sessions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time number of in-use connections in the CN connection pool",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of transactions committed by users per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of transactions rolled back by users per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of transactions committed by the background per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of transactions rolled back by the background per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average response time of user transactions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average rate of user rollback transactions to all user committed and rolled back transactions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average rate of background rollback transactions to all user committed and rolled back transactions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of DDLs of user loads at the query layer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of DMLs of user loads at the query layer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of DCLs of user loads at the query layer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average rate of DDLs and DCLs to DDLs, DCLs, and DMLs of user loads at the query layer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time amount of data to be flushed to disks during synchronization",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4128,6 +4169,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of physical reads per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4225,6 +4267,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of physical writes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4322,6 +4365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of real-time online sessions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4419,6 +4463,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of real-time active sessions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4516,6 +4561,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time percentage of online sessions on a CN (of a distributed instance) or a primary DN (of a primary/standby instance)",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4613,6 +4659,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum execution duration of database transactions",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4710,6 +4757,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time size of WAL logs reserved in the replication slot of a primary DN",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4807,6 +4855,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time rate of xlogs on CNs or primary DNs",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4904,6 +4953,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time swap memory usage of the OS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5001,6 +5051,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time total swap memory size of the OS",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5098,6 +5149,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time thread pool usage on a CN and DN",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5195,6 +5247,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of sessions waiting for locks on a CN or primary DN. This metric is updated in real time",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5292,6 +5345,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Log difference between shards in the DR cluster and shards in the production cluster when streaming DR is enabled",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5389,6 +5443,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of the logs to be replayed of each shard in the DR cluster when streaming DR is enabled",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5486,6 +5541,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Rate at which logs of each shard in the DR cluster are flushed to disk when streaming DR is enabled",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5583,6 +5639,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Rate at which logs of each shard in the DR cluster are replayed when streaming DR is enabled",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5680,6 +5737,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time RPO of each shard when streaming DR is enabled",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5777,6 +5835,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time RTO of each shard when streaming DR is enabled",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5874,6 +5933,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of physical and logical replication slots that are inactive",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5971,6 +6031,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Difference between the number of replayed read replica logs and the number of received read replica logs",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6068,6 +6129,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of the CPU time devoted to processing application code",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6165,6 +6227,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of the CPU time devoted to processing kernel code",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6262,6 +6325,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is waiting for disk I/O operations to complete",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6359,6 +6423,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time number of xlogs in the data directory on a CN or DN",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6456,6 +6521,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time size of xlogs in the data directory on a CN or DN",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6553,6 +6619,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time, used dynamic memory of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6650,6 +6717,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time, dynamic memory usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6747,6 +6815,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time reporting of how many idle transactions there are for the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6844,6 +6913,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time number of slow SQL statements in the system database on the primary DN or CN in a measurement period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6941,6 +7011,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time number of slow SQL statements in the user database on the primary DN or CN in a measurement period",
       "fieldConfig": {
         "defaults": {
           "color": {

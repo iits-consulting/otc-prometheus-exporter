@@ -154,6 +154,7 @@ type Target struct {
 }
 type Panel struct {
 	Datasource  Datasource  `json:"datasource"`
+	Description string      `json:"description,omitempty"`
 	FieldConfig FieldConfig `json:"fieldConfig"`
 	GridPos     GridPos     `json:"gridPos"`
 	ID          int         `json:"id"`

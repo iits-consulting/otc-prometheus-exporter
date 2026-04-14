@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of I/O requests processed by the system in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Incoming traffic in bytes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Outgoing traffic in bytes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of connections that attempt to connect to the MySQL server",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of current active connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Query times of SQL statements (including stored procedures) per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Execution times of submitted and rollback transactions per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of idle pages to the total number of buffer pool pages in the InnoDB buffer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of read hits to read requests in the InnoDB buffer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Ratio of dirty data to used pages in the InnoDB buffer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of read bytes per second in the InnoDB buffer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write bytes per second in the InnoDB buffer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that InnoDB reads data from files per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that InnoDB writes data to files per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of InnoDB log write requests per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of InnoDB physical write times to log files per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of completed fsync() write times to InnoDB log files per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of temporary tables automatically created on hard disks when MySQL statements are executed",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of temporary tables created on hard disks per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "MyISAM key buffer usage",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "MyISAM key buffer write hit ratio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "MyISAM key buffer read hit ratio",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that indexes are written to disks per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that indexes are read from disks per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of requests for writing indexes into the MyISAM buffer pool per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of requests for reading indexes from the MyISAM buffer pool per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of DELETE statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of INSERT statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of INSERT_SELECT statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of REPLACE statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of REPLACE_SELECTION statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of SELECT statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of UPDATE statements executed per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of rows deleted from the InnoDB table per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of rows inserted into the InnoDB table per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of rows read from the InnoDB table per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of rows updated into the InnoDB table per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Storage space usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total storage space of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4128,6 +4169,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used storage space of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4225,6 +4267,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes read from the disk per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4322,6 +4365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes written into the disk per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4419,6 +4463,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of processes to be written into the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4516,6 +4561,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percent of used MySQL connections to the total number of connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4613,6 +4659,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Real-time replication delay between standby DB instances or read replicas and primary DB instances, corresponding to seconds_behind_master.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4710,6 +4757,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of slow query logs generated per minute by MySQL",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4807,6 +4855,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time required for each disk read in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4904,6 +4953,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time required for each disk write in a specified period",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5001,6 +5051,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Virtual memory area size of an RDS process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5098,6 +5149,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of threads in a process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5195,6 +5247,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Peak physical memory usage of an RDS process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5292,6 +5345,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Peak virtual memory usage of an RDS process",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5389,6 +5443,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of CPU time during which I/O requests were issued to the device",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5486,6 +5541,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average wait time of transactions in semi-synchronous mode",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5583,6 +5639,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average replication delay within 60s between standby DB instances or read replicas and primary DB instances, corresponding to seconds_behind_master.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5680,6 +5737,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "SWAP usage of the monitored object",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5777,6 +5835,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of InnoDB row lock waits",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5874,6 +5933,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes received by the database per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -5971,6 +6031,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes sent from the database per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6068,6 +6129,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data volume read by InnoDB per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6165,6 +6227,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Data volume written by InnoDB per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6262,6 +6325,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Size of redo logs written per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6359,6 +6423,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of innodb_buffer_pool read requests per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6456,6 +6521,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of innodb_buffer_pool write requests per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6553,6 +6619,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of innodb_buffer_pool page flushes per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6650,6 +6717,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Times of transaction logs flushed to disks due to insufficient log buffer",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6747,6 +6815,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of temporary tables created per second",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6844,6 +6913,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of waiting threads",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -6941,6 +7011,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average wait time of InnoDB row locks",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7038,6 +7109,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of current InnoDB row lock waits",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7135,6 +7207,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of MDL locks",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7232,6 +7305,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "When InnoDB needs to read or create a page and no clean pages are available, InnoDB flushes some dirty pages first and waits for that operation to finish. This counter counts instances of these waits.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7329,6 +7403,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Usage of active connections",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7426,6 +7501,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of times that the log buffer was too small and a wait was required for it to be flushed before continuing",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -7523,6 +7599,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Maximum duration for starting a transaction\n\nA complete long transaction is counted only when the **BEGIN** and **COMMIT** commands exist before and after the related operation commands, respectively.",
       "fieldConfig": {
         "defaults": {
           "color": {

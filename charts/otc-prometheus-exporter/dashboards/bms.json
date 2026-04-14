@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that CPU is idle\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s) id** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is used by other processes\n\nFormula:\n\n**Other Process CPU Usage** = 1- **Idle CPU Usage** - **Kernel Space CPU Usage** - **User Space CPU Usage**\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is used by kernel space\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s) sy** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is used by user space\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s) us** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU usage of the monitored object\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s)** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is used by the Nice process\n\nCheck the metric value changes in the **/proc/stat** file in a collection period. Run the **top** command to check the **%Cpu(s) ni** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time during which the CPU is waiting for I/O operations to complete\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s) wa** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is servicing interrupts\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s) hi** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -927,6 +935,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of time that the CPU is servicing software interrupts\n\nCheck the metric value changes in the **/proc/stat** file in a collection period.\n\nRun the **top** command to check the **%Cpu(s) si** value.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1024,6 +1033,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU load averaged from the last 1 minute\n\nObtain its value by dividing the **load1/** value in **/proc/loadavg** by the number of logical CPUs.\n\nRun the **top** command to check the **load1** value.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1121,6 +1131,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU load averaged from the last 5 minutes\n\nObtain its value by dividing the **load5/** value in **/proc/loadavg** by the number of logical CPUs.\n\nRun the **top** command to check the **load5** value in the **/proc/loadavg** file.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1218,6 +1229,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "CPU load averaged from the last 15 minutes\n\nObtain its value by dividing the **load15/** value in **/proc/loadavg** by the number of logical CPUs.\n\nRun the **top** command to check the **load15** value in the **/proc/loadavg** file.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1315,6 +1327,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Available memory size of the monitored object\n\nObtain the **MemAvailable** value by checking the file **/proc/meminfo**. If it is not displayed in the file:\n\n**MemAvailable** = **MemFree** + **Buffers + Cached**\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1412,6 +1425,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory usage of the monitored object\n\nObtain its value by checking the file **/proc/meminfo**. **Memory Usage** = (**MemTotal** - **MemAvailable**)/**MemTotal**\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1509,6 +1523,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Amount of memory that is not being used\n\nObtain its value by checking the file **/proc/meminfo**.\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1606,6 +1621,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory that is being used for buffers\n\nObtain its value by checking the file **/proc/meminfo**.\n\nRun the **top** command to check the **KiB Mem:buffers** value.\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1703,6 +1719,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Memory that is being used for file caches\n\nObtain its value by checking the file **/proc/meminfo**.\n\nRun the **top** command to check the **KiB Swap:cached Mem** value.\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1800,6 +1817,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Available disk space of the monitored object\n\nRun the **df -h** command to check the data in the **Avail** column.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1897,6 +1915,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk storage capacity of the monitored object\n\nRun the **df -h** command to check the data in the **Size** column.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1994,6 +2013,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Used disk space of the monitored object\n\nRun the **df -h** command to check the data in the **Used** column.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: GB",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2091,6 +2111,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk usage of the monitored object. It is calculated as follows: **Disk Usage** = **Used Disk Space**/**Disk Storage Capacity**.\n\n**Disk Usage** = **Used Disk Space**/**Disk Storage Capacity**\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2188,6 +2209,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Volume of data read from the monitored object per second\n\nThe disk read rate is calculated by checking data changes in the sixth column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: byte/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2285,6 +2307,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of read requests sent to the monitored object per second\n\nThe disk read requests are calculated by checking data changes in the fourth column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: request/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2382,6 +2405,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Volume of data written to the monitored object per second\n\nThe disk write rate is calculated by checking data changes in the tenth column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: byte/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2479,6 +2503,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of write requests sent to the monitored object per second\n\nThe disk write requests are calculated by checking data changes in the eighth column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: request/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2576,6 +2601,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average amount of time that read requests have waited on the disks\n\nThe average read request time is calculated by checking data changes in the seventh column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: ms/count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2673,6 +2699,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average amount of time that write requests have waited on the disks\n\nThe average write request time is calculated by checking data changes in the eleventh column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: ms/count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2770,6 +2797,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Disk I/O usage of the monitored object\n\nCheck the data changes in the thirteenth column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2867,6 +2895,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of read or write requests to be processed for the monitored disk in the monitoring period\n\nThe average disk queue length is calculated by checking data changes in the fourteenth column of the corresponding device in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: count",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2964,6 +2993,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of bytes in an I/O write for the monitored disk in the monitoring period\n\nThe average disk write size is calculated by dividing the data changes in the tenth column of the corresponding device by that of the eighth column in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: KB/op",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3061,6 +3091,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average number of bytes in an I/O read for the monitored disk in the monitoring period\n\nThe average disk read size is calculated by dividing the data changes in the sixth column of the corresponding device by that of the fourth column in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: KB/op",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3158,6 +3189,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Average time in an I/O read or write for the monitored disk in the monitoring period\n\nThe average disk I/O service time is calculated by dividing the data changes in the thirteenth column of the corresponding device by the sum of data changes in the fourth and eighth columns in the **/proc/diskstats** file in a collection period.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: ms/op",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3255,6 +3287,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Read and write status of the mounted file system of the monitored object Possible values are **0** (read and write) and **1** (read only).\n\nCheck file system information in the fourth column in the **/proc/mounts** file.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3352,6 +3385,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Total number of index nodes on the disk Run the **df -i** command to check information in the **Inodes** column.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3449,6 +3483,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of used index nodes on the disk\n\nRun the **df -i** command to check data in the **IUsed** column.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3546,6 +3581,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of used index nodes on the disk\n\nRun the **df -i** command to check data in the **IUse%** column.\n\nThe path of the mount point prefix cannot exceed 64 characters. It must start with a letter, and contain only digits, letters, hyphens (-), dots (.), and swung dashes (~).\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3643,6 +3679,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bits received by this NIC per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3740,6 +3777,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bits sent by this NIC per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3837,6 +3875,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets received by this NIC per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3934,6 +3973,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets sent by this NIC per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: count/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4031,6 +4071,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of receive errors detected by this NIC per second\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4128,6 +4169,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of transmit errors detected by this NIC per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4225,6 +4267,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of packets discarded by this NIC to the total number of packets received by the NIC per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -4322,6 +4365,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Percentage of packets transmitted by this NIC which were dropped per second\n\nCheck metric value changes in the **/proc/net/dev** file in a collection period.\n\nUnit: percent",
       "fieldConfig": {
         "defaults": {
           "color": {

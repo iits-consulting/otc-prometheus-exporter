@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Bit rate for inbound data to the Direct Connect side of a connection\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Bit rate for outbound data from the Direct Connect side of a connection\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes for inbound data to the Direct Connect side of a connection\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of bytes for outbound data from the Direct Connect side of a connection\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Packet rate for inbound data to the Direct Connect side of a connection\n\nUnit: Packet/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Packet rate for outbound data from the Direct Connect side of a connection\n\nUnit: Packet/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -733,6 +739,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets for inbound data to the Direct Connect side of a connection\n\nUnit: Packet",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -830,6 +837,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Number of packets for outbound data from the Direct Connect side of a connection\n\nUnit: Packet",
       "fieldConfig": {
         "defaults": {
           "color": {

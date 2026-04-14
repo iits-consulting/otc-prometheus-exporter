@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Network rate of outbound traffic\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -248,6 +249,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Network rate of inbound traffic\n\nUnit: bit/s",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -345,6 +347,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Usage of outbound bandwidth in the unit of percent.\n\nOutbound bandwidth usage = Outbound bandwidth/Purchased bandwidth",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -442,6 +445,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Usage of inbound bandwidth in the unit of percent.\n\nInbound bandwidth usage = Inbound bandwidth/Purchased bandwidth",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -539,6 +543,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Network traffic going out of the cloud platform in a minute\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -636,6 +641,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Network traffic going into the cloud platform in a minute\n\nUnit: byte",
       "fieldConfig": {
         "defaults": {
           "color": {

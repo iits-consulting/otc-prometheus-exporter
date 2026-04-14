@@ -151,6 +151,7 @@
         "type": "prometheus",
         "uid": "${datasource}"
       },
+      "description": "Status of a VPN connection:\n\n-  **0**: not connected -  **1**: connected",
       "fieldConfig": {
         "defaults": {
           "color": {

@@ -120,7 +120,12 @@ func newMetricPanel(pc PanelConfig, id, x, y, w, h int) Panel {
 			Defaults: Defaults{
 				Color:    Color{Mode: "palette-classic"},
 				Custom:   defaultCustom(),
-				Mappings: []any{},
+				Mappings: func() []any {
+				if pc.Mappings != nil {
+					return pc.Mappings
+				}
+				return []any{}
+			}(),
 				Thresholds: Thresholds{
 					Mode:  "absolute",
 					Steps: convertThresholds(pc.Thresholds),
@@ -135,6 +140,7 @@ func newMetricPanel(pc PanelConfig, id, x, y, w, h int) Panel {
 			Legend:  Legend{Calcs: []any{}, DisplayMode: "list", Placement: "bottom", ShowLegend: true},
 			Tooltip: Tooltip{Mode: "single", Sort: "none"},
 		},
+		Description: pc.Description,
 		Targets: []Target{{
 			Datasource:          Datasource{Type: "prometheus", UID: "${datasource}"},
 			EditorMode:          "builder",

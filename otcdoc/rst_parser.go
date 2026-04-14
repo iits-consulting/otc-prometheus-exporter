@@ -171,29 +171,41 @@ func splitHeaderAndBody(tableLines []string) (headerLines []string, bodyRows [][
 }
 
 // extractCells extracts and joins the text content of each column across content lines.
+// Empty rows between content within a cell are treated as paragraph breaks (\n\n),
+// preserving the structure of RST table cells that use blank rows to separate sections.
 func extractCells(contentLines []string, colBounds []int) []string {
 	if len(colBounds) < 2 {
 		return nil
 	}
-	builders := make([]strings.Builder, len(colBounds)-1)
+	numCols := len(colBounds) - 1
+	builders := make([]strings.Builder, numCols)
+	lastEmpty := make([]bool, numCols)
 
 	for _, line := range contentLines {
-		for col := 0; col < len(colBounds)-1; col++ {
+		for col := 0; col < numCols; col++ {
 			start := colBounds[col] + 1
 			end := colBounds[col+1]
 			if start >= len(line) {
+				lastEmpty[col] = true
 				continue
 			}
 			if end > len(line) {
 				end = len(line)
 			}
 			part := strings.TrimSpace(line[start:end])
-			if part != "" {
-				if builders[col].Len() > 0 {
+			if part == "" {
+				lastEmpty[col] = true
+				continue
+			}
+			if builders[col].Len() > 0 {
+				if lastEmpty[col] {
+					builders[col].WriteString("\n\n")
+				} else {
 					builders[col].WriteByte(' ')
 				}
-				builders[col].WriteString(part)
 			}
+			builders[col].WriteString(part)
+			lastEmpty[col] = false
 		}
 	}
 

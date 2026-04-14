@@ -12,6 +12,22 @@ func statusDashboard() grafana.DashboardConfig {
 		{Color: "red", Value: 1},
 	}
 
+	// Maps 0 → "All healthy" so it's clear the service is monitored and all resources are OK.
+	// Values > 0 display as-is (count of unhealthy resources).
+	// No data means the service is not monitored / has no resources.
+	healthyMapping := []any{
+		map[string]any{
+			"type": "value",
+			"options": map[string]any{
+				"0": map[string]any{
+					"text":  "All healthy",
+					"color": "green",
+					"index": 0,
+				},
+			},
+		},
+	}
+
 	// unhealthy returns a Stat panel showing count of resources with status==1.
 	// Metric is intentionally empty: these custom exprs span multiple namespaces,
 	// so no single resource_name template variable would be meaningful.
@@ -23,6 +39,7 @@ func statusDashboard() grafana.DashboardConfig {
 			Expr:       `count(` + metric + ` == 1) or vector(0)`,
 			Legend:     "Unhealthy",
 			Thresholds: unhealthyThresholds,
+			Mappings:   healthyMapping,
 		}
 	}
 
