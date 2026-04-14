@@ -37,4 +37,6 @@ services:
       - "3000:3000"
     volumes:
       - "./docker.local/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources"
+      - "./docker.local/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards"
+      - "./charts/otc-prometheus-exporter/dashboards:/etc/grafana/dashboards"
       - "./docker.local/grafana/data:/var/lib/grafana"

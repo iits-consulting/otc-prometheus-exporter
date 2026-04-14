@@ -170,6 +170,13 @@ scrape_configs:
     static_configs:
       - targets: ["otc-prometheus-exporter:39100"]
 
+  - job_name: "otc-dcaas"
+    metrics_path: /metrics
+    params:
+      namespace: ["SYS.DCAAS"]
+    static_configs:
+      - targets: ["otc-prometheus-exporter:39100"]
+
   # --- Alarms ---
   - job_name: "otc-alarm"
     metrics_path: /metrics
