@@ -118,14 +118,14 @@ func newMetricPanel(pc PanelConfig, id, x, y, w, h int) Panel {
 		Datasource: Datasource{Type: "prometheus", UID: "${datasource}"},
 		FieldConfig: FieldConfig{
 			Defaults: Defaults{
-				Color:    Color{Mode: "palette-classic"},
-				Custom:   defaultCustom(),
+				Color:  Color{Mode: "palette-classic"},
+				Custom: defaultCustom(),
 				Mappings: func() []any {
-				if pc.Mappings != nil {
-					return pc.Mappings
-				}
-				return []any{}
-			}(),
+					if pc.Mappings != nil {
+						return pc.Mappings
+					}
+					return []any{}
+				}(),
 				Thresholds: Thresholds{
 					Mode:  "absolute",
 					Steps: convertThresholds(pc.Thresholds),
