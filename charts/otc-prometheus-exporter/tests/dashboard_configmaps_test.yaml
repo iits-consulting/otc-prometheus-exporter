@@ -15,6 +15,7 @@ tests:
       dashboards:
         enabled: true
         selfMonitoring: true
+        serviceHealth: false
       targets:
         defaults:
           enabled: false
@@ -31,6 +32,7 @@ tests:
       dashboards:
         enabled: true
         selfMonitoring: false
+        serviceHealth: false
       targets:
         defaults:
           enabled: false
@@ -42,6 +44,40 @@ tests:
   - it: skips namespace with dashboard set to false
     values:
       - values/only-ecs-no-dashboard.yaml
+    set:
+      dashboards:
+        serviceHealth: false
+    asserts:
+      - hasDocuments:
+          count: 0
+
+  - it: renders only serviceHealth dashboard when serviceHealth is true and selfMonitoring is false
+    set:
+      dashboards:
+        enabled: true
+        selfMonitoring: false
+        serviceHealth: true
+      targets:
+        defaults:
+          enabled: false
+          dashboard: false
+    asserts:
+      - hasDocuments:
+          count: 1
+      - matchRegex:
+          path: metadata.name
+          pattern: dashboard-status$
+
+  - it: skips serviceHealth dashboard when serviceHealth is false
+    set:
+      dashboards:
+        enabled: true
+        selfMonitoring: false
+        serviceHealth: false
+      targets:
+        defaults:
+          enabled: false
+          dashboard: false
     asserts:
       - hasDocuments:
           count: 0
