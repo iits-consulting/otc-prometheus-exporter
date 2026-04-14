@@ -1,0 +1,52 @@
+name: CI
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  commitlint:
+    name: Lint PR Title
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      pull-requests: read
+    steps:
+      - uses: amannn/action-semantic-pull-request@v6
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  quality-gates:
+    uses: ./.github/workflows/quality-gates.yaml
+
+  mod-tidy-check:
+    name: Go Mod Tidy
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-go@v6
+      - run: make tidy
+      - run: git diff --exit-code go.mod go.sum || (echo "go.mod/go.sum out of date. Run 'go mod tidy' and commit the result." && exit 1)
+
+  helm-docs-check:
+    name: Helm Docs Up To Date
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Regenerate docs
+        run: make helm-docs
+        env:
+          HELM_DOCS_IMAGE: jnorwood/helm-docs:v1.14.2
+
+      - name: Fail if README.md is outdated
+        run: |
+          git diff --exit-code charts/otc-prometheus-exporter/README.md \
+            || (echo "README.md is out of date. Run 'make helm-docs' locally and commit the result." && exit 1)

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://raw.githubusercontent.com/googleapis/release-please/main/schemas/config.json",
+  "packages": {
+    ".": {
+      "release-type": "go",
+      "include-component-in-tag": false,
+      "bump-minor-pre-major": true,
+      "exclude-paths": [
+        ".github",
+        ".goreleaser.yaml",
+        ".gitignore",
+        ".env.template",
+        "CONTRIBUTING.md",
+        "LICENSE",
+        "Makefile",
+        "README.md",
+        "docker-compose.yml",
+        "docker.local",
+        "img"
+      ],
+      "extra-files": [
+        {
+          "type": "yaml",
+          "path": "charts/otc-prometheus-exporter/Chart.yaml",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "yaml",
+          "path": "charts/otc-prometheus-exporter/Chart.yaml",
+          "jsonpath": "$.appVersion"
+        }
+      ]
+    }
+  }
+}
