@@ -20,8 +20,10 @@ func exporterDashboard() grafana.DashboardConfig {
 			}},
 			{Title: "Scrape Results", Panels: []grafana.PanelConfig{
 				{Metric: "otc_scrape_families_count", Title: "Families per Namespace", Unit: "short", Type: grafana.TimeSeries,
+					Expr:   `otc_scrape_families_count`,
 					Legend: "{{namespace}}"},
 				{Metric: "otc_scrape_metrics_count", Title: "Metrics per Namespace", Unit: "short", Type: grafana.TimeSeries,
+					Expr:   `otc_scrape_metrics_count`,
 					Legend: "{{namespace}}"},
 			}},
 			{Title: "HTTP Request Duration", Panels: []grafana.PanelConfig{
@@ -52,14 +54,20 @@ func exporterDashboard() grafana.DashboardConfig {
 					Legend: "{{host}}"},
 			}},
 			{Title: "Go Runtime", Panels: []grafana.PanelConfig{
-				{Metric: "go_goroutines", Title: "Goroutines", Unit: "short", Type: grafana.TimeSeries},
-				{Metric: "go_memstats_alloc_bytes", Title: "Memory Allocated", Unit: "bytes", Type: grafana.TimeSeries},
-				{Metric: "go_gc_duration_seconds", Title: "GC Duration", Unit: "s", Type: grafana.TimeSeries},
+				{Metric: "go_goroutines", Title: "Goroutines", Unit: "short", Type: grafana.TimeSeries,
+					Expr: `go_goroutines`},
+				{Metric: "go_memstats_alloc_bytes", Title: "Memory Allocated", Unit: "bytes", Type: grafana.TimeSeries,
+					Expr: `go_memstats_alloc_bytes`},
+				{Metric: "go_gc_duration_seconds", Title: "GC Duration", Unit: "s", Type: grafana.TimeSeries,
+					Expr: `go_gc_duration_seconds`},
 			}},
 			{Title: "Process", Panels: []grafana.PanelConfig{
-				{Metric: "process_cpu_seconds_total", Title: "CPU Usage", Unit: "s", Type: grafana.TimeSeries},
-				{Metric: "process_resident_memory_bytes", Title: "Resident Memory", Unit: "bytes", Type: grafana.TimeSeries},
-				{Metric: "process_open_fds", Title: "Open File Descriptors", Unit: "short", Type: grafana.TimeSeries},
+				{Metric: "process_cpu_seconds_total", Title: "CPU Usage", Unit: "s", Type: grafana.TimeSeries,
+					Expr: `rate(process_cpu_seconds_total[5m])`},
+				{Metric: "process_resident_memory_bytes", Title: "Resident Memory", Unit: "bytes", Type: grafana.TimeSeries,
+					Expr: `process_resident_memory_bytes`},
+				{Metric: "process_open_fds", Title: "Open File Descriptors", Unit: "short", Type: grafana.TimeSeries,
+					Expr: `process_open_fds`},
 			}},
 		},
 	}

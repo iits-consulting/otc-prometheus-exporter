@@ -44,6 +44,8 @@ func buildCSSNameMap(clusters []cssClusters.Cluster) map[string]string {
 // convertCSSClustersToMetrics creates a MetricFamily "css_cluster_status" with
 // a gauge metric per cluster. The value is 0.0 for status "200" (available),
 // 1.0 otherwise (OTC convention: 0=normal, 1=abnormal).
+// CSS uses HTTP-like numeric status codes as strings (e.g. "200" = healthy),
+// unlike most OTC services which use word statuses ("ACTIVE", "AVAILABLE").
 func convertCSSClustersToMetrics(clusters []cssClusters.Cluster) []*dto.MetricFamily {
 	metrics := make([]*dto.Metric, 0, len(clusters))
 	for _, c := range clusters {
