@@ -8,11 +8,14 @@ on:
 permissions:
   contents: write
   pull-requests: write
+  packages: write
 
 jobs:
   release-please:
     runs-on: ubuntu-24.04
     outputs:
+      releases_created: ${{ steps.release.outputs.releases_created }}
+      tag_name: ${{ steps.release.outputs.tag_name }}
       prs: ${{ steps.release.outputs.prs }}
     steps:
       - uses: googleapis/release-please-action@v4
@@ -27,7 +30,7 @@ jobs:
     needs: release-please
     if: needs.release-please.outputs.prs != '[]' && needs.release-please.outputs.prs != ''
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           ref: ${{ fromJson(needs.release-please.outputs.prs)[0].headBranchName }}
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -44,3 +47,13 @@ jobs:
             git commit -m "chore: update helm-docs" &&
             git push
           )
+
+  release:
+    needs: release-please
+    if: needs.release-please.outputs.releases_created == 'true'
+    uses: ./.github/workflows/release.yaml
+    with:
+      tag: ${{ needs.release-please.outputs.tag_name }}
+    permissions:
+      contents: write
+      packages: write
