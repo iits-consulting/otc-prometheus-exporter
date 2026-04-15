@@ -59,8 +59,9 @@ func main() {
 	)
 
 	var rootCmd = &cobra.Command{
-		Use:   "otc-prometheus-exporter",
-		Short: "Exports OTC Cloud Eye metrics as Prometheus metrics",
+		Use:     "otc-prometheus-exporter",
+		Short:   "Exports OTC Cloud Eye metrics as Prometheus metrics",
+		Version: Version,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return cmdPackage.InitializeConfig(cmd, map[string]string{
 				"port":              "PORT",
