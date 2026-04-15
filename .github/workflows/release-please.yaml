@@ -13,7 +13,7 @@ jobs:
   release-please:
     runs-on: ubuntu-24.04
     outputs:
-      pr_branch: ${{ steps.release.outputs.pr_branch }}
+      prs: ${{ steps.release.outputs.prs }}
     steps:
       - uses: googleapis/release-please-action@v4
         id: release
@@ -25,11 +25,11 @@ jobs:
   helm-docs:
     runs-on: ubuntu-24.04
     needs: release-please
-    if: needs.release-please.outputs.pr_branch != ''
+    if: needs.release-please.outputs.prs != '[]' && needs.release-please.outputs.prs != ''
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ needs.release-please.outputs.pr_branch }}
+          ref: ${{ fromJson(needs.release-please.outputs.prs)[0].headBranchName }}
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run helm-docs
         run: make helm-docs
