@@ -12,9 +12,35 @@ permissions:
 jobs:
   release-please:
     runs-on: ubuntu-24.04
+    outputs:
+      pr_branch: ${{ steps.release.outputs.pr_branch }}
     steps:
       - uses: googleapis/release-please-action@v4
+        id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
+
+  helm-docs:
+    runs-on: ubuntu-24.04
+    needs: release-please
+    if: needs.release-please.outputs.pr_branch != ''
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.release-please.outputs.pr_branch }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run helm-docs
+        run: make helm-docs
+        env:
+          HELM_DOCS_IMAGE: jnorwood/helm-docs:v1.14.2
+      - name: Commit if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet charts/otc-prometheus-exporter/README.md || (
+            git add charts/otc-prometheus-exporter/README.md &&
+            git commit -m "chore: update helm-docs" &&
+            git push
+          )
