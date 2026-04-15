@@ -1,5 +1,41 @@
 # Changelog
 
+## [2.0.0](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v1.3.0...v2.0.0) (2026-04-15)
+
+
+### ⚠ BREAKING CHANGES
+
+* extend providers and dashboards ([#76](https://github.com/iits-consulting/otc-prometheus-exporter/issues/76))
+
+### Features
+
+* Add resource name resolutions for ELB, DCS, VPC ([#39](https://github.com/iits-consulting/otc-prometheus-exporter/issues/39)) ([4beee5b](https://github.com/iits-consulting/otc-prometheus-exporter/commit/4beee5bc18a3759c986bb91005af278b020b36de))
+* AK/SK Authentication ([#6](https://github.com/iits-consulting/otc-prometheus-exporter/issues/6)) ([e0452ff](https://github.com/iits-consulting/otc-prometheus-exporter/commit/e0452ffa02630192466e07ac44a947350553446b))
+* **chart:** add support for default and additional Prometheus rules ([#69](https://github.com/iits-consulting/otc-prometheus-exporter/issues/69)) ([f6d4049](https://github.com/iits-consulting/otc-prometheus-exporter/commit/f6d4049fe63316995be58eaf602f541efa257062))
+* expose version via --version flag ([#86](https://github.com/iits-consulting/otc-prometheus-exporter/issues/86)) ([be51adb](https://github.com/iits-consulting/otc-prometheus-exporter/commit/be51adba09f48905ef342bf94f39eceda2e4aca5))
+* extend providers and dashboards ([#76](https://github.com/iits-consulting/otc-prometheus-exporter/issues/76)) ([0472c91](https://github.com/iits-consulting/otc-prometheus-exporter/commit/0472c9148ee9baa95b024b8abf28a272994629fc))
+* **grafana:** generate dashboards for all namespaces based on the official documentation ([#47](https://github.com/iits-consulting/otc-prometheus-exporter/issues/47)) ([bf0b06d](https://github.com/iits-consulting/otc-prometheus-exporter/commit/bf0b06d3cfcc367af0c82176f72b8d8ac57913f7))
+* **helm:** adding prometheus service monitor ([7f7f601](https://github.com/iits-consulting/otc-prometheus-exporter/commit/7f7f601d7772bc22c3daee715477c91695ecd0a7))
+* **logging:** Add zap logging and fix some small issues ([#38](https://github.com/iits-consulting/otc-prometheus-exporter/issues/38)) ([e6c7380](https://github.com/iits-consulting/otc-prometheus-exporter/commit/e6c73802f9ed52b6b829c8eb81d68b62a1bbc86f))
+* rewrite exporter with per-namespace on-demand scraping ([#75](https://github.com/iits-consulting/otc-prometheus-exporter/issues/75)) ([88223ee](https://github.com/iits-consulting/otc-prometheus-exporter/commit/88223ee40fdab0d2e0aa22c92005368354e18e0a))
+
+
+### Bug Fixes
+
+* **batchdl:** Don't panic if batch download request fails ([eb9195c](https://github.com/iits-consulting/otc-prometheus-exporter/commit/eb9195c0b4fe32134589d12cce0fad22f3a608fe))
+* **chart:** update helm-docs chartInstallation section ([c939221](https://github.com/iits-consulting/otc-prometheus-exporter/commit/c939221d9c2bfa27d1885df7226dd4c1726719a1))
+* **ci:** fix cli arguments ([5ef231b](https://github.com/iits-consulting/otc-prometheus-exporter/commit/5ef231b93f588a38f17215d79d63d0229dbbc583))
+* **ci:** fix pipeline for helm documentation autogeneration  ([#46](https://github.com/iits-consulting/otc-prometheus-exporter/issues/46)) ([b234475](https://github.com/iits-consulting/otc-prometheus-exporter/commit/b234475ba13ccd08332ab35a702e562ef711b61b))
+* **ci:** updated main path in goreleaser conv ([3337796](https://github.com/iits-consulting/otc-prometheus-exporter/commit/333779663bc5fe446dd9c197492412754cf91a2a))
+* Comment out default env variable to allow override when used as helm dependency ([5c876b1](https://github.com/iits-consulting/otc-prometheus-exporter/commit/5c876b1fac9e37e52e08cb0aaed148fd8d587cbd))
+* don't add domain name when authenticating with AK/SK ([bc35f1d](https://github.com/iits-consulting/otc-prometheus-exporter/commit/bc35f1d20869ef38e715734b82f793bd529ddf09))
+* don't add domain name when authenticating with AK/SK ([986222f](https://github.com/iits-consulting/otc-prometheus-exporter/commit/986222fac1ad5ea5cdea40e134d0db89502e38ef))
+* increase start time to fetch dcs metrics too ([#36](https://github.com/iits-consulting/otc-prometheus-exporter/issues/36)) ([e01ddb6](https://github.com/iits-consulting/otc-prometheus-exporter/commit/e01ddb66aa990f59da89e17d2bff8273170432ea))
+* **lint:** fix linting issue ([273e9d8](https://github.com/iits-consulting/otc-prometheus-exporter/commit/273e9d8be27d728084dd20197427aa58d2762afb))
+* Move name overrides in values file to the correct level ([e7fef61](https://github.com/iits-consulting/otc-prometheus-exporter/commit/e7fef6150123522a76ff27d8cbc15deb81ea2726))
+* Update chart README.md to reflect movement of name override variable ([5f46279](https://github.com/iits-consulting/otc-prometheus-exporter/commit/5f46279328c88e1fa22203c70b3aa698da4ce439))
+* Use correct property for  envFromSecret ([4a47776](https://github.com/iits-consulting/otc-prometheus-exporter/commit/4a47776e31cfd48f25690944616f6d5d88d0af73))
+
 ## v1.0.0 — Complete Rewrite
 
 This is a full rewrite of the exporter. The architecture changed fundamentally — please read the breaking changes carefully before upgrading.
