@@ -51,6 +51,8 @@ func ParseHuaweiMarkdownMetrics(data []byte) []MetricDocumentationEntry {
 		}
 		cells := strings.Split(line, "|")
 		// After split on "|": cells[0]="" cells[1]=dim cells[2]=metric_id cells[3]=desc cells[4]=unit cells[5]=""
+		// Column positions are fixed based on the known Huawei catalog format. If the upstream
+		// table gains or reorders columns this will silently read the wrong values.
 		if len(cells) < 5 {
 			continue
 		}

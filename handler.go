@@ -49,8 +49,6 @@ func metricsHandler(registry *provider.Registry, client *otcclient.Client, logge
 		families, err := prov.Collect(ctx, scrapeClient)
 		duration := time.Since(start)
 
-		provider.EnrichWithHelp(families)
-
 		if err != nil {
 			scrapeDuration.WithLabelValues(namespace, "false").Observe(duration.Seconds())
 			var notFound *provider.ErrNamespaceNotFound
@@ -69,6 +67,8 @@ func metricsHandler(registry *provider.Registry, client *otcclient.Client, logge
 			_, _ = fmt.Fprintf(w, "collect error: %v\n", err)
 			return
 		}
+
+		provider.EnrichWithHelp(families)
 
 		metricCount := 0
 		for _, fam := range families {

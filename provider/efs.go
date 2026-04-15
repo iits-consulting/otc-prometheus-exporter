@@ -49,6 +49,8 @@ func buildEFSNameMap(turbos []sfsTurboShares.Turbo) map[string]string {
 // convertEFSFileSysToMetrics creates a MetricFamily "efs_filesystem_status" with
 // a gauge metric per file system. The value is 0.0 for status "200" (available),
 // 1.0 otherwise (OTC convention: 0=normal, 1=abnormal).
+// EFS (SFS Turbo) uses HTTP-like numeric status codes as strings (e.g. "200" = healthy),
+// unlike most OTC services which use word statuses ("ACTIVE", "AVAILABLE").
 func convertEFSFileSysToMetrics(turbos []sfsTurboShares.Turbo) []*dto.MetricFamily {
 	metrics := make([]*dto.Metric, 0, len(turbos))
 	for _, t := range turbos {
