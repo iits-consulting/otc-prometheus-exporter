@@ -101,22 +101,31 @@ Assign the **Tenant Guest** role at both **global** and **regional project** sco
 
 **CES ReadOnlyAccess** is the core requirement -- it covers reading CES metrics for all namespaces. Additional per-service policies are only needed for services where the exporter calls the service-specific API:
 
-| Policy                         | Needed for                                                                                                                      |
-|--------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
-| **CES ReadOnlyAccess**         | CES metrics for all namespaces (required)                                                                                       |
-| **ECS ReadOnlyAccess**         | List servers (name mapping + instance status)                                                                                   |
-| **AOM ReadOnlyAccess**         | AOM host metrics with `ecs_aom_` prefix (required for per-device/per-NIC/per-mountpoint metrics when ECS enrichment is enabled) |
-| **RDS ReadOnlyAccess**         | List RDS instances (name mapping + status/nodes)                                                                                |
-| **ELB ReadOnlyAccess**         | List load balancers (name mapping + operating status)                                                                           |
-| **DMS ReadOnlyAccess**         | List Kafka instances (name mapping + storage/partitions)                                                                        |
-| **NAT ReadOnlyAccess**         | List NAT gateways (name mapping + status)                                                                                       |
-| **DCS ReadOnlyAccess**         | List Redis instances (name mapping + status/capacity)                                                                           |
-| **DDS ReadOnlyAccess**         | List MongoDB instances (name mapping + node status)                                                                             |
-| **VPC ReadOnlyAccess**         | List bandwidths (name mapping + size)                                                                                           |
-| **CBR ReadOnlyAccess**         | List backups (status/size)                                                                                                      |
-| **AutoScaling ReadOnlyAccess** | List scaling groups (instance counts/status)                                                                                    |
+| Policy                              | Needed for                                                                                                                      |
+|-------------------------------------|---------------------------------------------------------------------------------------------------------------------------------|
+| **CES ReadOnlyAccess**              | CES metrics for all namespaces (required)                                                                                       |
+| **ECS ReadOnlyAccess**              | List servers (name mapping + instance status)                                                                                   |
+| **AOM ReadOnlyAccess**              | AOM host metrics with `ecs_aom_` prefix (required for per-device/per-NIC/per-mountpoint metrics when ECS enrichment is enabled) |
+| **RDS ReadOnlyAccess**              | List RDS instances (name mapping + status/nodes)                                                                                |
+| **ELB ReadOnlyAccess**              | List load balancers (name mapping + operating status)                                                                           |
+| **DMS ReadOnlyAccess**              | List Kafka instances (name mapping + storage/partitions)                                                                        |
+| **NAT ReadOnlyAccess**              | List NAT gateways (name mapping + status)                                                                                       |
+| **DCS ReadOnlyAccess**              | List Redis instances (name mapping + status/capacity)                                                                           |
+| **DDS ReadOnlyAccess**              | List MongoDB instances (name mapping + node status)                                                                             |
+| **VPC ReadOnlyAccess**              | List bandwidths (name mapping + size)                                                                                           |
+| **CBR ReadOnlyAccess**              | List backups (status/size)                                                                                                      |
+| **AutoScaling ReadOnlyAccess**      | List scaling groups (instance counts/status)                                                                                    |
+| **BMS ReadOnlyAccess**              | List bare metal servers (name mapping + status)                                                                                 |
+| **EVS ReadOnlyAccess**              | List volumes (name mapping + status/size)                                                                                       |
+| **CSS ReadOnlyAccess**              | List Elasticsearch clusters (name mapping + status)                                                                             |
+| **DWS ReadOnlyAccess**              | List data warehouse clusters (name mapping + status)                                                                            |
+| **SFS ReadOnlyAccess**              | List file shares (name mapping + status)                                                                                        |
+| **SFS Turbo ReadOnlyAccess**        | List SFS Turbo shares (name mapping + status)                                                                                   |
+| **Direct Connect ReadOnlyAccess**   | List virtual gateways (name mapping + status)                                                                                   |
 
-CES-only namespaces (WAF, BMS, OBS, EVS, SFS, EFS, DWS, CSS, GaussDB, GaussDBv5, NoSQL, VPN) need **no additional policies** beyond CES ReadOnlyAccess.
+> **Note:** If the service API call fails (e.g. missing policy), enrichment degrades gracefully — the scrape still succeeds but resource names and `*_status` metrics will be absent for that namespace. A warning is logged.
+
+CES-only namespaces (WAF, OBS, GaussDB, GaussDBv5, NoSQL, VPN) need **no additional policies** beyond CES ReadOnlyAccess.
 
 All policies must be assigned at the **regional project** scope for the relevant region (`eu-de` or `eu-nl`).
 
@@ -173,6 +182,7 @@ targets:
 dashboards:
   enabled: true        # deploy dashboard ConfigMaps
   selfMonitoring: true # include the exporter self-monitoring dashboard
+  serviceHealth: true  # include the Service Health Overview dashboard (aggregates all *_status metrics)
 
 prometheusRules:
   enabled: true        # deploy PrometheusRule CRDs
@@ -211,6 +221,8 @@ This starts the exporter, Prometheus (localhost:9090), and Grafana (localhost:30
 3. On macOS: `xattr -d com.apple.quarantine otc-prometheus-exporter`
 4. `cp .env.template .env` and fill out the values
 5. Run: `env $(cat .env) ./otc-prometheus-exporter`
+
+To check the installed version: `./otc-prometheus-exporter --version`
 
 ## References
 
