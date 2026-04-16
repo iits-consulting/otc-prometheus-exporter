@@ -137,5 +137,6 @@ jobs:
           charts_dir: charts
           skip_existing: true
           mark_as_latest: false
+          release-notes-file: RELEASE_NOTES.md
         env:
           CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
