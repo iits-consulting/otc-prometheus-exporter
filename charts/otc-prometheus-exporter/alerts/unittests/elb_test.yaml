@@ -34,7 +34,7 @@ tests:
 
   - input_series:
       - series: 'elb_l4_con_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer4ConnectionUsage
@@ -48,7 +48,7 @@ tests:
 
   - input_series:
       - series: 'elb_l4_in_bps_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer4InboundBandwidthUsage
@@ -62,7 +62,7 @@ tests:
 
   - input_series:
       - series: 'elb_l4_out_bps_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer4OutboundBandwidthUsage
@@ -76,7 +76,7 @@ tests:
 
   - input_series:
       - series: 'elb_l7_con_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer7ConnectionUsage
@@ -90,7 +90,7 @@ tests:
 
   - input_series:
       - series: 'elb_l7_in_bps_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer7InboundBandwidthUsage
@@ -104,7 +104,7 @@ tests:
 
   - input_series:
       - series: 'elb_l7_out_bps_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer7OutboundBandwidthUsage
@@ -118,7 +118,7 @@ tests:
 
   - input_series:
       - series: 'elb_l7_ncps_usage{loadbalancer="elb1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: ELBHighLayer7NewConnectionUsage

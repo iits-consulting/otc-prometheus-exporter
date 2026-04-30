@@ -6,7 +6,7 @@ evaluation_interval: 1m
 tests:
   - input_series:
       - series: 'rds_rds001_cpu_util{instance="db1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLHighCPUUtilization
@@ -20,7 +20,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds001_cpu_util{instance="db1"}'
-        values: '0.95'
+        values: '95'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLVeryHighCPUUtilization
@@ -34,7 +34,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds002_mem_util{instance="db1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLHighMemoryUtilization
@@ -48,7 +48,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds002_mem_util{instance="db1"}'
-        values: '0.95'
+        values: '95'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLVeryHighMemoryUtilization
@@ -62,7 +62,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds039_disk_util{instance="db1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLHighDiskUtilization
@@ -76,7 +76,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds039_disk_util{instance="db1"}'
-        values: '0.95'
+        values: '95'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLVeryHighDiskUtilization
@@ -122,7 +122,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds083_conn_usage{instance="db1"}'
-        values: '0.85'
+        values: '85'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLHighConnectionUsage
@@ -136,7 +136,7 @@ tests:
 
   - input_series:
       - series: 'rds_rds083_conn_usage{instance="db1"}'
-        values: '0.95'
+        values: '95'
     alert_rule_test:
       - eval_time: 1m
         alertname: PostgreSQLVeryHighConnectionUsage
