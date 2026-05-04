@@ -12,7 +12,6 @@ require (
 	github.com/spf13/viper v1.21.0
 	go.elastic.co/ecszap v1.0.3
 	go.uber.org/zap v1.27.1
-	golang.org/x/exp v0.0.0-20260410095643-746e56fc9e2f
 )
 
 require (
