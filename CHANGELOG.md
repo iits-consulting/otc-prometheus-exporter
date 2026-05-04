@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.1](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v2.0.0...v2.0.1) (2026-04-30)
+
+
+### Bug Fixes
+
+* correct ELB, RDS, and OBS alert thresholds for 0-100 percentage scale ([7630528](https://github.com/iits-consulting/otc-prometheus-exporter/commit/7630528af1935c1d4f73b6f9a7bb5ba3507218fd))
+
 ## [2.0.0](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v1.3.0...v2.0.0) (2026-04-15)
 
 > ⚠️ **Upgrading from v0.6.6? v1.x was never published — this is a direct jump.**

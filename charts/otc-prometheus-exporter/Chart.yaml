@@ -3,4 +3,4 @@ name: otc-prometheus-exporter
 description: Prometheus exporter for Open Telekom Cloud (OTC) metrics
 type: application
 version: 2.0.1
-appVersion: 2.0.0
+appVersion: 2.0.1
