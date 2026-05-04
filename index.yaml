@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   otc-prometheus-exporter:
   - apiVersion: v2
+    appVersion: 2.0.1
+    created: "2026-05-04T09:57:26.679650608Z"
+    description: Prometheus exporter for Open Telekom Cloud (OTC) metrics
+    digest: 1579c8babf4bc63c185d04d4b9048c718b18b753cbc61970facb1d9738d8b2c8
+    name: otc-prometheus-exporter
+    type: application
+    urls:
+    - https://github.com/iits-consulting/otc-prometheus-exporter/releases/download/otc-prometheus-exporter-2.0.1/otc-prometheus-exporter-2.0.1.tgz
+    version: 2.0.1
+  - apiVersion: v2
     appVersion: 2.0.0
     created: "2026-04-16T09:01:07.030799094Z"
     description: A Helm chart for Kubernetes
@@ -171,4 +181,4 @@ entries:
     urls:
     - https://iits-consulting.github.io/otc-prometheus-exporter/otc-prometheus-exporter-0.1.0.tgz
     version: 0.1.0
-generated: "2026-04-16T09:01:07.030894246Z"
+generated: "2026-05-04T09:57:26.679770641Z"
