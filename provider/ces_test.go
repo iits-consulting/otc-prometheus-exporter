@@ -185,7 +185,7 @@ func TestFetchMetricDataBatchedRespectsContextCancellation(t *testing.T) {
 		}
 	}
 
-	_, err := fetchMetricDataBatched(ctx, nil, metrics)
+	_, err := fetchMetricDataBatched(ctx, nil, metrics, cesPeriodRaw, Config.CESLookback)
 	if !errors.Is(err, context.Canceled) {
 		t.Fatalf("expected context.Canceled, got: %v", err)
 	}

@@ -14,23 +14,17 @@ import (
 	"github.com/iits-consulting/otc-prometheus-exporter/otcclient"
 )
 
+const (
+	cesPeriodRaw  = "1"
+	cesPeriod5Min = "300"
+)
+
 // CollectCESMetrics fetches all CES metrics for the given namespace using the
 // project-scoped CES client. Most providers should use this.
 func CollectCESMetrics(ctx context.Context, client *otcclient.Client, namespace string) ([]*dto.MetricFamily, error) {
 	cesClient, err := client.CESClient()
 	if err != nil {
 		return nil, fmt.Errorf("ces client: %w", err)
-	}
-	return collectCESMetricsWithClient(ctx, cesClient, namespace)
-}
-
-// CollectCESMetricsRegionScoped fetches CES metrics using the region-level
-// project scope. Use this for global services like OBS whose metrics are only
-// visible under the region project (e.g. eu-de).
-func CollectCESMetricsRegionScoped(ctx context.Context, client *otcclient.Client, namespace string) ([]*dto.MetricFamily, error) {
-	cesClient, err := client.RegionCESClient()
-	if err != nil {
-		return nil, fmt.Errorf("region ces client: %w", err)
 	}
 	return collectCESMetricsWithClient(ctx, cesClient, namespace)
 }
@@ -44,7 +38,7 @@ func collectCESMetricsWithClient(ctx context.Context, cesClient *golangsdk.Servi
 		return nil, nil
 	}
 
-	data, err := fetchMetricDataBatched(ctx, cesClient, metrics)
+	data, err := fetchMetricDataBatched(ctx, cesClient, metrics, cesPeriodRaw, Config.CESLookback)
 	if err != nil {
 		return nil, fmt.Errorf("fetch metric data: %w", err)
 	}
@@ -74,11 +68,14 @@ func listMetricsByNamespace(cesClient *golangsdk.ServiceClient, namespace string
 // metrics. It splits the request into batches of 500 via the batch API.
 // The OTC SDK documents a limit of 10 per batch, but the API accepts 500
 // in practice (matching the Huawei Cloud documentation).
-func fetchMetricDataBatched(ctx context.Context, cesClient *golangsdk.ServiceClient, metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
+func fetchMetricDataBatched(ctx context.Context, cesClient *golangsdk.ServiceClient, metrics []otcMetrics.MetricInfoList, period string, lookback time.Duration) ([]otcMetricData.BatchMetricData, error) {
 	window, err := internal.NewSliceWindow(metrics, Config.CESBatchSize)
 	if err != nil {
 		return nil, fmt.Errorf("slice window: %w", err)
 	}
+
+	to := time.Now()
+	from := to.Add(-lookback)
 
 	var result []otcMetricData.BatchMetricData
 	for window.HasNext() {
@@ -86,7 +83,7 @@ func fetchMetricDataBatched(ctx context.Context, cesClient *golangsdk.ServiceCli
 			return nil, err
 		}
 		batch := window.Window()
-		data, err := fetchBatch(cesClient, batch)
+		data, err := fetchBatch(cesClient, batch, period, from, to)
 		if err != nil {
 			return nil, err
 		}
@@ -97,7 +94,7 @@ func fetchMetricDataBatched(ctx context.Context, cesClient *golangsdk.ServiceCli
 }
 
 // fetchBatch sends a single BatchListMetricData request for a slice of metrics.
-func fetchBatch(cesClient *golangsdk.ServiceClient, metrics []otcMetrics.MetricInfoList) ([]otcMetricData.BatchMetricData, error) {
+func fetchBatch(cesClient *golangsdk.ServiceClient, metrics []otcMetrics.MetricInfoList, period string, from time.Time, to time.Time) ([]otcMetricData.BatchMetricData, error) {
 	reqMetrics := make([]otcMetricData.Metric, len(metrics))
 	for i, m := range metrics {
 		dims := make([]otcMetricData.MetricsDimension, len(m.Dimensions))
@@ -114,15 +111,12 @@ func fetchBatch(cesClient *golangsdk.ServiceClient, metrics []otcMetrics.MetricI
 		}
 	}
 
-	now := time.Now()
-	from := now.Add(-Config.CESLookback)
-
 	return otcMetricData.BatchListMetricData(cesClient, otcMetricData.BatchListMetricDataOpts{
 		Metrics: reqMetrics,
 		From:    from.UnixMilli(),
-		To:      now.UnixMilli(),
+		To:      to.UnixMilli(),
 		Filter:  "average",
-		Period:  "1",
+		Period:  period,
 	})
 }
 

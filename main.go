@@ -39,23 +39,24 @@ func registerAllProviders(registry *provider.Registry) {
 
 func main() {
 	var (
-		port            uint16
-		region          string
-		username        string
-		password        string
-		accessKey       string
-		secretKey       string
-		projectID       string
-		regionProjectID string
-		osDomainName    string
-		logLevel        string
-		cesBatchSize    int
-		aomBatchSize    int
-		aomConcurrency  int
-		requestTimeout  int
-		idleConnTimeout int
-		cesLookback     int
-		collectTimeout  int
+		port                        uint16
+		region                      string
+		username                    string
+		password                    string
+		accessKey                   string
+		secretKey                   string
+		projectID                   string
+		regionProjectID             string
+		osDomainName                string
+		logLevel                    string
+		cesBatchSize                int
+		aomBatchSize                int
+		aomConcurrency              int
+		requestTimeout              int
+		idleConnTimeout             int
+		cesLookback                 int
+		cesObsStorageMetricLookback int
+		collectTimeout              int
 	)
 
 	var rootCmd = &cobra.Command{
@@ -64,23 +65,24 @@ func main() {
 		Version: Version,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			return cmdPackage.InitializeConfig(cmd, map[string]string{
-				"port":              "PORT",
-				"region":            "REGION",
-				"os-username":       "OS_USERNAME",
-				"os-password":       "OS_PASSWORD",
-				"access-key":        "OS_ACCESS_KEY",
-				"secret-key":        "OS_SECRET_KEY",
-				"project-id":        "OS_PROJECT_ID",
-				"region-project-id": "OS_REGION_PROJECT_ID",
-				"os-domain-name":    "OS_DOMAIN_NAME",
-				"log-level":         "LOG_LEVEL",
-				"ces-batch-size":    "CES_BATCH_SIZE",
-				"aom-batch-size":    "AOM_BATCH_SIZE",
-				"aom-concurrency":   "AOM_CONCURRENCY",
-				"request-timeout":   "REQUEST_TIMEOUT",
-				"idle-conn-timeout": "IDLE_CONN_TIMEOUT",
-				"ces-lookback":      "CES_LOOKBACK",
-				"collect-timeout":   "COLLECT_TIMEOUT",
+				"port":                            "PORT",
+				"region":                          "REGION",
+				"os-username":                     "OS_USERNAME",
+				"os-password":                     "OS_PASSWORD",
+				"access-key":                      "OS_ACCESS_KEY",
+				"secret-key":                      "OS_SECRET_KEY",
+				"project-id":                      "OS_PROJECT_ID",
+				"region-project-id":               "OS_REGION_PROJECT_ID",
+				"os-domain-name":                  "OS_DOMAIN_NAME",
+				"log-level":                       "LOG_LEVEL",
+				"ces-batch-size":                  "CES_BATCH_SIZE",
+				"aom-batch-size":                  "AOM_BATCH_SIZE",
+				"aom-concurrency":                 "AOM_CONCURRENCY",
+				"request-timeout":                 "REQUEST_TIMEOUT",
+				"idle-conn-timeout":               "IDLE_CONN_TIMEOUT",
+				"ces-lookback":                    "CES_LOOKBACK",
+				"ces-obs-storage-metric-lookback": "CES_OBS_STORAGE_METRIC_LOOKBACK",
+				"collect-timeout":                 "COLLECT_TIMEOUT",
 			})
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -88,6 +90,10 @@ func main() {
 
 			//nolint:errcheck // best-effort flush
 			defer logger.Sync()
+
+			if cesObsStorageMetricLookback < 30 {
+				return fmt.Errorf("ces-obs-storage-metric-lookback must be at least 30 minutes (got %d): values below 30 lead to gaps in OBS storage metrics", cesObsStorageMetricLookback)
+			}
 
 			// Validate authentication credentials.
 			hasUserPass := username != "" && password != ""
@@ -126,6 +132,7 @@ func main() {
 			provider.Config.AOMBatchSize = aomBatchSize
 			provider.Config.AOMConcurrency = aomConcurrency
 			provider.Config.CESLookback = time.Duration(cesLookback) * time.Minute
+			provider.Config.CESObsStorageMetricLookback = time.Duration(cesObsStorageMetricLookback) * time.Minute
 			provider.Config.CollectTimeout = time.Duration(collectTimeout) * time.Second
 
 			registry := provider.NewRegistry()
@@ -159,6 +166,7 @@ func main() {
 	rootCmd.Flags().IntVarP(&requestTimeout, "request-timeout", "", 10, "HTTP request timeout in seconds for OTC API calls")
 	rootCmd.Flags().IntVarP(&idleConnTimeout, "idle-conn-timeout", "", 90, "How long idle HTTP connections stay in the pool in seconds (set higher than scrape interval)")
 	rootCmd.Flags().IntVarP(&cesLookback, "ces-lookback", "", 10, "CES lookback window in minutes for metric data queries")
+	rootCmd.Flags().IntVarP(&cesObsStorageMetricLookback, "ces-obs-storage-metric-lookback", "", 60, "CES lookback window in minutes for OBS storage metrics only (capacity_*, object_num_*); request metrics use --ces-lookback. Minimum 30; lower values lead to gaps in OBS storage metrics")
 	rootCmd.Flags().IntVarP(&collectTimeout, "collect-timeout", "", 55, "Maximum collect time in seconds per scrape (should be less than Prometheus scrape_timeout)")
 
 	if err := rootCmd.Execute(); err != nil {

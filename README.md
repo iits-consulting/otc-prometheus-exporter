@@ -150,6 +150,7 @@ All policies must be assigned at the **regional project** scope for the relevant
 | `COLLECT_TIMEOUT`      | `55`    | Maximum collect time in seconds per scrape (should be less than Prometheus scrape_timeout)   |
 | `CES_BATCH_SIZE`       | `500`   | Max metrics per CES batch API request                                                        |
 | `CES_LOOKBACK`         | `10`    | CES lookback window in minutes (how far back to query for datapoints)                        |
+| `CES_OBS_STORAGE_METRIC_LOOKBACK` | `60` | CES lookback in minutes for OBS storage metrics only (`capacity_*`, `object_num_*`); request metrics use `CES_LOOKBACK`. Minimum 30 — the exporter exits with an error if set lower, since smaller values lead to gaps in OBS storage metrics |
 | `AOM_BATCH_SIZE`       | `20`    | Max metrics per AOM data API request                                                         |
 | `AOM_CONCURRENCY`      | `5`     | Max concurrent AOM API calls per scrape                                                      |
 

@@ -1,5 +1,4 @@
 services:
-
   otc-prometheus-exporter:
     build: .
     ports:
@@ -19,6 +18,7 @@ services:
       # REQUEST_TIMEOUT: "10"
       # CES_BATCH_SIZE: "500"
       # CES_LOOKBACK: "10"
+      # CES_OBS_STORAGE_METRIC_LOOKBACK: "60"
       # AOM_BATCH_SIZE: "20"
       # AOM_CONCURRENCY: "5"
 
@@ -27,7 +27,7 @@ services:
     ports:
       - "9090:9090"
     command:
-       - '--config.file=/tmp/prometheus/prometheus.yaml'
+      - "--config.file=/tmp/prometheus/prometheus.yaml"
     volumes:
       - "./docker.local/prometheus:/tmp/prometheus"
 
