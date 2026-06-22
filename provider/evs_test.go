@@ -4,6 +4,7 @@ import (
 	"testing"
 
 	evsVolumes "github.com/opentelekomcloud/gophertelekomcloud/openstack/evs/v2/cloudvolumes"
+	dto "github.com/prometheus/client_model/go"
 )
 
 func TestConvertEVSVolumesToMetrics(t *testing.T) {
@@ -65,5 +66,70 @@ func TestBuildEVSNameMap(t *testing.T) {
 	}
 	if nameMap["evs-001"] != "data-disk-1" {
 		t.Errorf("expected evs-001 -> %q, got %q", "data-disk-1", nameMap["evs-001"])
+	}
+}
+
+func TestBuildEVSNameMapAttachments(t *testing.T) {
+	volumes := []evsVolumes.Volume{
+		{
+			ID:   "vol-001",
+			Name: "system-disk",
+			Attachments: []evsVolumes.Attachment{
+				{ServerID: "srv-1", Device: "/dev/vda"},
+			},
+		},
+		{
+			ID:   "vol-002",
+			Name: "data-disk",
+			Attachments: []evsVolumes.Attachment{
+				{ServerID: "srv-1", Device: "/dev/vdb"},
+			},
+		},
+		{ID: "vol-003", Name: "spare-disk"},
+	}
+
+	nameMap := buildEVSNameMap(volumes)
+
+	cases := map[string]string{
+		"vol-001": "system-disk",
+		"vol-002": "data-disk",
+		"vol-003": "spare-disk",
+
+		"srv-1-vda": "system-disk",
+		"srv-1-vdb": "data-disk",
+	}
+
+	if len(nameMap) != len(cases) {
+		t.Fatalf("expected %d entries, got %d: %v", len(cases), len(nameMap), nameMap)
+	}
+
+	for key, expected := range cases {
+		if actual := nameMap[key]; actual != expected {
+			t.Errorf("nameMap[%q] = %q, expected %q", key, actual, expected)
+		}
+	}
+}
+
+func TestEnrichEVSDiskDevice(t *testing.T) {
+	volumes := []evsVolumes.Volume{
+		{ID: "vol-001", Name: "system-disk", Attachments: []evsVolumes.Attachment{
+			{ServerID: "srv-1", Device: "/dev/vda"},
+		}},
+	}
+	nameMap := buildEVSNameMap(volumes)
+
+	mResolved := NewGaugeMetric(1, map[string]string{"resource_id": "srv-1-vda", "resource_name": ""})
+	mUnresolved := NewGaugeMetric(1, map[string]string{"resource_id": "srv-9-vdz", "resource_name": ""})
+	families := []*dto.MetricFamily{
+		NewGaugeMetricFamily("evs_disk_device_write_bytes_rate", []*dto.Metric{mResolved, mUnresolved}),
+	}
+
+	enrichEVSNames(families, nameMap)
+
+	if actual := getLabelValue(mResolved, "resource_name"); actual != "system-disk" {
+		t.Errorf("resolved disk: resource_name = %q, expect %q", actual, "system-disk")
+	}
+	if actual := getLabelValue(mUnresolved, "resource_name"); actual != "srv-9-vdz" {
+		t.Errorf("unresolved disk: resource_name = %q, expect resource_id fallback %q", actual, "srv-9-vdz")
 	}
 }
