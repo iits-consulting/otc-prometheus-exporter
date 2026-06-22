@@ -30,15 +30,16 @@ func (p *EVSProvider) Collect(ctx context.Context, client *otcclient.Client) ([]
 		return &EnrichResult{
 			NameMap:       nameMap,
 			ExtraFamilies: convertEVSVolumesToMetrics(volumes),
-			Enrich: func(families []*dto.MetricFamily) {
-				EnrichWithNames(families, nameMap)
-
-				// any disk-device metric that didn't resolve (e.g. a detached volume or missing attachment)
-				// falls back to its resource_id
-				FillResourceNameFromLabel(families, "resource_id")
-			},
+			Enrich:        func(families []*dto.MetricFamily) { enrichEVSNames(families, nameMap) },
 		}, nil
 	})
+}
+
+// enrichEVSNames resolves resource_name for EVS metric families.
+// Any metric still without a name falls back to its resource_id.
+func enrichEVSNames(families []*dto.MetricFamily, nameMap map[string]string) {
+	EnrichWithNames(families, nameMap)
+	FillResourceNameFromLabel(families, "resource_id")
 }
 
 // buildEVSNameMap maps EVS resource ids to volume names.

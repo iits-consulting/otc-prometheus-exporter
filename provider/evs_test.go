@@ -91,13 +91,18 @@ func TestBuildEVSNameMapAttachments(t *testing.T) {
 	nameMap := buildEVSNameMap(volumes)
 
 	cases := map[string]string{
-		"vol-001":   "system-disk",
-		"vol-002":   "data-disk",
-		"vol-003":   "spare-disk",
+		"vol-001": "system-disk",
+		"vol-002": "data-disk",
+		"vol-003": "spare-disk",
 
 		"srv-1-vda": "system-disk",
 		"srv-1-vdb": "data-disk",
 	}
+
+	if len(nameMap) != len(cases) {
+		t.Fatalf("expected %d entries, got %d: %v", len(cases), len(nameMap), nameMap)
+	}
+
 	for key, expected := range cases {
 		if actual := nameMap[key]; actual != expected {
 			t.Errorf("nameMap[%q] = %q, expected %q", key, actual, expected)
@@ -119,9 +124,7 @@ func TestEnrichEVSDiskDevice(t *testing.T) {
 		NewGaugeMetricFamily("evs_disk_device_write_bytes_rate", []*dto.Metric{mResolved, mUnresolved}),
 	}
 
-	// Same two calls the EnrichResult.Enrich closure performs.
-	EnrichWithNames(families, nameMap)
-	FillResourceNameFromLabel(families, "resource_id")
+	enrichEVSNames(families, nameMap)
 
 	if actual := getLabelValue(mResolved, "resource_name"); actual != "system-disk" {
 		t.Errorf("resolved disk: resource_name = %q, expect %q", actual, "system-disk")
