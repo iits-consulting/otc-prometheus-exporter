@@ -17,7 +17,7 @@ func (p *EVSProvider) Namespace() string { return "SYS.EVS" }
 
 func (p *EVSProvider) Collect(ctx context.Context, client *otcclient.Client) ([]*dto.MetricFamily, error) {
 	return CollectWithEnrichment(ctx, client, "SYS.EVS", func(ctx context.Context, client *otcclient.Client) (*EnrichResult, error) {
-		blockClient, err := client.BlockStorageV3()
+		blockClient, err := client.BlockStorageV2()
 		if err != nil {
 			return nil, err
 		}
