@@ -67,3 +67,27 @@ func TestBuildEVSNameMap(t *testing.T) {
 		t.Errorf("expected evs-001 -> %q, got %q", "data-disk-1", nameMap["evs-001"])
 	}
 }
+
+// CES reports EVS disk metrics with resource_id "{server_id}-{device}" (e.g.
+// "server-1-vdb"), not the volume ID, so the name map must also key by
+// attachment.
+func TestBuildEVSNameMapAttachmentKeys(t *testing.T) {
+	volumes := []evsVolumes.Volume{
+		{
+			ID:   "evs-001",
+			Name: "data-disk-1",
+			Attachments: []evsVolumes.Attachment{
+				{ServerID: "server-1", Device: "/dev/vdb"},
+			},
+		},
+	}
+
+	nameMap := buildEVSNameMap(volumes)
+
+	if nameMap["server-1-vdb"] != "data-disk-1" {
+		t.Errorf("expected server-1-vdb -> %q, got %q", "data-disk-1", nameMap["server-1-vdb"])
+	}
+	if nameMap["evs-001"] != "data-disk-1" {
+		t.Errorf("expected volume ID key to remain, got %q", nameMap["evs-001"])
+	}
+}

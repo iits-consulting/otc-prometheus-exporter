@@ -2,6 +2,7 @@ package provider
 
 import (
 	"context"
+	"strings"
 
 	evsVolumes "github.com/opentelekomcloud/gophertelekomcloud/openstack/evs/v2/cloudvolumes"
 	dto "github.com/prometheus/client_model/go"
@@ -17,7 +18,7 @@ func (p *EVSProvider) Namespace() string { return "SYS.EVS" }
 
 func (p *EVSProvider) Collect(ctx context.Context, client *otcclient.Client) ([]*dto.MetricFamily, error) {
 	return CollectWithEnrichment(ctx, client, "SYS.EVS", func(ctx context.Context, client *otcclient.Client) (*EnrichResult, error) {
-		blockClient, err := client.BlockStorageV3()
+		blockClient, err := client.BlockStorageV2()
 		if err != nil {
 			return nil, err
 		}
@@ -33,10 +34,16 @@ func (p *EVSProvider) Collect(ctx context.Context, client *otcclient.Client) ([]
 }
 
 // buildEVSNameMap creates a mapping from EVS volume ID to volume name.
+// CES reports disk metrics with resource_id "{server_id}-{device}" (e.g.
+// "server-1-vdb"), so attachment-based keys are added as well.
 func buildEVSNameMap(volumes []evsVolumes.Volume) map[string]string {
 	m := make(map[string]string, len(volumes))
 	for _, v := range volumes {
 		m[v.ID] = v.Name
+		for _, a := range v.Attachments {
+			device := strings.TrimPrefix(a.Device, "/dev/")
+			m[a.ServerID+"-"+device] = v.Name
+		}
 	}
 	return m
 }

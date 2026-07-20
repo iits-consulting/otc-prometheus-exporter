@@ -169,3 +169,19 @@ func TestIamEndpoint(t *testing.T) {
 		t.Fatalf("iamEndpoint(eu-de) = %q, want %q", got, want)
 	}
 }
+
+func TestValidateConfigAcceptsSwissRegion(t *testing.T) {
+	cfg := validUserPassConfig()
+	cfg.Region = "eu-ch2"
+	if err := validateConfig(cfg); err != nil {
+		t.Fatalf("expected eu-ch2 config to pass validation, got: %s", err)
+	}
+}
+
+func TestIamEndpointSwiss(t *testing.T) {
+	got := iamEndpoint("eu-ch2")
+	want := "https://iam-pub.eu-ch2.sc.otc.t-systems.com/v3"
+	if got != want {
+		t.Fatalf("iamEndpoint(eu-ch2) = %q, want %q", got, want)
+	}
+}

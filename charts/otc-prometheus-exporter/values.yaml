@@ -80,7 +80,7 @@ deployment:
   # Credentials should be set via envFromSecret in production.
   env:
     # -- Authentication (required — pick one method)
-    # REGION: "eu-de"                # OTC region: "eu-de" or "eu-nl"
+    # REGION: "eu-de"                # OTC region: "eu-de", "eu-nl", or "eu-ch2" (Swiss OTC, experimental)
     # OS_PROJECT_ID: ""              # OTC project ID (always required)
     #
     # Option A: Username/password

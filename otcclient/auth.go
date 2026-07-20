@@ -24,9 +24,10 @@ type Config struct {
 }
 
 func validateConfig(cfg Config) error {
-	// Region must be eu-de or eu-nl.
-	if cfg.Region != "eu-de" && cfg.Region != "eu-nl" {
-		return fmt.Errorf("otcclient: invalid region %q, must be \"eu-de\" or \"eu-nl\"", cfg.Region)
+	// Region must be eu-de, eu-nl, or eu-ch2 (Swiss OTC, experimental).
+	validRegions := map[string]bool{"eu-de": true, "eu-nl": true, "eu-ch2": true}
+	if !validRegions[cfg.Region] {
+		return fmt.Errorf("otcclient: invalid region %q, must be \"eu-de\", \"eu-nl\", or \"eu-ch2\"", cfg.Region)
 	}
 
 	// ProjectID is always required.
@@ -63,6 +64,10 @@ func validateConfig(cfg Config) error {
 }
 
 func iamEndpoint(region string) string {
+	// The Swiss OTC uses an irregular public IAM hostname.
+	if region == "eu-ch2" {
+		return "https://iam-pub.eu-ch2.sc.otc.t-systems.com/v3"
+	}
 	return fmt.Sprintf("https://iam.%s.otc.t-systems.com/v3", region)
 }
 

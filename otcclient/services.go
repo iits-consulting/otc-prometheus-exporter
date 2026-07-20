@@ -105,9 +105,12 @@ func (c *Client) NetworkV1() (*golangsdk.ServiceClient, error) {
 	})
 }
 
-func (c *Client) BlockStorageV3() (*golangsdk.ServiceClient, error) {
+// BlockStorageV2 returns a v2 block storage client. The EVS-specific
+// cloudvolumes API is only published under /v2/{project_id}; the v3
+// endpoint rejects it with APIGW.0101 in all regions.
+func (c *Client) BlockStorageV2() (*golangsdk.ServiceClient, error) {
 	return c.cache.getOrCreate("block", func() (*golangsdk.ServiceClient, error) {
-		return openstack.NewBlockStorageV3(c.provider, c.endpointOpts())
+		return openstack.NewBlockStorageV2(c.provider, c.endpointOpts())
 	})
 }
 

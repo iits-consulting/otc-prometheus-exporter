@@ -144,7 +144,7 @@ func main() {
 	}
 
 	rootCmd.Flags().Uint16VarP(&port, "port", "", 39100, "Port on which metrics are served")
-	rootCmd.Flags().StringVarP(&region, "region", "r", "eu-de", "OTC region")
+	rootCmd.Flags().StringVarP(&region, "region", "r", "eu-de", "OTC region: eu-de, eu-nl, or eu-ch2 (Swiss OTC, experimental)")
 	rootCmd.Flags().StringVarP(&username, "os-username", "u", "", "OTC username (user/password auth)")
 	rootCmd.Flags().StringVarP(&password, "os-password", "p", "", "OTC password (user/password auth)")
 	rootCmd.Flags().StringVarP(&accessKey, "access-key", "", "", "OTC access key (AK/SK auth)")

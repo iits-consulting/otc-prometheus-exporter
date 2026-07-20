@@ -81,7 +81,7 @@ Basic hypervisor-level metrics (CPU utilization, network traffic) are available 
 The Object Storage Service (OBS) metrics have some unique considerations:
 
 1. **Global Project ID Requirement**: Unlike other services OBS is a global service. This means you need a global project ID to gather OBS metrics.
-   The supported projects are `eu-de` and `eu-nl`.
+   The supported projects are `eu-de`, `eu-nl`, and `eu-ch2` (experimental).
 2. **Limitation on Project Scoped Metrics**: OBS metrics cannot be collected with project scoped metrics since a global project ID is needed, which transcends individual project scopes.
 
 ## Requirements
@@ -127,7 +127,7 @@ Assign the **Tenant Guest** role at both **global** and **regional project** sco
 
 CES-only namespaces (WAF, OBS, GaussDB, GaussDBv5, NoSQL, VPN) need **no additional policies** beyond CES ReadOnlyAccess.
 
-All policies must be assigned at the **regional project** scope for the relevant region (`eu-de` or `eu-nl`).
+All policies must be assigned at the **regional project** scope for the relevant region (`eu-de`, `eu-nl`, or `eu-ch2` (experimental)).
 
 ## Usage & Configuration
 
@@ -142,7 +142,7 @@ All policies must be assigned at the **regional project** scope for the relevant
 | `OS_PROJECT_ID`        | -       | **Required** OTC project ID                                                                  |
 | `OS_DOMAIN_NAME`       | -       | **Required** OTC domain name / tenant ID                                                     |
 | `OS_REGION_PROJECT_ID` | -       | Region-level project ID for global services (OBS). Auto-discovered if not set.               |
-| `REGION`               | `eu-de` | OTC region (`eu-de` or `eu-nl`)                                                              |
+| `REGION`               | `eu-de` | OTC region (`eu-de`, `eu-nl`, or `eu-ch2` — see note below)                                  |
 | `PORT`                 | `39100` | HTTP server port                                                                             |
 | `LOG_LEVEL`            | `INFO`  | Log level (`DEBUG`, `INFO`, `WARN`, `ERROR`)                                                 |
 | `REQUEST_TIMEOUT`      | `10`    | HTTP request timeout in seconds for OTC API calls                                            |
@@ -152,6 +152,8 @@ All policies must be assigned at the **regional project** scope for the relevant
 | `CES_LOOKBACK`         | `10`    | CES lookback window in minutes (how far back to query for datapoints)                        |
 | `AOM_BATCH_SIZE`       | `20`    | Max metrics per AOM data API request                                                         |
 | `AOM_CONCURRENCY`      | `5`     | Max concurrent AOM API calls per scrape                                                      |
+
+> **Swiss OTC (`eu-ch2`) — experimental:** Support for the Swiss Open Telekom Cloud is experimental. The Swiss service catalog is smaller than eu-de/eu-nl; the following namespaces are **not available** there and should not be configured as scrape targets: `SYS.DMS`, `SYS.DDS`, `SYS.DCS`, `SYS.DWS`, `SYS.ES`, `SYS.SFS`, `SYS.DCAAS`, `SYS.BMS`.
 
 *Either username+password or access-key+secret-key is required (mutually exclusive).
 
