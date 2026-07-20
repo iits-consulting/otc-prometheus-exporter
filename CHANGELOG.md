@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.1.0](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v2.0.1...v2.1.0) (2026-07-20)
+
+
+### Features
+
+* Experimental Swiss OTC (eu-ch2) support + EVS enrichment  ([#103](https://github.com/iits-consulting/otc-prometheus-exporter/issues/103)) ([88cf36b](https://github.com/iits-consulting/otc-prometheus-exporter/commit/88cf36b383bfb29584f345dd49dc5aa7de24b5b5))
+
 ## [2.0.1](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v2.0.0...v2.0.1) (2026-04-30)
 
 
