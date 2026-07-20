@@ -2,6 +2,16 @@ apiVersion: v1
 entries:
   otc-prometheus-exporter:
   - apiVersion: v2
+    appVersion: 2.1.0
+    created: "2026-07-20T13:06:18.107998372Z"
+    description: Prometheus exporter for Open Telekom Cloud (OTC) metrics
+    digest: 4eacd09e4adc1d2a62b51b4b35f5d916d4c17fe6b79f053389698306c3457c2d
+    name: otc-prometheus-exporter
+    type: application
+    urls:
+    - https://github.com/iits-consulting/otc-prometheus-exporter/releases/download/otc-prometheus-exporter-2.1.0/otc-prometheus-exporter-2.1.0.tgz
+    version: 2.1.0
+  - apiVersion: v2
     appVersion: 2.0.1
     created: "2026-05-04T09:57:26.679650608Z"
     description: Prometheus exporter for Open Telekom Cloud (OTC) metrics
@@ -181,4 +191,4 @@ entries:
     urls:
     - https://iits-consulting.github.io/otc-prometheus-exporter/otc-prometheus-exporter-0.1.0.tgz
     version: 0.1.0
-generated: "2026-05-04T09:57:26.679770641Z"
+generated: "2026-07-20T13:06:18.108147852Z"
