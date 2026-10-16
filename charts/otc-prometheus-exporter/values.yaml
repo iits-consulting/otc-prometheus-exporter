@@ -152,14 +152,14 @@ targets:
   # -- Namespace-specific overrides. Keys are CES namespace names (e.g. SYS.ECS).
   # Names for dashboards and alerts are auto-derived: SYS.ECS -> ecs, SERVICE.BMS -> bms.
   namespaces:
-    SYS.ECS:
+    SYS.ECS: {}
     SYS.RDS:
       rules: true
       dashboard: true
     SYS.ELB:
       rules: true
-    SYS.NAT:
-    SYS.VPC:
+    SYS.NAT: {}
+    SYS.VPC: {}
     SYS.OBS:
       rules: true
     SYS.ALARM:
