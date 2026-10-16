@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.1.1](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v2.1.0...v2.1.1) (2026-10-16)
+
+### Changes
+- Helm Chart: Adjust values to be compatible between helm v3 and helm v4
+
 ## [2.1.0](https://github.com/iits-consulting/otc-prometheus-exporter/compare/v2.0.1...v2.1.0) (2026-07-20)
 
 
